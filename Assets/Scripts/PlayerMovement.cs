@@ -6,7 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rigidbody;
     public Transform DirectionCameraOffset;
-    public float MovementSpeed;
+    public float MovementSpeed = 5f;
+    public float TurningSpeed = 10f;
     
     private RaycastHit mouseRay;
 
@@ -15,12 +16,6 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         RaycastHit hit;
@@ -28,32 +23,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
+            // Character will look where mouse is pointing relative to the world
             Quaternion targetRotation = Quaternion.LookRotation(hit.point - transform.position);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 100.0f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
 
         Vector3 movementDirection = Vector3.zero;
-        
-        if (Input.GetKey(KeyCode.W))
-        {
-            movementDirection += DirectionCameraOffset.forward;
-        }
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            movementDirection -= DirectionCameraOffset.forward;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            movementDirection += DirectionCameraOffset.right;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            movementDirection -= DirectionCameraOffset.right;
-        }
+        // Move character relative to the camera rotation offset
+        movementDirection += DirectionCameraOffset.forward * Input.GetAxis("Vertical");
+        movementDirection += DirectionCameraOffset.right * Input.GetAxis("Horizontal");
 
         rigidbody.velocity = movementDirection * MovementSpeed;
     }

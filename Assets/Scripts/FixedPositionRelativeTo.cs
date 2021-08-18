@@ -15,6 +15,7 @@ public class FixedPositionRelativeTo : MonoBehaviour
 
     void Update()
     {
+        // Keep that offset between current object and anchor
         transform.position = AnchorObject.position + offset;
     }
 }
