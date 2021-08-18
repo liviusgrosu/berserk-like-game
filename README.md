@@ -1,5 +1,5 @@
  <p float="left">
-  <img src="https://raw.githubusercontent.com/liviusgrosu/Fabrik-Inverse-Kinematics-Spider/main/Pictures/diagram_4.png" width="400" height="380">
+  <img src="https://raw.githubusercontent.com/liviusgrosu/berserk-like-game/main/Other%20Resources/Images/Repo_Header.PNG?token=AAM4WUIXKRNUH35W2EU5YZ3BEQYZU" >
  </p>
 
 # Berserk-like Game
