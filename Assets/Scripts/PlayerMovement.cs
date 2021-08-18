@@ -32,9 +32,11 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movementDirection = Vector3.zero;
 
         // Move character relative to the camera rotation offset
-        movementDirection += DirectionCameraOffset.forward * Input.GetAxis("Vertical");
-        movementDirection += DirectionCameraOffset.right * Input.GetAxis("Horizontal");
+        movementDirection += DirectionCameraOffset.forward * Input.GetAxisRaw("Vertical");
+        movementDirection += DirectionCameraOffset.right * Input.GetAxisRaw("Horizontal");
 
+        // Eliminate double speed with multiple inputs
+        movementDirection = movementDirection.normalized;
         rigidbody.velocity = movementDirection * MovementSpeed;
     }
 }
