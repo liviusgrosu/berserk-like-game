@@ -26,8 +26,11 @@ public class GenerateDirectPath : MonoBehaviour
     private int[,] startSideRooms;
     private int[,] endSideRooms;
 
+    int[] startTile;
+
     void Start()
     {
+        // --- Init Grid ---
         grid = new Grid(MinRange, MaxRange);
 
         startSideRooms = new int[grid.EdgeSize, 2];
@@ -74,6 +77,12 @@ public class GenerateDirectPath : MonoBehaviour
             default:
                 break;
         }
+
+        // --- Calculate Path ---
+
+        int randNum = Random.Range(0, grid.EdgeSize);
+
+        startTile =  new int[] {startSideRooms[randNum, 0], startSideRooms[randNum, 1]};
     }
 
     void FillEdgeTiles(int idx, int s1, int s2, int e1, int e2)
@@ -98,6 +107,10 @@ public class GenerateDirectPath : MonoBehaviour
                 if (CheckIfTileExists(startSideRooms, i, j))
                 {
                     Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
+                    if (startTile[0] == i && startTile[1] == j)
+                    {
+                        Gizmos.color = new Color(1f, 1f, 0f, 0.5f);
+                    }
                 }
                 else if(CheckIfTileExists(endSideRooms, i, j))
                 {
@@ -108,8 +121,7 @@ public class GenerateDirectPath : MonoBehaviour
                     Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
                 }
 
-                // Check if tile exists in startSideRoom
-
+                // Check if tile exists in startSideRooms
                 Gizmos.DrawCube(new Vector3(1.5f * i, 0, 1.5f * j), new Vector3(1, 1, 1));
             }
         }
