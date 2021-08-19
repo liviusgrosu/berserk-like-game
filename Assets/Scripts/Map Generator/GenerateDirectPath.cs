@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class GenerateDirectPath : MonoBehaviour
 {
     // TODO: add custom editor range
@@ -9,9 +10,10 @@ public class GenerateDirectPath : MonoBehaviour
     public int MinRange;
     public int MaxRange;
     public int EdgeSize = 4;
-    private int[,] grid;
 
     private int startDirection, endDirection, leftDirection, rightDirection;
+
+    Grid grid;
 
     private int[,] gridOrientation = {
         //  Start   Left    Forward Right
@@ -26,7 +28,7 @@ public class GenerateDirectPath : MonoBehaviour
 
     void Start()
     {
-        Grid grid = new Grid(MinRange, MaxRange);
+        grid = new Grid(MinRange, MaxRange);
 
         startSideRooms = new int[grid.EdgeSize, 2];
         endSideRooms = new int[grid.EdgeSize, 2];
@@ -48,46 +50,80 @@ public class GenerateDirectPath : MonoBehaviour
             case 0:
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
-                    startSideRooms[i, 0] = 0;
-                    startSideRooms[i, 1] = i;
-
-                    endSideRooms[i, 0] = 3;
-                    endSideRooms[i, 1] = i;
+                    FillEdgeTiles(i, 0, i, grid.EdgeSize - 1, i);
                 }
                 break;
             case 1:
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
-                    startSideRooms[i, 0] = i;
-                    startSideRooms[i, 1] = 3;
-
-                    endSideRooms[i, 0] = i;
-                    endSideRooms[i, 1] = 0;
+                    FillEdgeTiles(i, i, grid.EdgeSize - 1, i, 0);
                 }
                 break;
             case 2:
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
-                    startSideRooms[i, 0] = 3;
-                    startSideRooms[i, 1] = i;
-
-                    endSideRooms[i, 0] = 0;
-                    endSideRooms[i, 1] = i;
+                    FillEdgeTiles(i, grid.EdgeSize - 1, i, 0, i);
                 }
                 break;
             case 3:
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
-                    startSideRooms[i, 0] = i;
-                    startSideRooms[i, 1] = 0;
-
-                    endSideRooms[i, 0] = i;
-                    endSideRooms[i, 1] = 3;
+                    FillEdgeTiles(i, i, 0, i, grid.EdgeSize - 1);
                 }
                 break;
             default:
                 break;
         }
-        int k = 0;
+    }
+
+    void FillEdgeTiles(int idx, int s1, int s2, int e1, int e2)
+    {
+        startSideRooms[idx, 0] = s1;
+        startSideRooms[idx, 1] = s2;
+
+        endSideRooms[idx, 0] = e1;
+        endSideRooms[idx, 1] = e2;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (grid == null)
+        {
+            return;
+        }
+        for (int i = 0; i < grid.EdgeSize; i++)
+        {
+            for (int j = 0; j < grid.EdgeSize; j++)
+            {
+                if (CheckIfTileExists(startSideRooms, i, j))
+                {
+                    Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
+                }
+                else if(CheckIfTileExists(endSideRooms, i, j))
+                {
+                    Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
+                }
+                else
+                {
+                    Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+                }
+
+                // Check if tile exists in startSideRoom
+
+                Gizmos.DrawCube(new Vector3(1.5f * i, 0, 1.5f * j), new Vector3(1, 1, 1));
+            }
+        }
+    }
+
+    bool CheckIfTileExists(int[,] side, int row, int col)
+    {
+        for(int i = 0; i < side.GetLength(0); i++)
+        {
+            if (side[i, 0] == row && side[i, 1] == col)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
