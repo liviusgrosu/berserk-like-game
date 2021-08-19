@@ -114,17 +114,22 @@ public class GenerateDirectPath : MonoBehaviour
 
         grid.GridData[currentTile[0], currentTile[1]] = 1;
 
+        if (CheckIfTileExists(endSideRooms, currentTile[0], currentTile[1]))
+        {
+            return;
+        }
+
         // Check available paths
         int[] availablePaths = { leftDirection, endDirection, rightDirection };
 
         // Remove possibility of going back
-        if(previousDirection == leftDirection)
-        {
-            availablePaths[0] = -1;
-        }
-        else if(previousDirection == rightDirection)
+        if (previousDirection == leftDirection)
         {
             availablePaths[2] = -1;
+        }
+        else if (previousDirection == rightDirection)
+        {
+            availablePaths[0] = -1;
         }
 
         // Left direction
