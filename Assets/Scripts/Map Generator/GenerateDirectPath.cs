@@ -15,6 +15,7 @@ public class GenerateDirectPath : MonoBehaviour
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
+    GridDirectionTree gridDirectionTree;
 
     private int[,] gridOrientation = {
         // 0 - North
@@ -83,9 +84,12 @@ public class GenerateDirectPath : MonoBehaviour
         // --- Calculate Path ---
 
         int randNum = UnityEngine.Random.Range(0, grid.EdgeSize);
-
         startTile = new int[] {startSideRooms[randNum, 0], startSideRooms[randNum, 1]};
-        currentRoom = startTile.ToArray();
+        currentRoom = new int[2];
+        startTile.CopyTo(currentRoom, 0);
+
+        gridDirectionTree = new GridDirectionTree(currentRoom);
+
         TraversePath(startDirection);
     }
 
