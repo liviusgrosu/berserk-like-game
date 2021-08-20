@@ -15,7 +15,8 @@ public class GenerateDirectPath : MonoBehaviour
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
-    GridDirectionTree gridDirectionTree;
+    GridDirectionNode gridDirectionParentNode;
+    GridDirectionNode currentDirectionNode;
 
     private int[,] gridOrientation = {
         // 0 - North
@@ -88,9 +89,11 @@ public class GenerateDirectPath : MonoBehaviour
         currentRoom = new int[2];
         startTile.CopyTo(currentRoom, 0);
 
-        gridDirectionTree = new GridDirectionTree(currentRoom);
+        gridDirectionParentNode = new GridDirectionNode(currentRoom);
+        currentDirectionNode = gridDirectionParentNode;
 
         TraversePath(startDirection);
+        int k = 0;
     }
 
     void FillEdgeTiles(int idx, int s1, int s2, int e1, int e2)
@@ -170,6 +173,9 @@ public class GenerateDirectPath : MonoBehaviour
             default:
                 break;
         }
+
+        currentDirectionNode.AddChildRoom(currentRoom);
+        currentDirectionNode = currentDirectionNode.child;
         TraversePath(newDirection);
     }
 

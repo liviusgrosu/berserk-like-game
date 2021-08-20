@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 
-class GridDirectionTree
+class GridDirectionNode
 {
     public int[] coordinate;
-    public LinkedList<GridDirectionTree> children;
+    //public LinkedList<GridDirectionNode> children;
+    public GridDirectionNode child;
 
-    public GridDirectionTree(int[] coordinate)
+    public GridDirectionNode(int[] coordinate)
     {
         this.coordinate = new int[coordinate.Length];
         coordinate.CopyTo(this.coordinate, 0);
@@ -13,6 +14,7 @@ class GridDirectionTree
 
     public void AddChildRoom(int[] coordinate)
     {
-        children.AddFirst(new GridDirectionTree(coordinate));
+        //children.AddFirst(new GridDirectionNode(coordinate));
+        child = new GridDirectionNode(coordinate);
     }
 }
