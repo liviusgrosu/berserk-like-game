@@ -11,14 +11,17 @@ public class GenerateDirectPath : MonoBehaviour
     // https://docs.unity3d.com/ScriptReference/EditorGUILayout.MinMaxSlider.html
     public int MinRange;
     public int MaxRange;
-    public int EdgeSize = 4;
 
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
 
     private int[,] gridOrientation = {
-        //  Start   Left    Forward Right
+        // 0 - North
+        // 1 - East
+        // 2 - South
+        // 3 - West
+        //  Back    Left    Forward Right
         {   0,      1,      2,      3},
         {   1,      2,      3,      0},
         {   2,      3,      0,      1},
@@ -28,11 +31,8 @@ public class GenerateDirectPath : MonoBehaviour
     private int[,] startSideRooms;
     private int[,] endSideRooms;
 
-    int[] startTile;
-    int[] currentTile;
-
-    int currentTripCounter = 0;
-    int tripCounter = 40;
+    private int[] startTile;
+    private int[] currentRoom;
 
     void Start()
     {
@@ -41,19 +41,15 @@ public class GenerateDirectPath : MonoBehaviour
 
         startSideRooms = new int[grid.EdgeSize, 2];
         endSideRooms = new int[grid.EdgeSize, 2];
-
+        // Select a random direction as the start
         startDirection = UnityEngine.Random.Range(0, grid.EdgesCount);
-        for(int i = 0; i < gridOrientation.GetLength(0); i++)
-        {
-            if (startDirection == gridOrientation[i, 0])
-            {
-                leftDirection =  gridOrientation[i, 1];
-                endDirection =   gridOrientation[i, 2];
-                rightDirection = gridOrientation[i, 3];
-                break;
-            }
-        }
 
+        // Get the surronding available directions
+        leftDirection = (startDirection + 1) % grid.EdgesCount;
+        endDirection = (leftDirection + 1) % grid.EdgesCount;
+        rightDirection = (endDirection + 1) % grid.EdgesCount;
+
+        // Get the rooms that exist in the start and end edges
         switch(startDirection)
         {
             case 0:
@@ -89,33 +85,28 @@ public class GenerateDirectPath : MonoBehaviour
         int randNum = UnityEngine.Random.Range(0, grid.EdgeSize);
 
         startTile = new int[] {startSideRooms[randNum, 0], startSideRooms[randNum, 1]};
-        currentTile = startTile.ToArray();
+        currentRoom = startTile.ToArray();
         TraversePath(startDirection);
-
-        currentTripCounter = 0;
     }
 
     void FillEdgeTiles(int idx, int s1, int s2, int e1, int e2)
     {
+        // Store the room coordinates on the start to a list
         startSideRooms[idx, 0] = s1;
         startSideRooms[idx, 1] = s2;
 
+        // Store the room coordinates on the end to a list
         endSideRooms[idx, 0] = e1;
         endSideRooms[idx, 1] = e2;
     }
 
     void TraversePath(int previousDirection)
     {
-        currentTripCounter++;
-        if (currentTripCounter >= tripCounter)
-        {
-            return;
-        }
+        grid.GridData[currentRoom[0], currentRoom[1]] = 1;
 
-        grid.GridData[currentTile[0], currentTile[1]] = 1;
-
-        if (CheckIfTileExists(endSideRooms, currentTile[0], currentTile[1]))
+        if (CheckIfRoomOnEdge(endSideRooms, currentRoom[0], currentRoom[1]))
         {
+            // Stop when a tile on the end side is traversed
             return;
         }
 
@@ -133,111 +124,13 @@ public class GenerateDirectPath : MonoBehaviour
         }
 
         // Left direction
-        switch (leftDirection)
-        {
-            case 0:
-                // if its not in the grid then remove 
-                if (currentTile[0] - 1 < 0)
-                {
-                    availablePaths[0] = -1;
-                }
-
-                break;
-            case 1:
-                // if its not in the grid then remove 
-                if (currentTile[1] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[0] = -1;
-                }
-                break;
-            case 2:
-                // if its not in the grid then remove 
-                if (currentTile[0] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[0] = -1;
-                }
-                break;
-            case 3:
-                // if its not in the grid then remove 
-                if (currentTile[1] - 1 < 0)
-                {
-                    availablePaths[0] = -1;
-                }
-                break;
-            default:
-                break;
-        }
+        PruneAvailableDirections(0, leftDirection, availablePaths);
 
         // End direction
-        switch (endDirection)
-        {
-            case 0:
-                // if its not in the grid then remove 
-                if (currentTile[0] - 1 < 0)
-                {
-                    availablePaths[1] = -1;
-                }
-                break;
-            case 1:
-                // if its not in the grid then remove 
-                if (currentTile[1] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[1] = -1;
-                }
-                break;
-            case 2:
-                // if its not in the grid then remove 
-                if (currentTile[0] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[1] = -1;
-                }
-                break;
-            case 3:
-                // if its not in the grid then remove 
-                if (currentTile[1] - 1 < 0)
-                {
-                    availablePaths[1] = -1;
-                }
-                break;
-            default:
-                break;
-        }
+        PruneAvailableDirections(1, endDirection, availablePaths);
 
         // Right direction
-        switch (rightDirection)
-        {
-            case 0:
-                // if its not in the grid then remove 
-                if (currentTile[0] - 1 < 0)
-                {
-                    availablePaths[2] = -1;
-                }
-
-                break;
-            case 1:
-                // if its not in the grid then remove 
-                if (currentTile[1] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[2] = -1;
-                }
-                break;
-            case 2:
-                // if its not in the grid then remove 
-                if (currentTile[0] + 1 >= grid.EdgeSize)
-                {
-                    availablePaths[2] = -1;
-                }
-                break;
-            case 3:
-                // if its not in the grid then remove 
-                if (currentTile[1] - 1 < 0)
-                {
-                    availablePaths[2] = -1;
-                }
-                break;
-            default:
-                break;
-        }
+        PruneAvailableDirections(2, rightDirection, availablePaths);
         
         // Remove unavailable paths
         int newDirection = -1;
@@ -255,24 +148,24 @@ public class GenerateDirectPath : MonoBehaviour
         int directionIdx = Array.IndexOf(availablePaths, pathCandidates[rand]);
         newDirection = availablePaths[directionIdx];
         
+        // Traverse the next room
         switch (newDirection)
         {
             case 0:
-                currentTile[0] -= 1;
+                currentRoom[0] -= 1;
                 break;
             case 1:
-                currentTile[1] += 1;
+                currentRoom[1] += 1;
                 break;
             case 2:
-                currentTile[0] += 1;
+                currentRoom[0] += 1;
                 break;
             case 3:
-                currentTile[1] -= 1;
+                currentRoom[1] -= 1;
                 break;
             default:
                 break;
         }
-
         TraversePath(newDirection);
     }
 
@@ -286,36 +179,41 @@ public class GenerateDirectPath : MonoBehaviour
         {
             for (int j = 0; j < grid.EdgeSize; j++)
             {
-                if (CheckIfTileExists(startSideRooms, i, j))
+                Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+
+                if (CheckIfRoomOnEdge(startSideRooms, i, j))
                 {
+                    // Check if room exists in the start side 
                     Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
-                    if (startTile[0] == i && startTile[1] == j)
-                    {
-                        Gizmos.color = new Color(1f, 1f, 0f, 0.5f);
-                    }
+
                 }
-                else if(CheckIfTileExists(endSideRooms, i, j))
+                else if(CheckIfRoomOnEdge(endSideRooms, i, j))
                 {
+                    // Check if room exists in the end side
                     Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
-                }
-                else
-                {
-                    Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
                 }
 
                 if (grid.GridData[i, j] == 1)
                 {
+                    // Check if room is part of path
                     Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
                 }
 
-                // Check if tile exists in startSideRooms
+                if (startTile[0] == i && startTile[1] == j)
+                {
+                    // Check if room is the start
+                    Gizmos.color = new Color(1f, 1f, 0f, 0.5f);
+                }
+
+                // Draw the cube
                 Gizmos.DrawCube(new Vector3(1.5f * i, 0, 1.5f * j), new Vector3(1, 1, 1));
             }
         }
     }
 
-    bool CheckIfTileExists(int[,] side, int row, int col)
+    bool CheckIfRoomOnEdge(int[,] side, int row, int col)
     {
+        // Check if the tiles lie within the edge list
         for(int i = 0; i < side.GetLength(0); i++)
         {
             if (side[i, 0] == row && side[i, 1] == col)
@@ -324,5 +222,40 @@ public class GenerateDirectPath : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void PruneAvailableDirections(int directionIdx, int direction, int[] availablePaths)
+    {
+        switch (direction)
+        {
+            case 0:
+                if (currentRoom[0] - 1 < 0)
+                {
+                    // if its not in the grid then remove it from the available paths
+                    availablePaths[directionIdx] = -1;
+                }
+                break;
+            case 1:
+                
+                if (currentRoom[1] + 1 >= grid.EdgeSize)
+                {
+                    availablePaths[directionIdx] = -1;
+                }
+                break;
+            case 2:
+                if (currentRoom[0] + 1 >= grid.EdgeSize)
+                {
+                    availablePaths[directionIdx] = -1;
+                }
+                break;
+            case 3:
+                if (currentRoom[1] - 1 < 0)
+                {
+                    availablePaths[directionIdx] = -1;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
