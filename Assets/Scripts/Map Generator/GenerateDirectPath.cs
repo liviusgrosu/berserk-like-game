@@ -15,8 +15,8 @@ public class GenerateDirectPath : MonoBehaviour
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
-    GridDirectionNode gridDirectionParentNode;
-    GridDirectionNode currentDirectionNode;
+    GridDirectionNode gridDirectionParentNode, currentDirectionNode;
+    GridDirectionNode gizmosCurrentDirectionNode, previousCurrentDirectionNode;
 
     private int[,] gridOrientation = {
         // 0 - North
@@ -185,6 +185,28 @@ public class GenerateDirectPath : MonoBehaviour
         {
             return;
         }
+
+        previousCurrentDirectionNode = gridDirectionParentNode;
+        gizmosCurrentDirectionNode = gridDirectionParentNode.child;
+
+        while(true)
+        {
+            Gizmos.color = Color.cyan;
+
+            Vector3 startPos = new Vector3(previousCurrentDirectionNode.coordinate[0] * 1.5f, 0f, previousCurrentDirectionNode.coordinate[1] * 1.5f);
+            Vector3 endPos = new Vector3(gizmosCurrentDirectionNode.coordinate[0] * 1.5f, 0f, gizmosCurrentDirectionNode.coordinate[1] * 1.5f);
+
+            Gizmos.DrawLine(startPos, endPos);
+
+            previousCurrentDirectionNode = gizmosCurrentDirectionNode;
+            if (gizmosCurrentDirectionNode.child == null)
+            {
+                break;
+            }
+            // Go to the next node
+            gizmosCurrentDirectionNode = gizmosCurrentDirectionNode.child;
+        }
+
         for (int i = 0; i < grid.EdgeSize; i++)
         {
             for (int j = 0; j < grid.EdgeSize; j++)
@@ -195,7 +217,6 @@ public class GenerateDirectPath : MonoBehaviour
                 {
                     // Check if room exists in the start side 
                     Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
-
                 }
                 else if(CheckIfRoomOnEdge(endSideRooms, i, j))
                 {
