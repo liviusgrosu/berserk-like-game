@@ -235,8 +235,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f86ee47cd89700a4ebad45bb43aabfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinRange: 3
-  MaxRange: 7
+  MinRange: 20
+  MaxRange: 40
+  EndDirectionFactor: 61
 --- !u!4 &1213870747
 Transform:
   m_ObjectHideFlags: 0

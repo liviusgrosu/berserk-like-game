@@ -5,6 +5,7 @@ class GridDirectionNode
     public int[] coordinate;
     //public LinkedList<GridDirectionNode> children;
     public GridDirectionNode child;
+    public List<int> availableDirections;
 
     public GridDirectionNode(int[] coordinate)
     {
