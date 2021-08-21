@@ -18,6 +18,9 @@ public class GenerateDirectPath : MonoBehaviour
     [Range(1, 100)]
     public int EndDirectionFactor = 50;
 
+    public int MinDepthRange;
+    public int MaxDepthRange;
+
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
@@ -90,14 +93,18 @@ public class GenerateDirectPath : MonoBehaviour
         TraversePath(startDirection);
         // Store the available paths around each room in the main path
         CalculateAvailableDirectionsForPath();
+        // TODO: Calculate optional paths
+        TraverseOptionalPath();
         int k = 0;
     }
 
     void CalculateAvailableDirectionsForPath()
     {
-        currentDirectionNode = gridDirectionParentNode.child;
-        while(currentDirectionNode.child != null)
+        currentDirectionNode = gridDirectionParentNode.children[0];
+        while(currentDirectionNode.children.Count != 0)
         {
+            // TODO: Loop through all the children
+            // If you dont then its some rooms will have outdated available directions when the optional rooms are added
             List<int> availableDirections = new List<int> {0, 1, 2, 3};
 
             // Get coordinates around the path
@@ -129,13 +136,125 @@ public class GenerateDirectPath : MonoBehaviour
             availableDirections.RemoveAll(item => item == -1);
 
             currentDirectionNode.availableDirections = availableDirections;
-            currentDirectionNode = currentDirectionNode.child;
+            currentDirectionNode = currentDirectionNode.children[0];
+        }
+    }
+
+    void TraverseOptionalPath()
+    {
+        List<GridDirectionNode> rooms = new List<GridDirectionNode>();
+
+        // Add main path the list
+        currentDirectionNode = gridDirectionParentNode.children[0];
+        while (currentDirectionNode.children.Count != 0)
+        {
+            rooms.Add(currentDirectionNode);
+            currentDirectionNode = currentDirectionNode.children[0];
+        }
+
+        // Reset pointer to parent node
+        currentDirectionNode = gridDirectionParentNode.children[0];
+
+        int currentRoomCount = rooms.Count / 2;
+        for (int roomIdx = 0; roomIdx < currentRoomCount; roomIdx++)
+        {
+            // Get a random room
+            int randomRoomIdx = UnityEngine.Random.Range(1, rooms.Count - 1);
+            GridDirectionNode currentRoom = rooms[randomRoomIdx];
+            // Remove the main path room from the list
+            rooms.RemoveAt(randomRoomIdx);
+            List<int> availableDirections = currentRoom.availableDirections;
+            if (availableDirections.Count != 0)
+            {
+                // Choose a random available direction
+                int randomDirection = availableDirections[UnityEngine.Random.Range(0, availableDirections.Count)];
+                // Add that direction and remove it from available directions of the room
+                availableDirections.RemoveAll(item => item == randomDirection);
+
+                int randomDepth = UnityEngine.Random.Range(MinDepthRange, MaxDepthRange);
+
+                // Traverse depth
+                for (int depthIdx = 0; depthIdx < randomDepth; depthIdx++)
+                {
+                    // Get coordinate of new room
+                    int[] coordinate = new int[2];
+                    currentRoom.coordinate.CopyTo(coordinate, 0);
+
+                    switch (randomDirection)
+                    {
+                        case 0:
+                            coordinate[0] -= 1;
+                            break;
+                        case 1:
+                            coordinate[1] += 1;
+                            break;
+                        case 2:
+                            coordinate[0] += 1;
+                            break;
+                        case 3:
+                            coordinate[1] -= 1;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    grid.GridData[coordinate[0], coordinate[1]] = 1;
+
+                    currentRoom.AddChildRoom(coordinate);
+                    // Traverse that newly created child
+                    currentRoom = currentRoom.children[currentRoom.children.Count - 1];
+                    rooms.Add(currentRoom);
+                    // TODO: maybe instantiate the list in the class as this
+                    currentRoom.availableDirections = new List<int> {0, 1, 2, 3};
+                    availableDirections = currentRoom.availableDirections;
+
+                    // Get coordinates around the path
+                    int[] northCoordinate = new int[] {currentRoom.coordinate[0] - 1, currentRoom.coordinate[1] };
+                    int[] eastCoordinate =  new int[] {currentRoom.coordinate[0], currentRoom.coordinate[1] + 1 };
+                    int[] southCoordinate = new int[] {currentRoom.coordinate[0] + 1, currentRoom.coordinate[1] };
+                    int[] westCoordinate =  new int[] {currentRoom.coordinate[0], currentRoom.coordinate[1] - 1 };
+
+                    // Remove rooms that are adjacent
+                    if (CheckIfCoordinateExist(gridDirectionParentNode, northCoordinate) || CheckRoomOutOfBound(northCoordinate))
+                    {
+                        availableDirections[0] = -1;
+                    }
+
+                    if (CheckIfCoordinateExist(gridDirectionParentNode, eastCoordinate) || CheckRoomOutOfBound(eastCoordinate))
+                    {
+                        availableDirections[1] = -1;
+                    }
+
+                    if (CheckIfCoordinateExist(gridDirectionParentNode, southCoordinate) || CheckRoomOutOfBound(southCoordinate))
+                    {
+                        availableDirections[2] = -1;
+                    }
+
+                    if (CheckIfCoordinateExist(gridDirectionParentNode, westCoordinate) || CheckRoomOutOfBound(westCoordinate))
+                    {
+                        availableDirections[3] = -1;
+                    }
+
+                    availableDirections.RemoveAll(item => item == -1);
+
+                    if (availableDirections.Count == 0)
+                    {
+                        // No available rooms left then stop traversing path
+                        break;
+                    }
+
+                    // Get a random room
+                    randomDirection = availableDirections[UnityEngine.Random.Range(0, availableDirections.Count)];
+                    // Add that direction and remove it from available directions of the room
+                    availableDirections.RemoveAll(item => item == randomDirection);
+                }
+            }
         }
     }
 
     bool CheckIfCoordinateExist(GridDirectionNode room, int[] coordinate)
     {
-        if(room.child == null)
+        if(room.children.Count == 0)
         {
             return false;
         }
@@ -143,7 +262,12 @@ public class GenerateDirectPath : MonoBehaviour
         {
             return true;
         }
-        return CheckIfCoordinateExist(room.child, coordinate);
+
+        foreach(GridDirectionNode child in room.children)
+        {
+            return CheckIfCoordinateExist(child, coordinate);
+        }
+        return false;
     }
 
     bool CheckRoomOutOfBound(int[] coordinate)
@@ -200,13 +324,11 @@ public class GenerateDirectPath : MonoBehaviour
         List<int> pathCandidates = availablePaths.ToList();
         pathCandidates.RemoveAll(item => item == -1);
 
-        if (!pathCandidates.Any())
+        if (pathCandidates.Count == 0)
         {
             // If theres no more availble paths then the path is finished
             return;
         }
-
-        // currentDirectionNode.availableDirections = new List<int>(pathCandidates);
 
         if (pathCandidates.Count >= 2 && pathCandidates.Contains(endDirection))
         {
@@ -221,9 +343,6 @@ public class GenerateDirectPath : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, pathCandidates.Count);
         int directionIdx = Array.IndexOf(availablePaths, pathCandidates[rand]);
         newDirection = availablePaths[directionIdx];
-        
-        // Current available direction becomes whats left
-        // currentDirectionNode.availableDirections.RemoveAll(item => item == newDirection);
 
         // Traverse the next room
         switch (newDirection)
@@ -245,74 +364,24 @@ public class GenerateDirectPath : MonoBehaviour
         }
 
         currentDirectionNode.AddChildRoom(currentRoom);
-        currentDirectionNode = currentDirectionNode.child;
+        currentDirectionNode = currentDirectionNode.children[0];
         TraversePath(newDirection);
-    }
-
-    void TraverseOptionalPath()
-    {
-
     }
 
     void OnDrawGizmos()
     {
-        if (grid == null)
+        if (grid == null || gridDirectionParentNode.children.Count == 0)
         {
             return;
         }
 
         gizmosPreviousDirectionNode = gridDirectionParentNode;
-        gizmosCurrentDirectionNode = gridDirectionParentNode.child;
+        gizmosCurrentDirectionNode = gridDirectionParentNode.children[0];
+ 
+        Gizmos.color = Color.cyan;
 
-        while(true)
-        {
-            Gizmos.color = Color.cyan;
+        DrawDirectionLines(gizmosPreviousDirectionNode);
 
-            Vector3 startPos = new Vector3(gizmosPreviousDirectionNode.coordinate[0] * 1.5f, 0f, gizmosPreviousDirectionNode.coordinate[1] * 1.5f);
-            Vector3 endPos = new Vector3(gizmosCurrentDirectionNode.coordinate[0] * 1.5f, 0f, gizmosCurrentDirectionNode.coordinate[1] * 1.5f);
-
-            // Draw the path between current and previous node
-            Gizmos.DrawLine(startPos, endPos);
-
-            if (gizmosCurrentDirectionNode.availableDirections != null)
-            {
-                foreach(int direction in gizmosCurrentDirectionNode.availableDirections)
-                {
-                    Gizmos.color = Color.yellow;
-
-                    int[] nextCoordinate = new int[gizmosCurrentDirectionNode.coordinate.Length];
-                    gizmosCurrentDirectionNode.coordinate.CopyTo(nextCoordinate, 0);
-
-                    switch(direction)
-                    {
-                        case 0:
-                            nextCoordinate[0]--;
-                            break;
-                        case 1:
-                            nextCoordinate[1]++;
-                            break;
-                        case 2:
-                            nextCoordinate[0]++;
-                            break;
-                        case 3:
-                            nextCoordinate[1]--;
-                            break;
-                        default:
-                            break;
-                    }
-                    Vector3 nextAvailableNode = new Vector3(nextCoordinate[0] * 1.5f, 0f, nextCoordinate[1] * 1.5f);
-                    Gizmos.DrawLine(endPos, nextAvailableNode);
-                }
-            }
-
-            gizmosPreviousDirectionNode = gizmosCurrentDirectionNode;
-            if (gizmosCurrentDirectionNode.child == null)
-            {
-                break;
-            }
-            // Go to the next node
-            gizmosCurrentDirectionNode = gizmosCurrentDirectionNode.child;
-        }
 
         for (int i = 0; i < grid.EdgeSize; i++)
         {
@@ -347,6 +416,19 @@ public class GenerateDirectPath : MonoBehaviour
                 Gizmos.DrawCube(new Vector3(1.5f * i, 0, 1.5f * j), new Vector3(1, 1, 1));
             }
         }
+    }
+
+    void DrawDirectionLines(GridDirectionNode currentNode)
+    {
+        foreach(GridDirectionNode nextRoom in currentNode.children)
+        {
+            Vector3 currentRoomPos = new Vector3(currentNode.coordinate[0] * 1.5f, 0f, currentNode.coordinate[1] * 1.5f);
+            Vector3 nextRoomPos = new Vector3(nextRoom.coordinate[0] * 1.5f, 0f, nextRoom.coordinate[1] * 1.5f);
+
+            Gizmos.DrawLine(currentRoomPos, nextRoomPos);
+            DrawDirectionLines(nextRoom);
+        }
+        return;
     }
 
     bool CheckIfRoomOnEdge(int[,] side, int row, int col)

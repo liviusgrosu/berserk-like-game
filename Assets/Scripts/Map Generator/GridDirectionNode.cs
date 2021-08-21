@@ -3,19 +3,19 @@ using System.Collections.Generic;
 class GridDirectionNode
 {
     public int[] coordinate;
-    //public LinkedList<GridDirectionNode> children;
-    public GridDirectionNode child;
+    public List<GridDirectionNode> children;
     public List<int> availableDirections;
 
     public GridDirectionNode(int[] coordinate)
     {
         this.coordinate = new int[coordinate.Length];
         coordinate.CopyTo(this.coordinate, 0);
+
+        children = new List<GridDirectionNode>();
     }
 
     public void AddChildRoom(int[] coordinate)
     {
-        //children.AddFirst(new GridDirectionNode(coordinate));
-        child = new GridDirectionNode(coordinate);
+        children.Add(new GridDirectionNode(coordinate));
     }
 }
