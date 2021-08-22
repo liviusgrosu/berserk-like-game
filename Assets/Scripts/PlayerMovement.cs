@@ -11,9 +11,16 @@ public class PlayerMovement : MonoBehaviour
     
     private RaycastHit mouseRay;
 
+    public GenerateDirectPath GridGenerator;
+
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+    }
+
+    void Start()
+    {
+        transform.position = GridGenerator.GetStartRoomPosition() + new Vector3(0f, 1.5f, 0f);
     }
 
     void Update()
