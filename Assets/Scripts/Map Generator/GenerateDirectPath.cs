@@ -20,8 +20,7 @@ public class GenerateDirectPath : MonoBehaviour
     public int MinDepthRange;
     public int MaxDepthRange;
 
-    public GameObject PlatformModel;
-    public GameObject ConnectorModel;
+    public GameObject PlatformModel, ConnectorModel, WallModel;
 
     private int startDirection, endDirection, leftDirection, rightDirection;
 
@@ -88,7 +87,7 @@ public class GenerateDirectPath : MonoBehaviour
         currentRoom = new int[2];
         startRoom.CopyTo(currentRoom, 0);
 
-        gridDirectionParentNode = new GridDirectionNode(currentRoom);
+        gridDirectionParentNode = new GridDirectionNode(currentRoom, null);
         currentDirectionNode = gridDirectionParentNode;
 
         // Create the main path
@@ -497,9 +496,11 @@ public class GenerateDirectPath : MonoBehaviour
 
     void TraverseAndDrawRoom(GridDirectionNode room)
     {
+        // Render the platform
         GameObject platformInstaObj = Instantiate(PlatformModel, new Vector3(1.5f * room.coordinate[0], -0.5f, 1.5f * room.coordinate[1]), PlatformModel.transform.rotation);
-        platformInstaObj.name = $"[{room.coordinate[0]},{room.coordinate[1]}]";
+        platformInstaObj.name = $"Platform - [{room.coordinate[0]},{room.coordinate[1]}]";
 
+        // Render the connector
         foreach(int direction in room.adjacentRoomDirections)
         {
             GameObject platformConnectorInstaObj = Instantiate(ConnectorModel, Vector3.zero, ConnectorModel.transform.rotation);
@@ -510,27 +511,71 @@ public class GenerateDirectPath : MonoBehaviour
                 // North
                 case 0:
                     newPos = new Vector3(platformPosition.x - 0.75f, -0.5f, platformPosition.z);
-                    platformConnectorInstaObj.name = $"[{room.coordinate[0]},{room.coordinate[1]}] N";
+                    platformConnectorInstaObj.name = $"Connector - [{room.coordinate[0]},{room.coordinate[1]}] N";
                     break;
                 // East
                 case 1:
                     newPos = new Vector3(platformPosition.x, -0.5f, platformPosition.z + 0.75f);
                     platformConnectorInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
-                    platformConnectorInstaObj.name = $"[{room.coordinate[0]},{room.coordinate[1]}] E";
+                    platformConnectorInstaObj.name = $"Connector - [{room.coordinate[0]},{room.coordinate[1]}] E";
                     break;
                 // South
                 case 2:
                     newPos = new Vector3(platformPosition.x + 0.75f, -0.5f, platformPosition.z);
-                    platformConnectorInstaObj.name = $"[{room.coordinate[0]},{room.coordinate[1]}] S";
+                    platformConnectorInstaObj.name = $"Connector - [{room.coordinate[0]},{room.coordinate[1]}] S";
                     break;
                 // West
                 case 3:
                     newPos = new Vector3(platformPosition.x, -0.5f, platformPosition.z - 0.75f);
                     platformConnectorInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
-                    platformConnectorInstaObj.name = $"[{room.coordinate[0]},{room.coordinate[1]}] W";
+                    platformConnectorInstaObj.name = $"Connector - [{room.coordinate[0]},{room.coordinate[1]}] W";
                     break;
             }
             platformConnectorInstaObj.transform.position = newPos;
+        }
+
+        // Render the walls
+        List<int> wallDirections = new List<int> {0, 1, 2, 3};
+        wallDirections = wallDirections.Except(room.adjacentRoomDirections).ToList();
+
+        // Remove the parent room from the list
+        if (room.parent != null)
+        {
+            wallDirections.Remove(GetParentRoomDirection(room));
+        }
+
+        foreach(int direction in wallDirections)
+        {
+            GameObject wallInstaObj = Instantiate(WallModel, Vector3.zero, ConnectorModel.transform.rotation);
+            Vector3 wallPosition = platformInstaObj.transform.position;
+            Vector3 newPos = Vector3.zero;
+            switch (direction)
+            {
+                // North
+                case 0:
+                    newPos = new Vector3(wallPosition.x - 0.4f, -0.5f, wallPosition.z);
+                    wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
+                    wallInstaObj.name = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}] N";
+                    break;
+                // East
+                case 1:
+                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z + 0.4f);
+                    
+                    wallInstaObj.name = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}] E";
+                    break;
+                // South
+                case 2:
+                    newPos = new Vector3(wallPosition.x + 0.4f, -0.5f, wallPosition.z);
+                    wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
+                    wallInstaObj.name = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}] S";
+                    break;
+                // West
+                case 3:
+                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z - 0.4f);
+                    wallInstaObj.name = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}] W";
+                    break;
+            }
+            wallInstaObj.transform.position = newPos;
         }
 
         foreach(GridDirectionNode child in room.children)
@@ -598,5 +643,32 @@ public class GenerateDirectPath : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    int GetParentRoomDirection(GridDirectionNode room)
+    {
+        int[] northCoordinate = new int[] {room.coordinate[0] - 1, room.coordinate[1] };
+        int[] eastCoordinate =  new int[] {room.coordinate[0], room.coordinate[1] + 1 };
+        int[] southCoordinate = new int[] {room.coordinate[0] + 1, room.coordinate[1] };
+        int[] westCoordinate =  new int[] {room.coordinate[0], room.coordinate[1] - 1 };
+
+
+        if (room.parent.coordinate.SequenceEqual(northCoordinate))
+        {
+            return 0;
+        }
+        if (room.parent.coordinate.SequenceEqual(eastCoordinate))
+        {
+            return 1;
+        }
+        if (room.parent.coordinate.SequenceEqual(southCoordinate))
+        {
+            return 2;
+        }
+        if (room.parent.coordinate.SequenceEqual(westCoordinate))
+        {
+            return 3;
+        }
+        return -1;
     }
 }
