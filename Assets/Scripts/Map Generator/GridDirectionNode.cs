@@ -5,6 +5,7 @@ class GridDirectionNode
     public int[] coordinate;
     public List<GridDirectionNode> children;
     public List<int> availableDirections;
+    public List<int> adjacentRoomDirections;
 
     public GridDirectionNode(int[] coordinate)
     {
@@ -12,6 +13,7 @@ class GridDirectionNode
         coordinate.CopyTo(this.coordinate, 0);
 
         children = new List<GridDirectionNode>();
+        adjacentRoomDirections = new List<int>();
     }
 
     public void AddChildRoom(int[] coordinate)
