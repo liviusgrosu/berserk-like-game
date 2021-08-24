@@ -223,11 +223,11 @@ public class GenerateDirectPath : MonoBehaviour
         // Reset pointer to parent node
         currentDirectionNode = gridDirectionParentNode.children[0];
 
-        int currentRoomCount = rooms.Count / 2;
+        int currentRoomCount = rooms.Count - 1;
         for (int roomIdx = 0; roomIdx < currentRoomCount; roomIdx++)
         {
             // Get a random room
-            int randomRoomIdx = UnityEngine.Random.Range(1, rooms.Count - 1);
+            int randomRoomIdx = UnityEngine.Random.Range(1, rooms.Count - 2);
             GridDirectionNode currentRoom = rooms[randomRoomIdx];
             // Remove the main path room from the list
             rooms.RemoveAt(randomRoomIdx);
@@ -268,6 +268,9 @@ public class GenerateDirectPath : MonoBehaviour
 
                     grid.GridData[coordinate[0], coordinate[1]] = 1;
 
+                    // Update surrounding rooms to remove its available directions
+                    UpdateSurroundingAvailableDirections(coordinate);
+
                     currentRoom.AddChildRoom(coordinate);
                     // Traverse that newly created child
                     currentRoom = currentRoom.children[currentRoom.children.Count - 1];
@@ -277,10 +280,10 @@ public class GenerateDirectPath : MonoBehaviour
                     availableDirections = currentRoom.availableDirections;
 
                     // Get coordinates around the path
-                    int[] northCoordinate = new int[] {currentRoom.coordinate[0] - 1, currentRoom.coordinate[1] };
-                    int[] eastCoordinate =  new int[] {currentRoom.coordinate[0], currentRoom.coordinate[1] + 1 };
-                    int[] southCoordinate = new int[] {currentRoom.coordinate[0] + 1, currentRoom.coordinate[1] };
-                    int[] westCoordinate =  new int[] {currentRoom.coordinate[0], currentRoom.coordinate[1] - 1 };
+                    int[] northCoordinate = new int[] { currentRoom.coordinate[0] - 1, currentRoom.coordinate[1] };
+                    int[] eastCoordinate =  new int[] { currentRoom.coordinate[0], currentRoom.coordinate[1] + 1 };
+                    int[] southCoordinate = new int[] { currentRoom.coordinate[0] + 1, currentRoom.coordinate[1] };
+                    int[] westCoordinate =  new int[] { currentRoom.coordinate[0], currentRoom.coordinate[1] - 1 };
 
                     // Remove rooms that are adjacent
                     if (CheckIfCoordinateExist(gridDirectionParentNode, northCoordinate) || CheckRoomOutOfBound(northCoordinate))
@@ -342,6 +345,26 @@ public class GenerateDirectPath : MonoBehaviour
         {
             CheckIfCoordinateExistLoop(child, targetRoom, coordinate);
         }
+    }
+
+    GridDirectionNode GetRoom(GridDirectionNode currentRoom, int[] targetCoordinate)
+    {
+        if(currentRoom.coordinate.SequenceEqual(targetCoordinate))
+        {
+            return currentRoom;
+        }
+
+        foreach(GridDirectionNode childRoom in currentRoom.children)
+        {
+            GridDirectionNode result = GetRoom(childRoom, targetCoordinate);
+            if (result != null)
+            {
+                return result;
+            }
+            
+        }
+
+        return null;
     }
 
     bool CheckRoomOutOfBound(int[] coordinate)
@@ -675,6 +698,39 @@ public class GenerateDirectPath : MonoBehaviour
             return 3;
         }
         return -1;
+    }
+
+    void UpdateSurroundingAvailableDirections(int[] currentCoordinate)
+    {
+        int[] northCoordinate = new int[] {currentCoordinate[0] - 1, currentCoordinate[1] };
+        int[] eastCoordinate =  new int[] {currentCoordinate[0], currentCoordinate[1] + 1 };
+        int[] southCoordinate = new int[] {currentCoordinate[0] + 1, currentCoordinate[1] };
+        int[] westCoordinate =  new int[] {currentCoordinate[0], currentCoordinate[1] - 1 };
+
+        GridDirectionNode northDirectionRoom = GetRoom(gridDirectionParentNode, northCoordinate);
+        GridDirectionNode eastDirectionRoom = GetRoom(gridDirectionParentNode, eastCoordinate);
+        GridDirectionNode southDirectionRoom = GetRoom(gridDirectionParentNode, southCoordinate);
+        GridDirectionNode westDirectionRoom = GetRoom(gridDirectionParentNode, westCoordinate);
+
+        if (northDirectionRoom != null)
+        {
+            northDirectionRoom.availableDirections.Remove(2);
+        }
+
+        if (eastDirectionRoom != null)
+        {
+            eastDirectionRoom.availableDirections.Remove(3);
+        }
+
+        if (southDirectionRoom != null)
+        {
+            southDirectionRoom.availableDirections.Remove(0);
+        }
+
+        if (westDirectionRoom != null)
+        {
+            westDirectionRoom.availableDirections.Remove(1);
+        }
     }
 
     public Vector3 GetStartRoomPosition()

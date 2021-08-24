@@ -26,6 +26,7 @@ class GridDirectionNode
 
         children = new List<GridDirectionNode>();
         adjacentRoomDirections = new List<int>();
+        availableDirections = new List<int>();
     }
 
     public void AddChildRoom(int[] coordinate)
