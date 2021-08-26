@@ -1,5 +1,5 @@
  <p float="left">
-  <img src="https://raw.githubusercontent.com/liviusgrosu/berserk-like-game/main/Other%20Resources/Images/Repo_Header.PNG?token=AAM4WUIXKRNUH35W2EU5YZ3BEQYZU" >
+  <img src="https://raw.githubusercontent.com/liviusgrosu/berserk-like-game/main/Other%20Resources/Images/Repo_Header.PNG?token=AAM4WUPP6IQVVNEOVXE6HL3BF6Z34" >
  </p>
 
 # Berserk-like Game
