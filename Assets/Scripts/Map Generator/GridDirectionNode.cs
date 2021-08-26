@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 
-class GridDirectionNode
+class GridRoom
 {
     public int[] coordinate;
-    public GridDirectionNode parent;
-    public List<GridDirectionNode> children;
+    public GridRoom parent;
+    public List<GridRoom> children;
     public List<int> availableDirections;
     public List<int> adjacentRoomDirections;
 
-    public GridDirectionNode(int[] coordinate, GridDirectionNode parent)
+    public GridRoom(int[] coordinate, GridRoom parent)
     {
         this.parent = parent;
         Init(coordinate);
     }
 
-    public GridDirectionNode(int[] coordinate)
+    public GridRoom(int[] coordinate)
     {
         Init(coordinate);
     }
@@ -24,13 +24,13 @@ class GridDirectionNode
         this.coordinate = new int[coordinate.Length];
         coordinate.CopyTo(this.coordinate, 0);
 
-        children = new List<GridDirectionNode>();
+        children = new List<GridRoom>();
         adjacentRoomDirections = new List<int>();
         availableDirections = new List<int>();
     }
 
     public void AddChildRoom(int[] coordinate)
     {
-        children.Add(new GridDirectionNode(coordinate, this));
+        children.Add(new GridRoom(coordinate, this));
     }
 }

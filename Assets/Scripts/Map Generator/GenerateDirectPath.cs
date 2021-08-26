@@ -16,6 +16,9 @@ public class GenerateDirectPath : MonoBehaviour
     [Tooltip("The chance of traversing towards the end")]
     [Range(1, 100)]
     public int EndDirectionFactor = 50;
+    [Tooltip("Occurance of optional rooms")]
+    [Range(0, 1)]
+    public float OptionalRoomCoverage = 0.5f;
 
     public int MinDepthRange;
     public int MaxDepthRange;
@@ -27,7 +30,7 @@ public class GenerateDirectPath : MonoBehaviour
     private int startDirection, endDirection, leftDirection, rightDirection;
 
     Grid grid;
-    GridDirectionNode gridDirectionParentNode, currentDirectionNode;
+    GridRoom gridDirectionParentNode, currentDirectionNode;
 
     private int[,] startSideRooms;
     private int[,] endSideRooms;
@@ -87,7 +90,7 @@ public class GenerateDirectPath : MonoBehaviour
         currentRoom = new int[2];
         startRoom.CopyTo(currentRoom, 0);
 
-        gridDirectionParentNode = new GridDirectionNode(currentRoom, null);
+        gridDirectionParentNode = new GridRoom(currentRoom, null);
         currentDirectionNode = gridDirectionParentNode;
 
         // Create the main path
@@ -110,8 +113,6 @@ public class GenerateDirectPath : MonoBehaviour
             // Stop when a tile on the end side is traversed
             endRoom = new int[] { currentRoom[0], currentRoom[1] };
             grid.GridData[currentRoom[0], currentRoom[1]] = 3;
-
-            // TODO: add the final room to the tree here...
             return;
         }
 
@@ -203,7 +204,7 @@ public class GenerateDirectPath : MonoBehaviour
 
     void TraverseOptionalPath()
     {
-        List<GridDirectionNode> rooms = new List<GridDirectionNode>();
+        List<GridRoom> rooms = new List<GridRoom>();
 
         // Add main path the list
         currentDirectionNode = gridDirectionParentNode.children[0];
@@ -215,13 +216,13 @@ public class GenerateDirectPath : MonoBehaviour
 
         // Reset pointer to parent node
         currentDirectionNode = gridDirectionParentNode.children[0];
-
-        int currentRoomCount = rooms.Count - 1;
+        
+        int currentRoomCount = (int)(rooms.Count * (OptionalRoomCoverage) - 1);
         for (int roomIdx = 0; roomIdx < currentRoomCount; roomIdx++)
         {
             // Get a random room
             int randomRoomIdx = UnityEngine.Random.Range(1, rooms.Count - 2);
-            GridDirectionNode currentRoom = rooms[randomRoomIdx];
+            GridRoom currentRoom = rooms[randomRoomIdx];
             // Remove the main path room from the list
             rooms.RemoveAt(randomRoomIdx);
             List<int> availableDirections = currentRoom.availableDirections;
@@ -286,7 +287,7 @@ public class GenerateDirectPath : MonoBehaviour
             }
         }
     }
-    void RecalculatePathInformation(GridDirectionNode room)
+    void RecalculatePathInformation(GridRoom room)
     {
         // Get coordinates of adjacent rooms
         int[] northCoordinate = new int[] {room.coordinate[0] - 1, room.coordinate[1] };
@@ -325,7 +326,7 @@ public class GenerateDirectPath : MonoBehaviour
         // Check connecting rooms
         List<int> adjacentRoomDirections = new List<int>();
 
-        foreach(GridDirectionNode child in room.children)
+        foreach(GridRoom child in room.children)
         {
             if (child.coordinate.SequenceEqual(northCoordinate))
             {
@@ -361,7 +362,7 @@ public class GenerateDirectPath : MonoBehaviour
         TraverseAndDrawRoom(currentDirectionNode);
     }
 
-    void CalculateRoomsAvaibleDirections(GridDirectionNode room)
+    void CalculateRoomsAvaibleDirections(GridRoom room)
     {
         room.availableDirections = new List<int> {0, 1, 2, 3};
         // Get coordinates around the path
@@ -397,16 +398,16 @@ public class GenerateDirectPath : MonoBehaviour
         room.availableDirections.RemoveAll(item => item == -1);
     }
 
-    bool CheckIfCoordinateExist(GridDirectionNode room, int[] coordinate)
+    bool CheckIfCoordinateExist(GridRoom room, int[] coordinate)
     {
-        GridDirectionNode targetRoom = new GridDirectionNode(new int[] {-1, -1});
+        GridRoom targetRoom = new GridRoom(new int[] {-1, -1});
 
         CheckIfCoordinateExistLoop(room, targetRoom, coordinate);
 
         return targetRoom.coordinate.SequenceEqual(coordinate);
     }
 
-    void CheckIfCoordinateExistLoop(GridDirectionNode room, GridDirectionNode targetRoom, int[] coordinate)
+    void CheckIfCoordinateExistLoop(GridRoom room, GridRoom targetRoom, int[] coordinate)
     {
         if (coordinate[0] == room.coordinate[0] && coordinate[1] == room.coordinate[1])
         {
@@ -414,22 +415,22 @@ public class GenerateDirectPath : MonoBehaviour
             return;
         }
 
-        foreach(GridDirectionNode child in room.children)
+        foreach(GridRoom child in room.children)
         {
             CheckIfCoordinateExistLoop(child, targetRoom, coordinate);
         }
     }
 
-    GridDirectionNode GetRoom(GridDirectionNode currentRoom, int[] targetCoordinate)
+    GridRoom GetRoom(GridRoom currentRoom, int[] targetCoordinate)
     {
         if(currentRoom.coordinate.SequenceEqual(targetCoordinate))
         {
             return currentRoom;
         }
 
-        foreach(GridDirectionNode childRoom in currentRoom.children)
+        foreach(GridRoom childRoom in currentRoom.children)
         {
-            GridDirectionNode result = GetRoom(childRoom, targetCoordinate);
+            GridRoom result = GetRoom(childRoom, targetCoordinate);
             if (result != null)
             {
                 return result;
@@ -485,7 +486,7 @@ public class GenerateDirectPath : MonoBehaviour
         }
     }
 
-    void TraverseAndDrawRoom(GridDirectionNode room)
+    void TraverseAndDrawRoom(GridRoom room)
     {
         // Render the platform
         GameObject platformInstaObj = Instantiate(PlatformModel, new Vector3(DebugScaleFactor * 1.5f * room.coordinate[0], -0.5f, DebugScaleFactor * 1.5f * room.coordinate[1]), PlatformModel.transform.rotation);
@@ -573,7 +574,7 @@ public class GenerateDirectPath : MonoBehaviour
             wallInstaObj.transform.position = newPos;
         }
 
-        foreach(GridDirectionNode child in room.children)
+        foreach(GridRoom child in room.children)
         {
             // Traverse the children rooms
             TraverseAndDrawRoom(child);
@@ -627,7 +628,7 @@ public class GenerateDirectPath : MonoBehaviour
         }
     }
 
-    int GetParentRoomDirection(GridDirectionNode room)
+    int GetParentRoomDirection(GridRoom room)
     {
         int[] northCoordinate = new int[] {room.coordinate[0] - 1, room.coordinate[1] };
         int[] eastCoordinate =  new int[] {room.coordinate[0], room.coordinate[1] + 1 };
@@ -660,10 +661,10 @@ public class GenerateDirectPath : MonoBehaviour
         int[] southCoordinate = new int[] {currentCoordinate[0] + 1, currentCoordinate[1] };
         int[] westCoordinate =  new int[] {currentCoordinate[0], currentCoordinate[1] - 1 };
 
-        GridDirectionNode northDirectionRoom = GetRoom(gridDirectionParentNode, northCoordinate);
-        GridDirectionNode eastDirectionRoom = GetRoom(gridDirectionParentNode, eastCoordinate);
-        GridDirectionNode southDirectionRoom = GetRoom(gridDirectionParentNode, southCoordinate);
-        GridDirectionNode westDirectionRoom = GetRoom(gridDirectionParentNode, westCoordinate);
+        GridRoom northDirectionRoom = GetRoom(gridDirectionParentNode, northCoordinate);
+        GridRoom eastDirectionRoom = GetRoom(gridDirectionParentNode, eastCoordinate);
+        GridRoom southDirectionRoom = GetRoom(gridDirectionParentNode, southCoordinate);
+        GridRoom westDirectionRoom = GetRoom(gridDirectionParentNode, westCoordinate);
 
         if (northDirectionRoom != null)
         {
@@ -688,6 +689,6 @@ public class GenerateDirectPath : MonoBehaviour
 
     public Vector3 GetStartRoomPosition()
     {
-        return new Vector3(DebugScaleFactor * startRoom[0] * 1.5f, -0.5f, DebugScaleFactor * startRoom[1] * 1.5f);
+        return new Vector3(DebugScaleFactor * startRoom[0] * 1.5f, 0f, DebugScaleFactor * startRoom[1] * 1.5f);
     }
 }
