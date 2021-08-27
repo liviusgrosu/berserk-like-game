@@ -11,7 +11,7 @@ public class GenerateDirectPath : MonoBehaviour
     // https://docs.unity3d.com/ScriptReference/EditorGUILayout.MinMaxSlider.html
     public int MinRange;
     public int MaxRange;
-    public GameObject PlatformModel, ConnectorModel, WallModel;
+    public GameObject PlatformModel, WallModel;
     public float DebugScaleFactor = 1f;
 
     // The chances of the path going towards the end side
@@ -483,14 +483,14 @@ public class GenerateDirectPath : MonoBehaviour
                 {
                     // Check if room is the start
                     Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
-                    Gizmos.DrawCube(new Vector3(DebugScaleFactor * 1.5f * i, 0, DebugScaleFactor * 1.5f * j), new Vector3(1, 1, 1));
+                    Gizmos.DrawCube(new Vector3(DebugScaleFactor * i, 0, DebugScaleFactor * j), new Vector3(1, 1, 1));
                 }
 
                 if (endRoom.SequenceEqual(new int[]{i, j}))
                 {
                     // Check if room is the start
                     Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
-                    Gizmos.DrawCube(new Vector3(DebugScaleFactor * 1.5f * i, 0, DebugScaleFactor * 1.5f * j), new Vector3(1, 1, 1));
+                    Gizmos.DrawCube(new Vector3(DebugScaleFactor * i, 0, DebugScaleFactor * j), new Vector3(1, 1, 1));
                 }
             }
         }
@@ -499,45 +499,9 @@ public class GenerateDirectPath : MonoBehaviour
     void TraverseAndDrawRoom(GridRoom room)
     {
         // Render the platform
-        GameObject platformInstaObj = Instantiate(PlatformModel, new Vector3(DebugScaleFactor * 1.5f * room.coordinate[0], -0.5f, DebugScaleFactor * 1.5f * room.coordinate[1]), PlatformModel.transform.rotation);
+        GameObject platformInstaObj = Instantiate(PlatformModel, new Vector3(DebugScaleFactor * room.coordinate[0], -0.5f, DebugScaleFactor * room.coordinate[1]), PlatformModel.transform.rotation);
         platformInstaObj.transform.localScale = Vector3.Scale(platformInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
         platformInstaObj.name = $"Platform - [{room.coordinate[0]},{room.coordinate[1]}]";
-
-        // Render the connector
-        foreach(int direction in room.adjacentRoomDirections)
-        {
-            GameObject platformConnectorInstaObj = Instantiate(ConnectorModel, Vector3.zero, ConnectorModel.transform.rotation);
-            platformConnectorInstaObj.transform.localScale = Vector3.Scale(platformConnectorInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
-            Vector3 platformPosition = platformInstaObj.transform.position;
-            Vector3 newPos = Vector3.zero;
-            string baseName = $"Connector - [{room.coordinate[0]},{room.coordinate[1]}]";
-            switch (direction)
-            {
-                // North
-                case 0:
-                    newPos = new Vector3(platformPosition.x - (DebugScaleFactor * 0.75f), -0.5f, platformPosition.z);
-                    platformConnectorInstaObj.name = $"{baseName} N";
-                    break;
-                // East
-                case 1:
-                    newPos = new Vector3(platformPosition.x, -0.5f, platformPosition.z + (DebugScaleFactor * 0.75f));
-                    platformConnectorInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
-                    platformConnectorInstaObj.name = $"{baseName} E";
-                    break;
-                // South
-                case 2:
-                    newPos = new Vector3(platformPosition.x + (DebugScaleFactor * 0.75f), -0.5f, platformPosition.z);
-                    platformConnectorInstaObj.name = $"{baseName} S";
-                    break;
-                // West
-                case 3:
-                    newPos = new Vector3(platformPosition.x, -0.5f, platformPosition.z - (DebugScaleFactor * 0.75f));
-                    platformConnectorInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
-                    platformConnectorInstaObj.name = $"{baseName} W";
-                    break;
-            }
-            platformConnectorInstaObj.transform.position = newPos;
-        }
 
         // Render the walls
         List<int> wallDirections = new List<int> {0, 1, 2, 3};
@@ -551,7 +515,7 @@ public class GenerateDirectPath : MonoBehaviour
 
         foreach(int direction in wallDirections)
         {
-            GameObject wallInstaObj = Instantiate(WallModel, Vector3.zero, ConnectorModel.transform.rotation);
+            GameObject wallInstaObj = Instantiate(WallModel, Vector3.zero, WallModel.transform.rotation);
             wallInstaObj.transform.localScale = Vector3.Scale(wallInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
             Vector3 wallPosition = platformInstaObj.transform.position;
             Vector3 newPos = Vector3.zero;
