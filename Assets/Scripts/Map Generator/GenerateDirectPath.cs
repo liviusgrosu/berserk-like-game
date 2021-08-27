@@ -6,31 +6,37 @@ using UnityEngine;
 
 public class GenerateDirectPath : MonoBehaviour
 {
+    [Header("General")]
     // TODO: add custom editor range
     // https://docs.unity3d.com/ScriptReference/EditorGUILayout.MinMaxSlider.html
     public int MinRange;
     public int MaxRange;
+    public GameObject PlatformModel, ConnectorModel, WallModel;
+    public float DebugScaleFactor = 1f;
 
     // The chances of the path going towards the end side
-
     [Tooltip("The chance of traversing towards the end")]
     [Range(1, 100)]
     public int EndDirectionFactor = 50;
+    [Header("Optional Paths")]
+    [Space(5)]
     [Tooltip("Occurance of optional rooms")]
     [Range(0, 1)]
     public float OptionalRoomCoverage = 0.5f;
-
     public int MinDepthRange;
     public int MaxDepthRange;
 
-    public GameObject PlatformModel, ConnectorModel, WallModel;
-
-    public float DebugScaleFactor = 1f;
+    [Header("Direction Models")]
+    [Space(5)]
+    public GameObject NorthModel;
+    public GameObject EastModel;
+    public GameObject SouthModel;
+    public GameObject WestModel;
 
     private int startDirection, endDirection, leftDirection, rightDirection;
 
-    Grid grid;
-    GridRoom gridDirectionParentNode, currentDirectionNode;
+    private Grid grid;
+    private GridRoom gridDirectionParentNode, currentDirectionNode;
 
     private int[,] startSideRooms;
     private int[,] endSideRooms;
@@ -358,6 +364,11 @@ public class GenerateDirectPath : MonoBehaviour
             return;
         }
 
+        NorthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, -2f);
+        EastModel.transform.position = new Vector3(-2f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+        SouthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize + 2f);
+        WestModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize + 4f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+
         currentDirectionNode = gridDirectionParentNode;
         TraverseAndDrawRoom(currentDirectionNode);
     }
@@ -435,7 +446,6 @@ public class GenerateDirectPath : MonoBehaviour
             {
                 return result;
             }
-            
         }
 
         return null;
