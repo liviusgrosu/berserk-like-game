@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GeneratePath : MonoBehaviour
-{
-    [Header("General")]
-    // TODO: add custom editor range
-    // https://docs.unity3d.com/ScriptReference/EditorGUILayout.MinMaxSlider.html
-    public int MinRange;
-    public int MaxRange;
-    public GameObject PlatformModel, WallModel;
+{   
+    [Header("Room Model Types")]
+    [Space(5)]
+    public GameObject PlatformModel;
+    public GameObject WallModel;
+    public GameObject CornerModel;
     public float DebugScaleFactor = 1f;
 
     // The chances of the path going towards the end side
@@ -32,6 +31,12 @@ public class GeneratePath : MonoBehaviour
     public GameObject EastModel;
     public GameObject SouthModel;
     public GameObject WestModel;
+
+    [Header("Misc.")]
+    // TODO: add custom editor range
+    // https://docs.unity3d.com/ScriptReference/EditorGUILayout.MinMaxSlider.html
+    public int MinRange;
+    public int MaxRange;
 
     private int startDirection, endDirection, leftDirection, rightDirection;
 
@@ -364,10 +369,10 @@ public class GeneratePath : MonoBehaviour
             return;
         }
 
-        NorthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, -2f);
-        EastModel.transform.position = new Vector3(-2f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
-        SouthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize + 2f);
-        WestModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize + 4f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+        NorthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, -1f);
+        EastModel.transform.position = new Vector3(-1f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+        SouthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize + 1f);
+        WestModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize + 2f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
 
         currentDirectionNode = gridDirectionParentNode;
         TraverseAndDrawRoom(currentDirectionNode);
@@ -524,24 +529,24 @@ public class GeneratePath : MonoBehaviour
             {
                 // North
                 case 0:
-                    newPos = new Vector3(wallPosition.x - (DebugScaleFactor * 0.4f), -0.5f, wallPosition.z);
+                    newPos = new Vector3(wallPosition.x - (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} N";
                     break;
                 // East
                 case 1:
-                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z + (DebugScaleFactor * 0.4f));
+                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z + (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} E";
                     break;
                 // South
                 case 2:
-                    newPos = new Vector3(wallPosition.x + (DebugScaleFactor * 0.4f), -0.5f, wallPosition.z);
+                    newPos = new Vector3(wallPosition.x + (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} S";
                     break;
                 // West
                 case 3:
-                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z - (DebugScaleFactor * 0.4f));
+                    newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z - (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} W";
                     break;
             }
@@ -552,6 +557,25 @@ public class GeneratePath : MonoBehaviour
         {
             // Traverse the children rooms
             TraverseAndDrawRoom(child);
+        }
+    }
+
+    void HandleRoomTypes(GridRoom room)
+    {
+        int availableDirections = room.availableDirections.Count; 
+        switch (availableDirections)
+        {
+            case 1:
+                // Deadend
+                break;
+            case 2:
+                // Hallway, Bend, Corner
+                break;
+            case 3:
+                // Three way
+                break;
+            case 4:
+                break;
         }
     }
 
