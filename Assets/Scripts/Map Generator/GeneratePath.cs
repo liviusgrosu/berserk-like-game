@@ -553,29 +553,61 @@ public class GeneratePath : MonoBehaviour
             wallInstaObj.transform.position = newPos;
         }
 
+        // Render the corners
+        GridRoom northEastDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] - 1, room.coordinate[1] + 1 });
+        GridRoom southEastDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] + 1, room.coordinate[1] + 1 });
+        GridRoom southWestDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] + 1, room.coordinate[1] - 1 });
+        GridRoom northWestDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] - 1, room.coordinate[1] - 1 });
+
+        if (
+            northEastDirectionRoom == null ||
+            (!northEastDirectionRoom.adjacentRoomDirections.Contains(3) || !northEastDirectionRoom.adjacentRoomDirections.Contains(2)) ||
+            (!room.adjacentRoomDirections.Contains(0) && !room.adjacentRoomDirections.Contains(1))
+            )
+        {
+            Vector3 cornerPosition = platformInstaObj.transform.position;
+            Vector3 newPos = new Vector3(cornerPosition.x - (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z + (DebugScaleFactor * 0.45f));
+            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
+        }
+
+        if (
+            southEastDirectionRoom == null ||
+            (!southEastDirectionRoom.adjacentRoomDirections.Contains(3) || !southEastDirectionRoom.adjacentRoomDirections.Contains(0)) ||
+            (!room.adjacentRoomDirections.Contains(1) && !room.adjacentRoomDirections.Contains(2))
+            )
+        {
+            Vector3 cornerPosition = platformInstaObj.transform.position;
+            Vector3 newPos = new Vector3(cornerPosition.x + (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z + (DebugScaleFactor * 0.45f));
+            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
+        }
+
+        if (
+            southWestDirectionRoom == null ||
+            (!southWestDirectionRoom.adjacentRoomDirections.Contains(1) || !southWestDirectionRoom.adjacentRoomDirections.Contains(0)) ||
+            (!room.adjacentRoomDirections.Contains(3) && !room.adjacentRoomDirections.Contains(2))
+            )
+        {
+            Vector3 cornerPosition = platformInstaObj.transform.position;
+            Vector3 newPos = new Vector3(cornerPosition.x + (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z - (DebugScaleFactor * 0.45f));
+            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
+        }
+
+        if (
+            northWestDirectionRoom == null ||
+            (!northWestDirectionRoom.adjacentRoomDirections.Contains(1) || !northWestDirectionRoom.adjacentRoomDirections.Contains(2)) ||
+            (!room.adjacentRoomDirections.Contains(3) && !room.adjacentRoomDirections.Contains(0))
+            )
+        {
+            Vector3 cornerPosition = platformInstaObj.transform.position;
+            Vector3 newPos = new Vector3(cornerPosition.x - (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z - (DebugScaleFactor * 0.45f));
+            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
+        }
+
+
         foreach(GridRoom child in room.children)
         {
             // Traverse the children rooms
             TraverseAndDrawRoom(child);
-        }
-    }
-
-    void HandleRoomTypes(GridRoom room)
-    {
-        int availableDirections = room.availableDirections.Count; 
-        switch (availableDirections)
-        {
-            case 1:
-                // Deadend
-                break;
-            case 2:
-                // Hallway, Bend, Corner
-                break;
-            case 3:
-                // Three way
-                break;
-            case 4:
-                break;
         }
     }
 
