@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     
     private RaycastHit mouseRay;
 
-    public GenerateDirectPath GridGenerator;
+    public GeneratePath GridGenerator;
 
     void Awake()
     {

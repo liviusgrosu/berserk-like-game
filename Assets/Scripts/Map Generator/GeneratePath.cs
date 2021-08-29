@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenerateDirectPath : MonoBehaviour
+public class GeneratePath : MonoBehaviour
 {
     [Header("General")]
     // TODO: add custom editor range
