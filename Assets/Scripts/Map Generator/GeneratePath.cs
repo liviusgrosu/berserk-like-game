@@ -527,25 +527,25 @@ public class GeneratePath : MonoBehaviour
             string baseName = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}]";
             switch (direction)
             {
-                // North
                 case 0:
+                    // North
                     newPos = new Vector3(wallPosition.x - (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} N";
                     break;
-                // East
                 case 1:
+                    // East
                     newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z + (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} E";
                     break;
-                // South
                 case 2:
+                    // South
                     newPos = new Vector3(wallPosition.x + (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} S";
                     break;
-                // West
                 case 3:
+                    // West
                     newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z - (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} W";
                     break;
@@ -554,60 +554,39 @@ public class GeneratePath : MonoBehaviour
         }
 
         // Render the corners
-        GridRoom northEastDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] - 1, room.coordinate[1] + 1 });
-        GridRoom southEastDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] + 1, room.coordinate[1] + 1 });
-        GridRoom southWestDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] + 1, room.coordinate[1] - 1 });
-        GridRoom northWestDirectionRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] - 1, room.coordinate[1] - 1 });
-
-        if (
-            northEastDirectionRoom == null ||
-            (!northEastDirectionRoom.adjacentRoomDirections.Contains(3) || !northEastDirectionRoom.adjacentRoomDirections.Contains(2)) ||
-            (!room.adjacentRoomDirections.Contains(0) && !room.adjacentRoomDirections.Contains(1))
-            )
-        {
-            Vector3 cornerPosition = platformInstaObj.transform.position;
-            Vector3 newPos = new Vector3(cornerPosition.x - (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z + (DebugScaleFactor * 0.45f));
-            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
-        }
-
-        if (
-            southEastDirectionRoom == null ||
-            (!southEastDirectionRoom.adjacentRoomDirections.Contains(3) || !southEastDirectionRoom.adjacentRoomDirections.Contains(0)) ||
-            (!room.adjacentRoomDirections.Contains(1) && !room.adjacentRoomDirections.Contains(2))
-            )
-        {
-            Vector3 cornerPosition = platformInstaObj.transform.position;
-            Vector3 newPos = new Vector3(cornerPosition.x + (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z + (DebugScaleFactor * 0.45f));
-            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
-        }
-
-        if (
-            southWestDirectionRoom == null ||
-            (!southWestDirectionRoom.adjacentRoomDirections.Contains(1) || !southWestDirectionRoom.adjacentRoomDirections.Contains(0)) ||
-            (!room.adjacentRoomDirections.Contains(3) && !room.adjacentRoomDirections.Contains(2))
-            )
-        {
-            Vector3 cornerPosition = platformInstaObj.transform.position;
-            Vector3 newPos = new Vector3(cornerPosition.x + (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z - (DebugScaleFactor * 0.45f));
-            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
-        }
-
-        if (
-            northWestDirectionRoom == null ||
-            (!northWestDirectionRoom.adjacentRoomDirections.Contains(1) || !northWestDirectionRoom.adjacentRoomDirections.Contains(2)) ||
-            (!room.adjacentRoomDirections.Contains(3) && !room.adjacentRoomDirections.Contains(0))
-            )
-        {
-            Vector3 cornerPosition = platformInstaObj.transform.position;
-            Vector3 newPos = new Vector3(cornerPosition.x - (DebugScaleFactor * 0.45f), -0.5f, cornerPosition.z - (DebugScaleFactor * 0.45f));
-            GameObject cornerInstaObj = Instantiate(CornerModel, newPos, CornerModel.transform.rotation);
-        }
-
+        RenderCorner(room, -1, 1, new List<int> {0, 1}, platformInstaObj.transform.position);  // North east
+        RenderCorner(room, 1, 1, new List<int> {1, 2}, platformInstaObj.transform.position);   // South east
+        RenderCorner(room, 1, -1, new List<int> {3, 2}, platformInstaObj.transform.position);  // South west
+        RenderCorner(room, -1, -1, new List<int> {3, 0}, platformInstaObj.transform.position); // North west
 
         foreach(GridRoom child in room.children)
         {
             // Traverse the children rooms
             TraverseAndDrawRoom(child);
+        }
+    }
+
+    void RenderCorner(GridRoom room, int xDirection, int zDirection, List<int> adjacentRoomCheck, Vector3 origin)
+    {
+        // Get the corner room
+        GridRoom cornerRoom = GetRoom(gridDirectionParentNode, new int[] {room.coordinate[0] + xDirection, room.coordinate[1] + zDirection });
+
+        List<int> adjacentCornerRoomCheck = new List<int> {0, 1, 2, 3};
+        adjacentCornerRoomCheck = adjacentCornerRoomCheck.Except(adjacentRoomCheck).ToList();
+
+        // Check: 
+        // - the a corner room doesnt exists OR
+        // - A wall exists near the corner room OR
+        // - That a wall exists near the current room 
+        if (
+            cornerRoom == null ||
+            (!cornerRoom.adjacentRoomDirections.Contains(adjacentCornerRoomCheck[0]) || !cornerRoom.adjacentRoomDirections.Contains(adjacentCornerRoomCheck[1])) ||
+            (!room.adjacentRoomDirections.Contains(adjacentRoomCheck[0]) && !room.adjacentRoomDirections.Contains(adjacentRoomCheck[1]))
+            )
+        {
+            // Render the corner
+            Vector3 cornerPosition = new Vector3(origin.x + (xDirection * DebugScaleFactor * 0.45f), -0.5f, origin.z + (zDirection * DebugScaleFactor * 0.45f));
+            GameObject cornerInstaObj = Instantiate(CornerModel, cornerPosition, CornerModel.transform.rotation);
         }
     }
 
