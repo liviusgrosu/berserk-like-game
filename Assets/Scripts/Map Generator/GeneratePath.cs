@@ -64,28 +64,36 @@ public class GeneratePath : MonoBehaviour
         endDirection = (leftDirection + 1) % grid.EdgesCount;
         rightDirection = (endDirection + 1) % grid.EdgesCount;
 
-        // Get the rooms that exist on the start and end edges
+        // Store a list of rooms that exist in the start and end rooms
         switch(startDirection)
         {
             case 0:
+                // Starting Edge:   North
+                // Ending Edge:     South
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
                     FillEdgeTiles(i, 0, i, grid.EdgeSize - 1, i);
                 }
                 break;
             case 1:
+                // Starting Edge:   East
+                // Ending Edge:     West
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
                     FillEdgeTiles(i, i, grid.EdgeSize - 1, i, 0);
                 }
                 break;
             case 2:
+                // Starting Edge:   South
+                // Ending Edge:     North
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
                     FillEdgeTiles(i, grid.EdgeSize - 1, i, 0, i);
                 }
                 break;
             case 3:
+                // Starting Edge:   West
+                // Ending Edge:     East
                 for (int i = 0; i < grid.EdgeSize; i++)
                 {
                     FillEdgeTiles(i, i, 0, i, grid.EdgeSize - 1);
@@ -95,12 +103,13 @@ public class GeneratePath : MonoBehaviour
                 break;
         }
 
-        // Pick a random start room
+        // Pick a random room from the starting edge. That will be the starting room
         int randNum = UnityEngine.Random.Range(0, grid.EdgeSize);
         startRoom = new int[] {startSideRooms[randNum, 0], startSideRooms[randNum, 1]};
         currentRoom = new int[2];
         startRoom.CopyTo(currentRoom, 0);
 
+        // Create a new GridRoom object. This will be the parent node
         gridDirectionParentNode = new GridRoom(currentRoom, null);
         currentDirectionNode = gridDirectionParentNode;
 
@@ -112,11 +121,13 @@ public class GeneratePath : MonoBehaviour
         TraverseOptionalPath();
         // Recalculate available directions and connecting rooms
         RecalculatePathInformation(gridDirectionParentNode);
+        // Render the path with models
         RenderPath();
     }
 
     void TraversePath(int previousDirection)
     {
+        // Save current room into the grid data
         grid.GridData[currentRoom[0], currentRoom[1]] = 1;
 
         if (CheckIfRoomOnEdge(endSideRooms, currentRoom[0], currentRoom[1]))
@@ -129,6 +140,7 @@ public class GeneratePath : MonoBehaviour
 
         if (startRoom.SequenceEqual(currentRoom))
         {
+            // Store the starting room coordinate
             grid.GridData[currentRoom[0], currentRoom[1]] = 2;
         }
 
@@ -169,7 +181,7 @@ public class GeneratePath : MonoBehaviour
         {
             if(UnityEngine.Random.Range(0, 100) >= EndDirectionFactor)
             {
-                // Make end direction harder to traverse
+                // Make direction towards the ending edge harder to traverse
                 pathCandidates.Remove(endDirection);
             }
         }
@@ -198,6 +210,7 @@ public class GeneratePath : MonoBehaviour
                 break;
         }
 
+        // Traverse to the next room
         currentDirectionNode.AddChildRoom(currentRoom);
         currentDirectionNode = currentDirectionNode.children[0];
         TraversePath(newDirection);
@@ -208,7 +221,9 @@ public class GeneratePath : MonoBehaviour
         currentDirectionNode = gridDirectionParentNode.children[0];
         while(currentDirectionNode.children.Count != 0)
         {
+            // Calculate the available directions for this room
             CalculateRoomsAvaibleDirections(currentDirectionNode);
+            // Get the next child in the main path
             currentDirectionNode = currentDirectionNode.children[0];
         }
     }
@@ -228,13 +243,14 @@ public class GeneratePath : MonoBehaviour
         // Reset pointer to parent node
         currentDirectionNode = gridDirectionParentNode.children[0];
         
-        int currentRoomCount = (int)(rooms.Count * (OptionalRoomCoverage) - 1);
-        for (int roomIdx = 0; roomIdx < currentRoomCount; roomIdx++)
+        // Determine how many rooms to traverse for optional paths
+        int amountOfRoomsToTraverse = (int)(rooms.Count * (OptionalRoomCoverage) - 1);
+        for (int roomIdx = 0; roomIdx < amountOfRoomsToTraverse; roomIdx++)
         {
             // Get a random room
             int randomRoomIdx = UnityEngine.Random.Range(1, rooms.Count - 2);
             GridRoom currentRoom = rooms[randomRoomIdx];
-            // Remove the main path room from the list
+            // Remove the room from the list
             rooms.RemoveAt(randomRoomIdx);
             List<int> availableDirections = currentRoom.availableDirections;
             if (availableDirections.Count != 0)
@@ -271,6 +287,7 @@ public class GeneratePath : MonoBehaviour
                             break;
                     }
 
+                    // Save current room into the grid data
                     grid.GridData[coordinate[0], coordinate[1]] = 1;
 
                     // Update surrounding rooms to remove its available directions
@@ -366,14 +383,20 @@ public class GeneratePath : MonoBehaviour
     {
         if (grid == null || gridDirectionParentNode.children.Count == 0)
         {
+            // Don't render if no theres no path
             return;
         }
 
-        NorthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, -1f);
-        EastModel.transform.position = new Vector3(-1f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
-        SouthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize + 1f);
-        WestModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize + 2f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+        if (NorthModel != null && EastModel == null && SouthModel == null && WestModel == null)
+        {
+            // DEBUG: Render the the direction indicators
+            NorthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, -1f);
+            EastModel.transform.position = new Vector3(-1f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+            SouthModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize / 2, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize + 1f);
+            WestModel.transform.position = new Vector3(DebugScaleFactor * 1.5f * grid.EdgeSize + 2f, -0.5f, DebugScaleFactor * 1.5f * grid.EdgeSize / 2);
+        }
 
+        // Draw the rooms
         currentDirectionNode = gridDirectionParentNode;
         TraverseAndDrawRoom(currentDirectionNode);
     }
@@ -508,7 +531,7 @@ public class GeneratePath : MonoBehaviour
         platformInstaObj.transform.localScale = Vector3.Scale(platformInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
         platformInstaObj.name = $"Platform - [{room.coordinate[0]},{room.coordinate[1]}]";
 
-        // Render the walls
+        // Get the non adjacent rooms. This is where the walls will exist
         List<int> wallDirections = new List<int> {0, 1, 2, 3};
         wallDirections = wallDirections.Except(room.adjacentRoomDirections).ToList();
 
@@ -520,32 +543,34 @@ public class GeneratePath : MonoBehaviour
 
         foreach(int direction in wallDirections)
         {
+            // Instantiate the wall, scale it, and position it
             GameObject wallInstaObj = Instantiate(WallModel, Vector3.zero, WallModel.transform.rotation);
             wallInstaObj.transform.localScale = Vector3.Scale(wallInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
             Vector3 wallPosition = platformInstaObj.transform.position;
             Vector3 newPos = Vector3.zero;
             string baseName = $"Wall - [{room.coordinate[0]},{room.coordinate[1]}]";
+            // Position a wall for each direction where a wall is supposed to be
             switch (direction)
             {
                 case 0:
-                    // North
+                    // North wall
                     newPos = new Vector3(wallPosition.x - (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} N";
                     break;
                 case 1:
-                    // East
+                    // East wall
                     newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z + (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} E";
                     break;
                 case 2:
-                    // South
+                    // South wall
                     newPos = new Vector3(wallPosition.x + (DebugScaleFactor * 0.45f), -0.5f, wallPosition.z);
                     wallInstaObj.transform.Rotate(0f, 90f, 0f, Space.World);
                     wallInstaObj.name = $"{baseName} S";
                     break;
                 case 3:
-                    // West
+                    // West wall
                     newPos = new Vector3(wallPosition.x, -0.5f, wallPosition.z - (DebugScaleFactor * 0.45f));
                     wallInstaObj.name = $"{baseName} W";
                     break;
@@ -587,12 +612,13 @@ public class GeneratePath : MonoBehaviour
             // Render the corner
             Vector3 cornerPosition = new Vector3(origin.x + (xDirection * DebugScaleFactor * 0.45f), -0.5f, origin.z + (zDirection * DebugScaleFactor * 0.45f));
             GameObject cornerInstaObj = Instantiate(CornerModel, cornerPosition, CornerModel.transform.rotation);
+            cornerInstaObj.transform.localScale = Vector3.Scale(cornerInstaObj.transform.localScale, new Vector3(DebugScaleFactor, DebugScaleFactor, DebugScaleFactor));
         }
     }
 
     bool CheckIfRoomOnEdge(int[,] side, int row, int col)
     {
-        // Check if the tiles lie within the edge list
+        // Check if the room lies within the edge list
         for(int i = 0; i < side.GetLength(0); i++)
         {
             if (side[i, 0] == row && side[i, 1] == col)
@@ -605,6 +631,7 @@ public class GeneratePath : MonoBehaviour
 
     void PruneAvailableDirections(int directionIdx, int direction, int[] availablePaths)
     {
+        // Remove available directions depending on the direction
         switch (direction)
         {
             case 0:
@@ -639,6 +666,7 @@ public class GeneratePath : MonoBehaviour
 
     int GetParentRoomDirection(GridRoom room)
     {
+        // Get direction from the current room to its parent room
         int[] northCoordinate = new int[] {room.coordinate[0] - 1, room.coordinate[1] };
         int[] eastCoordinate =  new int[] {room.coordinate[0], room.coordinate[1] + 1 };
         int[] southCoordinate = new int[] {room.coordinate[0] + 1, room.coordinate[1] };
@@ -665,6 +693,7 @@ public class GeneratePath : MonoBehaviour
 
     void UpdateSurroundingAvailableDirections(int[] currentCoordinate)
     {
+        // Update the surronding rooms available directions around currently looked at room
         int[] northCoordinate = new int[] {currentCoordinate[0] - 1, currentCoordinate[1] };
         int[] eastCoordinate =  new int[] {currentCoordinate[0], currentCoordinate[1] + 1 };
         int[] southCoordinate = new int[] {currentCoordinate[0] + 1, currentCoordinate[1] };
@@ -698,6 +727,7 @@ public class GeneratePath : MonoBehaviour
 
     public Vector3 GetStartRoomPosition()
     {
-        return new Vector3(DebugScaleFactor * startRoom[0] * 1.5f, 0f, DebugScaleFactor * startRoom[1] * 1.5f);
+        // Get the levels starting room
+        return new Vector3(DebugScaleFactor * startRoom[0], 0f, DebugScaleFactor * startRoom[1]);
     }
 }
