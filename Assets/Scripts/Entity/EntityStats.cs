@@ -11,11 +11,11 @@ public class EntityStats : MonoBehaviour
     public int Defence;
     public int AttackSpeed;
 
+    [HideInInspector]
     // Current
-    public int CurrentHealth;
-    public int CurrentStamina;
+    public int CurrentHealth, CurrentStamina;
 
-    void Start()
+    void Awake()
     {
         CurrentHealth = Health;
         CurrentStamina = Stamina;
