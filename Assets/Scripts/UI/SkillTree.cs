@@ -29,7 +29,7 @@ class SkillTree : MonoBehaviour
             SkillTreeNode skillScript = skillUpgradeNode.GetComponent<SkillTreeNode>();
             if(PlayerEntityStats.CheckIfUpgradeUnlocked(skillScript.ID))
             {
-                // TODO: show thats its unlocked and aquired
+                skillUpgradeNode.GetComponent<Image>().color = Color.red;
                 continue;
             }
 
