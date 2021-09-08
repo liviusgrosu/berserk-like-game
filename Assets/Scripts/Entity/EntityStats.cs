@@ -15,8 +15,14 @@ public class EntityStats : MonoBehaviour
     // Current
     public int CurrentHealth, CurrentStamina;
 
+    // List of upgrade ids from the skill tree
+    private List<int> UpgradeIDs;
+
     void Awake()
     {
+        UpgradeIDs = new List<int>();
+        UpgradeIDs.Add(1);
+
         CurrentHealth = Health;
         CurrentStamina = Stamina;
     }
@@ -34,5 +40,15 @@ public class EntityStats : MonoBehaviour
     void LoadStatsFromFile()
     {
         // TODO: load stats from a file
+    }
+
+    public void StoreUpgrade(int id)
+    {
+        UpgradeIDs.Add(id);
+    }
+
+    public bool CheckIfUpgradeUnlocked(int id)
+    {
+        return UpgradeIDs.Contains(id);
     }
 }
