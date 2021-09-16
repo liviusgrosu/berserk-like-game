@@ -17,7 +17,7 @@ class SkillTree : MonoBehaviour
         // Add each skill tree node into a list
         foreach(Transform child in transform)
         {
-            if (child.GetComponent<SkillTreeNode>())
+            if(child.GetComponent<SkillTreeNode>())
             {
                 _skillTreeNodes.Add(child.gameObject);
             }
@@ -27,16 +27,17 @@ class SkillTree : MonoBehaviour
         foreach(GameObject skillUpgradeNode in _skillTreeNodes)
         {
             SkillTreeNode skillScript = skillUpgradeNode.GetComponent<SkillTreeNode>();
-            if(PlayerEntityStats.CheckIfUpgradeUnlocked(skillScript.ID))
+            if(PlayerEntityStats.CheckIfUpgradeUnlocked(skillScript))
             {
-                skillUpgradeNode.GetComponent<Image>().color = Color.red;
+                skillUpgradeNode.GetComponent<Image>().color = Color.cyan;
                 continue;
             }
 
+            // Check if the skill has the prerequisites
             bool unlocked = false;
-            foreach(int prerequitesID in skillUpgradeNode.GetComponent<SkillTreeNode>().PrerequisiteIDs)
+            foreach(SkillTreeNode prerequiteSkill in skillUpgradeNode.GetComponent<SkillTreeNode>().PrerequisiteSkills)
             {
-                if (PlayerEntityStats.CheckIfUpgradeUnlocked(prerequitesID))
+                if (PlayerEntityStats.CheckIfUpgradeUnlocked(prerequiteSkill))
                 {
                     unlocked = true;
                     break;

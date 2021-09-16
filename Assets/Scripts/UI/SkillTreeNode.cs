@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class SkillTreeNode : MonoBehaviour
 {
-    public int ID;
     public string Skill;
     public int Amount;
-    public List<int> PrerequisiteIDs;
+    public List<SkillTreeNode> PrerequisiteSkills;
 
     void Awake()
     {
-        PrerequisiteIDs = new List<int>();
+        if (PrerequisiteSkills == null)
+        {
+            PrerequisiteSkills = new List<SkillTreeNode>();
+        }
     }
 }
