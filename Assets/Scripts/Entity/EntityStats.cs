@@ -44,7 +44,7 @@ public class EntityStats : MonoBehaviour
         // TODO: load stats from a file
     }
 
-    public void StoreUpgrade(SkillTreeNode skillNode)
+    public void AddUpgrade(SkillTreeNode skillNode)
     {
         CurrentSkills.Add(skillNode);
     }
