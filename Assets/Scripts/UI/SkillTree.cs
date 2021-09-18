@@ -79,8 +79,11 @@ class SkillTree : MonoBehaviour
             if (!PlayerEntityStats.CurrentSkills.Contains(currentSkill.GetComponent<SkillTreeNode>()) && 
                 _listHelper.CheckSublistExists(PlayerEntityStats.CurrentSkills, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
             {
+                // Check if the player can afford it
+                bool sufficentExperience = true ? LootManager.Experience >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
+
                 currentSkill.GetComponent<Image>().color = Color.yellow;
-                currentSkill.GetComponent<Button>().interactable = true;   
+                currentSkill.GetComponent<Button>().interactable = sufficentExperience;   
             }
         }
 
