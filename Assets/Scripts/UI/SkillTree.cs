@@ -1,20 +1,29 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Utility;
+
 class SkillTree : MonoBehaviour
 {
     public EntityStats PlayerEntityStats;
     public LootManager LootManager;
+    public Text ExperienceText;
     private List<GameObject> _skillTreeNodes;
+    private ListHelper<SkillTreeNode> _listHelper;
 
     void Awake()
     {
+        _listHelper = new ListHelper<SkillTreeNode>();
         _skillTreeNodes = new List<GameObject>();
     }
     void Start()
     {
+        // Display the experience text
+        ExperienceText.text = $"Experience: {LootManager.Experience.ToString()}";
+
         // Add each skill tree node into a list
         foreach(Transform child in transform)
         {
@@ -59,6 +68,7 @@ class SkillTree : MonoBehaviour
     {
         // Decrease experience 
         LootManager.Experience -= skill.GetComponent<SkillTreeNode>().Cost;
+        ExperienceText.text = $"Experience: {LootManager.Experience.ToString()}";
 
         // Add to player stats
         PlayerEntityStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
@@ -66,7 +76,8 @@ class SkillTree : MonoBehaviour
         // Update skill tree
         foreach(GameObject currentSkill in _skillTreeNodes)
         {
-            if (currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills.Contains(skill.GetComponent<SkillTreeNode>()))
+            if (!PlayerEntityStats.CurrentSkills.Contains(currentSkill.GetComponent<SkillTreeNode>()) && 
+                _listHelper.CheckSublistExists(PlayerEntityStats.CurrentSkills, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
             {
                 currentSkill.GetComponent<Image>().color = Color.yellow;
                 currentSkill.GetComponent<Button>().interactable = true;   
