@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        transform.position = GridGenerator.GetStartRoomPosition() + new Vector3(0f, 1.5f, 0f);
+        // transform.position = GridGenerator.GetStartRoomPosition() + new Vector3(0f, 1.5f, 0f);
     }
 
     void Update()
