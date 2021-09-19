@@ -11,19 +11,24 @@ class PlayerUI : MonoBehaviour
 
     private EntityStats EntityStats;
 
+    private float _originalHealthBarSize, _originalStaminaBarSize;
+
     void Start()
     {
         EntityStats = GetComponent<EntityStats>();
 
+        _originalHealthBarSize = HealthBar.sizeDelta.x;
+        _originalStaminaBarSize = StaminaBar.sizeDelta.x;
+
         // Health Bar
         HealthBarSlider.maxValue = EntityStats.Health;
-        HealthBar.sizeDelta = new Vector2(HealthBar.sizeDelta.x * EntityStats.Health, HealthBar.sizeDelta.y);
+        HealthBar.sizeDelta = new Vector2(_originalHealthBarSize * EntityStats.Health, HealthBar.sizeDelta.y);
         HealthBarSlider.value = EntityStats.CurrentHealth;
 
         // Stamina Bar
-        StaminaBarSlider.maxValue = EntityStats.Health;
-        StaminaBar.sizeDelta = new Vector2(StaminaBar.sizeDelta.x * EntityStats.Stamina, StaminaBar.sizeDelta.y);
-        StaminaBarSlider.value = EntityStats.CurrentHealth;
+        StaminaBarSlider.maxValue = EntityStats.Stamina;
+        StaminaBar.sizeDelta = new Vector2(_originalStaminaBarSize * EntityStats.Stamina, StaminaBar.sizeDelta.y);
+        StaminaBarSlider.value = EntityStats.CurrentStamina;
     }
 
     void Update()
@@ -32,6 +37,20 @@ class PlayerUI : MonoBehaviour
         {
             EntityStats.CurrentHealth--;
             HealthBarSlider.value = EntityStats.CurrentHealth;
+        }
+
+        // Health Bar Update
+        if (HealthBarSlider.maxValue != EntityStats.Health)
+        {
+            HealthBarSlider.maxValue = EntityStats.Health;
+            HealthBar.sizeDelta = new Vector2(_originalHealthBarSize * EntityStats.Health, HealthBar.sizeDelta.y);
+        }
+
+        // Stamina Bar Update
+        if (StaminaBarSlider.maxValue != EntityStats.Stamina)
+        {
+            StaminaBarSlider.maxValue = EntityStats.Stamina;
+            StaminaBar.sizeDelta = new Vector2(_originalStaminaBarSize * EntityStats.Stamina, StaminaBar.sizeDelta.y);
         }
     }
 }

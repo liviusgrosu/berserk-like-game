@@ -47,6 +47,21 @@ public class EntityStats : MonoBehaviour
     public void AddUpgrade(SkillTreeNode skillNode)
     {
         CurrentSkills.Add(skillNode);
+        string skillName = skillNode.Skill;
+        switch (skillName)
+        {
+            case "health":
+                Health += skillNode.Amount;
+                break;
+            case "stamina":
+                Stamina += skillNode.Amount;
+                break;
+            case "attack speed":
+                AttackSpeed += skillNode.Amount;
+                break;
+            default:
+                break;
+        }
     }
 
     public bool CheckIfUpgradeUnlocked(SkillTreeNode skillNode)

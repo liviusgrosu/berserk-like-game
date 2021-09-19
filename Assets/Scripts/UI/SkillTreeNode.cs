@@ -7,6 +7,7 @@ public class SkillTreeNode : MonoBehaviour
 {
     public string Skill;
     public int Cost;
+    public int Amount;
     public List<SkillTreeNode> PrerequisiteSkills;
     public Text _costText;
 
