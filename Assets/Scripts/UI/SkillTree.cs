@@ -10,9 +10,11 @@ class SkillTree : MonoBehaviour
 {
     public EntityStats PlayerEntityStats;
     public LootManager LootManager;
-    public Text ExperienceText;
+    // TEMP: for now set the mode to write
+    public bool _writeMode = true;
 
     [Header("Stats Text")]
+    public Text ExperienceText;
     public Text HealthText;
     public Text StaminaText;
     public Text AttackSpeedText;
@@ -65,7 +67,7 @@ class SkillTree : MonoBehaviour
                 }
             }
 
-            skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentExperience;
+            skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentExperience && _writeMode;
             skillUpgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
         }
     }
@@ -92,7 +94,7 @@ class SkillTree : MonoBehaviour
                 bool sufficentExperience = true ? LootManager.Experience >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
 
                 currentSkill.GetComponent<Image>().color = Color.yellow;
-                currentSkill.GetComponent<Button>().interactable = sufficentExperience;   
+                currentSkill.GetComponent<Button>().interactable = sufficentExperience && _writeMode;   
             }
         }
 
