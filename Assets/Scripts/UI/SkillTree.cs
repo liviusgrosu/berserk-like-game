@@ -11,6 +11,12 @@ class SkillTree : MonoBehaviour
     public EntityStats PlayerEntityStats;
     public LootManager LootManager;
     public Text ExperienceText;
+
+    [Header("Stats Text")]
+    public Text HealthText;
+    public Text StaminaText;
+    public Text AttackSpeedText;
+
     private List<GameObject> _skillTreeNodes;
     private ListHelper<SkillTreeNode> _listHelper;
 
@@ -21,8 +27,8 @@ class SkillTree : MonoBehaviour
     }
     void Start()
     {
-        // Display the experience text
-        ExperienceText.text = $"Experience: {LootManager.Experience.ToString()}";
+        // Display the texts
+        UpdateTexts();
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)
@@ -68,10 +74,13 @@ class SkillTree : MonoBehaviour
     {
         // Decrease experience 
         LootManager.Experience -= skill.GetComponent<SkillTreeNode>().Cost;
-        ExperienceText.text = $"Experience: {LootManager.Experience.ToString()}";
+
 
         // Add to player stats
         PlayerEntityStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
+
+        // Refresh the texts
+        UpdateTexts();
 
         // Update skill tree
         foreach(GameObject currentSkill in _skillTreeNodes)
@@ -90,5 +99,15 @@ class SkillTree : MonoBehaviour
         // Change the UI
         skill.GetComponent<Button>().interactable = false;
         skill.GetComponent<Image>().color = Color.green;
+    }
+
+    private void UpdateTexts()
+    {
+        // Display the experience text
+        ExperienceText.text = $"Experience: {LootManager.Experience}";
+        // Display the player stats
+        HealthText.text = $"Health: {PlayerEntityStats.Health}";
+        StaminaText.text = $"Stamina: {PlayerEntityStats.Stamina}";
+        AttackSpeedText.text = $"Attack Speed: {PlayerEntityStats.AttackSpeed}";
     }
 }
