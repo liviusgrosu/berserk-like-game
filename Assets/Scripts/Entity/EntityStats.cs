@@ -5,15 +5,15 @@ using UnityEngine;
 public class EntityStats : MonoBehaviour
 {
     // Stats
-    public int Health;
-    public int Stamina;
-    public int StaminaRegeneration;
-    public int Defence;
-    public int AttackSpeed;
+    public float Health;
+    public float Stamina;
+    public float StaminaRegeneration;
+    public float Defence;
+    public float AttackSpeed;
 
     [HideInInspector]
     // Current
-    public int CurrentHealth, CurrentStamina;
+    public float CurrentHealth, CurrentStamina, CurrentStaminaRegeneration, CurrentAttackSpeed;
 
     // List of upgrade ids from the skill tree
     public List<SkillTreeNode> CurrentSkills;
@@ -25,13 +25,13 @@ public class EntityStats : MonoBehaviour
             CurrentSkills = new List<SkillTreeNode>();
         }
 
-        CurrentHealth = Health;
-        CurrentStamina = Stamina;
+        CurrentHealth = 2;
+        CurrentStamina = 2;
     }
 
     void Update()
     {
-        CurrentStamina = Mathf.Clamp(CurrentStamina + StaminaRegeneration, 0, Stamina);
+        // CurrentStamina = Mathf.Clamp(CurrentStamina + StaminaRegeneration, 0, Stamina);
     }
 
     void SaveStatsToFile()
@@ -58,6 +58,32 @@ public class EntityStats : MonoBehaviour
                 break;
             case "attack speed":
                 AttackSpeed += skillNode.Amount;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void AddCurrentStats(EntityEffects effect)
+    {
+        string effectName = effect.Name;
+        switch (effectName)
+        {
+            case "health":
+                CurrentHealth += effect.Rate;
+                CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Health);
+                break;
+            case "stamina":
+                CurrentStamina += effect.Rate;
+                CurrentStamina = Mathf.Clamp(CurrentStamina, 0, Stamina);
+                break;
+            case "stamina regeneration":
+                CurrentStaminaRegeneration += effect.Rate;
+                CurrentStaminaRegeneration = Mathf.Clamp(CurrentStaminaRegeneration, 0, StaminaRegeneration);
+                break;
+            case "attack speed":
+                CurrentAttackSpeed += effect.Rate;
+                CurrentAttackSpeed = Mathf.Clamp(CurrentAttackSpeed, 0, AttackSpeed);
                 break;
             default:
                 break;
