@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8c3b721c18e4b43930341f69258b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
+  Name: health
   Icon: {fileID: 21300000, guid: 965d5d84db1ddf34bb295a27b195e136, type: 3}
-  Count: 5
   Effect: {fileID: 44326524032832332, guid: fe860355f197f444fac8016bce62e003, type: 3}

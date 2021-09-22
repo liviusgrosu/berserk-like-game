@@ -15,9 +15,8 @@ public class ConsumablesUI : MonoBehaviour
     void Start()
     {
         _currentItemIdx = 0;
-        _currentItem = Inventory.Consumables[_currentItemIdx];
-        Icon.sprite = _currentItem.Icon;
-        ItemCount.text = _currentItem.Count.ToString();
+        // TODO: add error checking if no consumables are in the inventory
+        UpdateCurrentItem();
     }
 
     void Update()
@@ -31,18 +30,16 @@ public class ConsumablesUI : MonoBehaviour
             {
                 _currentItemIdx = Inventory.Consumables.Count - 1;
             }
-            _currentItem = Inventory.Consumables[_currentItemIdx];
-            Icon.sprite = _currentItem.Icon;
-            ItemCount.text = _currentItem.Count.ToString();
+            UpdateCurrentItem();
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             // Use current consumable item
             PlayerBuffs.Effects.Add(_currentItem.Effect);
-            _currentItem.Count --;
-            ItemCount.text = _currentItem.Count.ToString();
-            if (_currentItem.Count <= 0)
+            Inventory.Consumables[_currentItemIdx].Count--;
+            ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
+            if (Inventory.Consumables[_currentItemIdx].Count <= 0)
             {
                 // TODO: remove the icon
             }
@@ -56,9 +53,14 @@ public class ConsumablesUI : MonoBehaviour
             {
                 _currentItemIdx = 0;
             }
-            _currentItem = Inventory.Consumables[_currentItemIdx];
-            Icon.sprite = _currentItem.Icon;
-            ItemCount.text = _currentItem.Count.ToString();
+            UpdateCurrentItem();
         }
+    }
+
+    private void UpdateCurrentItem()
+    {
+        _currentItem = Inventory.Consumables[_currentItemIdx].Consumable;
+        Icon.sprite = _currentItem.Icon;
+        ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
     }
 }

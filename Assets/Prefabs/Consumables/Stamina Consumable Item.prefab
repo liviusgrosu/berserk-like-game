@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8c3b721c18e4b43930341f69258b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
+  Name: stamina
   Icon: {fileID: 21300000, guid: d602fea762c417a41828c88175334365, type: 3}
-  Count: 3
   Effect: {fileID: 7292970762192115261, guid: 237a09dbfa9c889419288cf68d5f897b, type: 3}

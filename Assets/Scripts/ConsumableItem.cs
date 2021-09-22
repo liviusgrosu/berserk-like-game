@@ -7,6 +7,5 @@ public class ConsumableItem : MonoBehaviour
 {
     public string Name;
     public Sprite Icon;
-    public int Count;
     public GameObject Effect;
 }
