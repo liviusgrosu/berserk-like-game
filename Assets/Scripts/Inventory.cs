@@ -7,12 +7,14 @@ public class Inventory : MonoBehaviour
 {
     public List<ConsuambleInventory> Consumables;
 
-    public GameObject healthPotion;
+    public GameObject healthPotion, staminaPotion, staminaRegenerationPotion;
 
     void Awake()
     {
         Consumables = new List<ConsuambleInventory>();
         AddConsumable(healthPotion.GetComponent<ConsumableItem>(), 5);
+        AddConsumable(staminaPotion.GetComponent<ConsumableItem>(), 3);
+        AddConsumable(staminaRegenerationPotion.GetComponent<ConsumableItem>(), 1);
     }
 
     public void AddConsumable(ConsumableItem consumable, int amount)
@@ -26,6 +28,16 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        Consumables.Add(new ConsuambleInventory(healthPotion.GetComponent<ConsumableItem>(), amount));
+        Consumables.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddConsumable(healthPotion.GetComponent<ConsumableItem>(), 5);
+            AddConsumable(staminaPotion.GetComponent<ConsumableItem>(), 3);
+            AddConsumable(staminaRegenerationPotion.GetComponent<ConsumableItem>(), 1);
+        }
     }
 }

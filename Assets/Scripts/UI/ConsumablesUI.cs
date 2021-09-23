@@ -11,18 +11,35 @@ public class ConsumablesUI : MonoBehaviour
     public PlayerBuffs PlayerBuffs;
     private ConsumableItem _currentItem; 
     private int _currentItemIdx;
+    private bool _UIActive;
 
     void Start()
     {
-        _currentItemIdx = 0;
         // TODO: add error checking if no consumables are in the inventory
-        UpdateCurrentItem();
+        if (Inventory.Consumables.Count == 0)
+        {
+            Icon.gameObject.SetActive(false);
+            ItemCount.gameObject.SetActive(false);
+        }
+        else
+        {
+            Init();
+        }
     }
 
     void Update()
     {
-        // TODO: add menu controller to disable this
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (!_UIActive && Inventory.Consumables.Count != 0)
+        {
+            Init();
+        }
+
+        if (ItemCount.gameObject.activeSelf)
+        {
+            ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && _UIActive)
         {
             // Cycle to previous consumable item
             _currentItemIdx--;
@@ -33,7 +50,7 @@ public class ConsumablesUI : MonoBehaviour
             UpdateCurrentItem();
         }
         
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && _UIActive)
         {
             // Use current consumable item
             PlayerBuffs.Effects.Add(_currentItem.Effect);
@@ -41,11 +58,27 @@ public class ConsumablesUI : MonoBehaviour
             ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
             if (Inventory.Consumables[_currentItemIdx].Count <= 0)
             {
-                // TODO: remove the icon
+                // Remove from inventory
+                Inventory.Consumables.RemoveAt(_currentItemIdx);
+                _currentItemIdx++;
+
+                if (Inventory.Consumables.Count == 0)
+                {
+                    _UIActive = false;
+                    Icon.gameObject.SetActive(false);
+                    ItemCount.gameObject.SetActive(false);
+                    return;
+                }
+                
+                if(_currentItemIdx >= Inventory.Consumables.Count)
+                {
+                    _currentItemIdx = 0;
+                }
+                UpdateCurrentItem();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && _UIActive)
         {
             // Cycle to next consumable item
             _currentItemIdx++;
@@ -62,5 +95,16 @@ public class ConsumablesUI : MonoBehaviour
         _currentItem = Inventory.Consumables[_currentItemIdx].Consumable;
         Icon.sprite = _currentItem.Icon;
         ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
+    }
+
+    private void Init()
+    {
+        _UIActive = true;
+        _currentItemIdx = 0;
+
+        Icon.gameObject.SetActive(true);
+        ItemCount.gameObject.SetActive(true);
+
+        UpdateCurrentItem();
     }
 }
