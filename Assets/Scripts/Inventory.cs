@@ -11,7 +11,9 @@ public class Inventory : MonoBehaviour
 
     void Awake()
     {
+        // Initialize the consumables list
         Consumables = new List<ConsuambleInventory>();
+        // TEMP: Add some consumables
         AddConsumable(healthPotion.GetComponent<ConsumableItem>(), 5);
         AddConsumable(staminaPotion.GetComponent<ConsumableItem>(), 3);
         AddConsumable(staminaRegenerationPotion.GetComponent<ConsumableItem>(), 1);
@@ -21,6 +23,7 @@ public class Inventory : MonoBehaviour
     {
         for(int i = 0; i < Consumables.Count; i++)
         {
+            // If the consumable exists in the inventory then update the count
             if (consumable.name == Consumables[i].Consumable.name)
             {
                 Consumables[i].Count += amount;
@@ -28,11 +31,13 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        // Add a new consumable item
         Consumables.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
     }
 
     void Update()
     {
+        // TEMP: Add some consumables
         if (Input.GetKeyDown(KeyCode.Space))
         {
             AddConsumable(healthPotion.GetComponent<ConsumableItem>(), 5);

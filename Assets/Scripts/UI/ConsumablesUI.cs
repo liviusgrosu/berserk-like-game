@@ -15,7 +15,7 @@ public class ConsumablesUI : MonoBehaviour
 
     void Start()
     {
-        // TODO: add error checking if no consumables are in the inventory
+        // Error checking if no consumables are in the inventory
         if (Inventory.Consumables.Count == 0)
         {
             Icon.gameObject.SetActive(false);
@@ -23,17 +23,20 @@ public class ConsumablesUI : MonoBehaviour
         }
         else
         {
+            // Initialize the script
             Init();
         }
     }
 
     void Update()
     {
+        // If an item has recently been added to the inventory then initialize the UI
         if (!_UIActive && Inventory.Consumables.Count != 0)
         {
             Init();
         }
 
+        // Update the consumables count text
         if (ItemCount.gameObject.activeSelf)
         {
             ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
@@ -62,6 +65,7 @@ public class ConsumablesUI : MonoBehaviour
                 Inventory.Consumables.RemoveAt(_currentItemIdx);
                 _currentItemIdx++;
 
+                // Deactive the UI when no items are available
                 if (Inventory.Consumables.Count == 0)
                 {
                     _UIActive = false;
@@ -69,7 +73,8 @@ public class ConsumablesUI : MonoBehaviour
                     ItemCount.gameObject.SetActive(false);
                     return;
                 }
-                
+
+                // Switch to the next item
                 if(_currentItemIdx >= Inventory.Consumables.Count)
                 {
                     _currentItemIdx = 0;
@@ -92,16 +97,20 @@ public class ConsumablesUI : MonoBehaviour
 
     private void UpdateCurrentItem()
     {
+        // Update the current item
         _currentItem = Inventory.Consumables[_currentItemIdx].Consumable;
+        // Update the UI elements
         Icon.sprite = _currentItem.Icon;
         ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
     }
 
     private void Init()
     {
-        _UIActive = true;
+        // Set the current item to the first consumable in the inventory
         _currentItemIdx = 0;
 
+        // Activate the UI
+        _UIActive = true;
         Icon.gameObject.SetActive(true);
         ItemCount.gameObject.SetActive(true);
 
