@@ -56,7 +56,7 @@ public class ConsumablesUI : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && _UIActive)
         {
             // Use current consumable item
-            PlayerBuffs.Effects.Add(_currentItem.Effect);
+            PlayerBuffs.AddBuff(_currentItem.Effect);
             Inventory.Consumables[_currentItemIdx].Count--;
             ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
             if (Inventory.Consumables[_currentItemIdx].Count <= 0)

@@ -6,6 +6,7 @@ public class PlayerBuffs : MonoBehaviour
 {
     [HideInInspector]
     public List<GameObject> Effects;
+    public Transform BuffParent;
     private EntityStats _playerStats;
 
     void Awake()
@@ -25,8 +26,18 @@ public class PlayerBuffs : MonoBehaviour
             // Remove it once the duration is 0
             if (effect.Duration <= 0)
             {
+                GameObject currentEffect = Effects[idx];
                 Effects.RemoveAt(idx);
+                Destroy(currentEffect);
             }
         }
+    }
+
+    public void AddBuff(GameObject effect)
+    {
+        // Instantiate the effect and add it to the list
+        GameObject newEffect = Instantiate(effect, BuffParent.position, Quaternion.identity);
+        newEffect.transform.parent = BuffParent;
+        Effects.Add(newEffect);
     }
 }

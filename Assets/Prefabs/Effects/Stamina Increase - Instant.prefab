@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3341328552525164415}
   - component: {fileID: 4678553545514310967}
   m_Layer: 0
-  m_Name: Health Increase - Stamina
+  m_Name: Stamina Increase - Instant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
