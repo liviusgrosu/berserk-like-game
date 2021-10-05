@@ -39,11 +39,10 @@ public class Equipment : MonoBehaviour
                 case (EquipmentType.Weapon):
                     // Load the weapon stats
                     _stats = (WeaponStats)bf.Deserialize(file);
-                    Debug.Log($"{ItemName} - durability: {_stats._durability}, damage:  {((WeaponStats)_stats)._damage}, attack speed: {((WeaponStats)_stats)._attackSpeed}");
                     break;
                 case (EquipmentType.Shield):
+                    // Load the shield stats
                     _stats = (ShieldStats)bf.Deserialize(file);
-                    Debug.Log($"{ItemName} - durability: {_stats._durability}, defence:  {((ShieldStats)_stats)._defence}");
                     break;
                 default:
                     break; 
@@ -56,17 +55,18 @@ public class Equipment : MonoBehaviour
             switch (Type)
             {
                 case (EquipmentType.Weapon):
-                    // Init the weapon stats
+                    // Initialize the weapon stats
                     _stats = new WeaponStats();
                     break;
                 case (EquipmentType.Shield):
+                    // Initialize the shields stats
                     _stats = new ShieldStats();
                     break;
                 default:
                     break; 
             }
-            // Set default states
             
+            // Save new equipment
             Save();
         }
     }
@@ -75,6 +75,7 @@ public class Equipment : MonoBehaviour
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/{ItemName}.equipment");
+        // Serialize the equipment and save it to its respective file
         switch (Type)
         {
             case (EquipmentType.Weapon):

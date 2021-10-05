@@ -5,10 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class EquipmentStats
 {
-    public float _durability;
+    public float Durability;
 
     public EquipmentStats()
     {
-        _durability = 100f;
+        Durability = 100f;
     }
 }

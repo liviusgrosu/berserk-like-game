@@ -4,12 +4,12 @@ using System.Collections.Generic;
 [System.Serializable]
 public class WeaponStats : EquipmentStats
 {
-    public float _damage;
-    public float _attackSpeed;
+    public float Damage;
+    public float AttackSpeed;
 
     public WeaponStats() : base()
     {
-        _damage = 1.0f;
-        _attackSpeed = 1.0f;
+        Damage = 1.0f;
+        AttackSpeed = 1.0f;
     }
 }

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 [System.Serializable]
 public class ShieldStats : EquipmentStats
 {
-    public float _defence;
+    public float Defence;
 
     public ShieldStats() : base()
     {
-        _defence = 1.0f;
+        Defence = 1.0f;
     }
 }
