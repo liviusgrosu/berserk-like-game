@@ -7,13 +7,17 @@ public class EntityStats : MonoBehaviour
     // Stats
     public float Health;
     public float Stamina;
+    // Passive stamina regeneration
     public float StaminaRegeneration;
     public float Defence;
     public float AttackSpeed;
 
     [HideInInspector]
     // Current
-    public float CurrentHealth, CurrentStamina, CurrentStaminaRegeneration, CurrentAttackSpeed;
+    public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
+    [HideInInspector]
+    // Used only for buffs
+    public float CurrentStaminaRegeneration = 0f;
 
     // List of upgrade ids from the skill tree
     public List<SkillTreeNode> CurrentSkills;
@@ -31,7 +35,7 @@ public class EntityStats : MonoBehaviour
 
     void Update()
     {
-        // CurrentStamina = Mathf.Clamp(CurrentStamina + StaminaRegeneration, 0, Stamina);
+        CurrentStamina = Mathf.Clamp(CurrentStamina + (CurrentStaminaRegeneration + StaminaRegeneration) * Time.deltaTime, 0, Stamina);
     }
 
     void SaveStatsToFile()
@@ -79,7 +83,6 @@ public class EntityStats : MonoBehaviour
                 break;
             case "stamina regeneration":
                 CurrentStaminaRegeneration += effect.Rate;
-                CurrentStaminaRegeneration = Mathf.Clamp(CurrentStaminaRegeneration, 0, StaminaRegeneration);
                 break;
             case "attack speed":
                 CurrentAttackSpeed += effect.Rate;
