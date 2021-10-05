@@ -3902,7 +3902,6 @@ MonoBehaviour:
   HealthPotion: {fileID: 7243667632073724920, guid: 64b03ce6b08c713418e784fcbb9edf37, type: 3}
   StaminaPotion: {fileID: 3765025175337811981, guid: c185a57ce14500c49b252cfd9bbc1b7f, type: 3}
   StaminaRegenerationPotion: {fileID: 4932203009005677837, guid: 89cb9d83f2886664dac5c9419c67ca9c, type: 3}
-  BuffParent: {fileID: 1186710197}
 --- !u!1 &1585943343
 GameObject:
   m_ObjectHideFlags: 0
@@ -3919,6 +3918,7 @@ GameObject:
   - component: {fileID: 1585943350}
   - component: {fileID: 1585943351}
   - component: {fileID: 1585943349}
+  - component: {fileID: 1585943352}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4034,6 +4034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Effects: []
+  BuffParent: {fileID: 0}
 --- !u!114 &1585943350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4053,8 +4054,8 @@ MonoBehaviour:
   AttackSpeed: 1
   CurrentHealth: 0
   CurrentStamina: 0
-  CurrentStaminaRegeneration: 0
   CurrentAttackSpeed: 0
+  CurrentStaminaRegeneration: 0
   CurrentSkills:
   - {fileID: 2088636139}
 --- !u!114 &1585943351
@@ -4073,6 +4074,21 @@ MonoBehaviour:
   MovementSpeed: 5
   TurningSpeed: 10
   GridGenerator: {fileID: 0}
+--- !u!114 &1585943352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585943343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ae8524254de7a4d9594f5c3d14d7ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Equipment:
+  - {fileID: 4064580605667996374, guid: e74e16640f31319409a2b3ecd28db4b3, type: 3}
+  - {fileID: 4064580605667996374, guid: 3c6db902813834f4ab91c4df16098ca3, type: 3}
 --- !u!1 &1648096511
 GameObject:
   m_ObjectHideFlags: 0

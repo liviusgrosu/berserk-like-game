@@ -17,7 +17,7 @@ public class Equipment : MonoBehaviour
     public enum EquipmentType
     {
         Weapon,
-        Armor
+        Shield
     }
     public EquipmentType Type;
 
@@ -38,11 +38,13 @@ public class Equipment : MonoBehaviour
             {
                 case (EquipmentType.Weapon):
                     // Load the weapon stats
-                    Debug.Log("Got weapon save");
-                    EquipmentStats save = (EquipmentStats)bf.Deserialize(file);
+                    _stats = (WeaponStats)bf.Deserialize(file);
                     Debug.Log($"{ItemName} - durability: {_stats._durability}, damage:  {((WeaponStats)_stats)._damage}, attack speed: {((WeaponStats)_stats)._attackSpeed}");
                     break;
-                case (EquipmentType.Armor):
+                case (EquipmentType.Shield):
+                    _stats = (ShieldStats)bf.Deserialize(file);
+                    Debug.Log($"{ItemName} - durability: {_stats._durability}, defence:  {((ShieldStats)_stats)._defence}");
+                    break;
                 default:
                     break; 
             }
@@ -56,9 +58,10 @@ public class Equipment : MonoBehaviour
                 case (EquipmentType.Weapon):
                     // Init the weapon stats
                     _stats = new WeaponStats();
-                    Debug.Log($"{ItemName} - durability: {_stats._durability}, damage:  {((WeaponStats)_stats)._damage}, attack speed: {((WeaponStats)_stats)._attackSpeed}");
                     break;
-                case (EquipmentType.Armor):
+                case (EquipmentType.Shield):
+                    _stats = new ShieldStats();
+                    break;
                 default:
                     break; 
             }
@@ -72,7 +75,18 @@ public class Equipment : MonoBehaviour
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/{ItemName}.equipment");
-        bf.Serialize(file, _stats);
+        switch (Type)
+        {
+            case (EquipmentType.Weapon):
+                bf.Serialize(file, (WeaponStats)_stats);
+                break;
+            case (EquipmentType.Shield):
+                bf.Serialize(file, (ShieldStats)_stats);
+                break;
+            default:
+                break; 
+        }
+        
         file.Close();
     }
 }
