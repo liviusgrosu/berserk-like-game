@@ -11,11 +11,12 @@ public class PlayerEquipments : MonoBehaviour
     public Transform EquipmentParent;
     public List<string> StartingEquipment;
     private List<string> _equipmentCarrying;
-    private List<GameObject> _equipmentIntances;
+    [HideInInspector]
+    public List<GameObject> EquipmentIntances;
 
     void Awake()
     {
-        _equipmentIntances = new List<GameObject>();
+        EquipmentIntances = new List<GameObject>();
         //  Create a new list regardless if its empty
         if (StartingEquipment == null)
         {
@@ -58,12 +59,12 @@ public class PlayerEquipments : MonoBehaviour
             GameObject prefab = Resources.Load<GameObject>($"Prefabs/Equipments/{equipmentName}");
             if (prefab != null)
             {
+                // Create the instance and load its stats
                 GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, Quaternion.identity);
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
                 instantiatedObj.GetComponent<Equipment>().Load();
-                instantiatedObj.GetComponent<Equipment>().Stats.Durability += 100f;
-                _equipmentIntances.Add(instantiatedObj);
+                EquipmentIntances.Add(instantiatedObj);
             }
         }
     }
@@ -71,7 +72,7 @@ public class PlayerEquipments : MonoBehaviour
     void OnApplicationQuit()
     {
         // Save equipment stats 
-        foreach(GameObject equipment in _equipmentIntances)
+        foreach(GameObject equipment in EquipmentIntances)
         {
             equipment.GetComponent<Equipment>().Save();
         }

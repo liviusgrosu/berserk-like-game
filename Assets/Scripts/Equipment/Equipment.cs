@@ -10,6 +10,7 @@ public class Equipment : MonoBehaviour
 {
     public GameObject ModelPrefab;
     
+    [HideInInspector]
     public EquipmentStats Stats;
 
     [HideInInspector]
