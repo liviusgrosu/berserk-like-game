@@ -4086,9 +4086,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ae8524254de7a4d9594f5c3d14d7ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Equipment:
-  - {fileID: 4064580605667996374, guid: e74e16640f31319409a2b3ecd28db4b3, type: 3}
-  - {fileID: 4064580605667996374, guid: 3c6db902813834f4ab91c4df16098ca3, type: 3}
+  EquipmentParent: {fileID: 0}
+  StartingEquipment:
+  - Base Sword
+  - Base Shield
+  - 
 --- !u!1 &1648096511
 GameObject:
   m_ObjectHideFlags: 0

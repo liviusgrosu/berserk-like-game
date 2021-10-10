@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ModelPrefab: {fileID: 0}
-  ItemName: Base Sword
+  Stats:
+    Durability: 100
   Type: 0
