@@ -9,9 +9,8 @@ using UnityEngine;
 public class Equipment : MonoBehaviour
 {
     public GameObject ModelPrefab;
-    public string ItemName;
-
-    private EquipmentStats _stats;
+    
+    public EquipmentStats Stats;
 
     [HideInInspector]
     public enum EquipmentType
@@ -21,28 +20,23 @@ public class Equipment : MonoBehaviour
     }
     public EquipmentType Type;
 
-    public void Init()
-    {
-        Save();
-    }
-
     public void Load() 
     {
         // Check if the file exists
-        if (File.Exists($"{Application.persistentDataPath}/{ItemName}.equipment"))
+        if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats"))
         {
             // Open the file
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open($"{Application.persistentDataPath}/{ItemName}.equipment", FileMode.Open);
+            FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats", FileMode.Open);
             switch (Type)
             {
                 case (EquipmentType.Weapon):
                     // Load the weapon stats
-                    _stats = (WeaponStats)bf.Deserialize(file);
+                    Stats = (WeaponStats)bf.Deserialize(file);
                     break;
                 case (EquipmentType.Shield):
                     // Load the shield stats
-                    _stats = (ShieldStats)bf.Deserialize(file);
+                    Stats = (ShieldStats)bf.Deserialize(file);
                     break;
                 default:
                     break; 
@@ -56,11 +50,11 @@ public class Equipment : MonoBehaviour
             {
                 case (EquipmentType.Weapon):
                     // Initialize the weapon stats
-                    _stats = new WeaponStats();
+                    Stats = new WeaponStats();
                     break;
                 case (EquipmentType.Shield):
                     // Initialize the shields stats
-                    _stats = new ShieldStats();
+                    Stats = new ShieldStats();
                     break;
                 default:
                     break; 
@@ -70,19 +64,19 @@ public class Equipment : MonoBehaviour
             Save();
         }
     }
-
+    
     public void Save()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/{ItemName}.equipment");
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats");
         // Serialize the equipment and save it to its respective file
         switch (Type)
         {
             case (EquipmentType.Weapon):
-                bf.Serialize(file, (WeaponStats)_stats);
+                bf.Serialize(file, (WeaponStats)Stats);
                 break;
             case (EquipmentType.Shield):
-                bf.Serialize(file, (ShieldStats)_stats);
+                bf.Serialize(file, (ShieldStats)Stats);
                 break;
             default:
                 break; 
