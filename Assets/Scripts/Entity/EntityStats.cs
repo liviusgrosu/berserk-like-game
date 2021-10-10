@@ -19,6 +19,7 @@ public class EntityStats : MonoBehaviour
     // Used only for buffs
     public float CurrentStaminaRegeneration = 0f;
 
+    [HideInInspector]
     // List of upgrade ids from the skill tree
     public List<SkillTreeNode> CurrentSkills;
 
@@ -50,9 +51,9 @@ public class EntityStats : MonoBehaviour
 
     public void AddUpgrade(SkillTreeNode skillNode)
     {
+        // Add skill upgrade and increment the respective stat
         CurrentSkills.Add(skillNode);
-        string skillName = skillNode.Skill;
-        switch (skillName)
+        switch (skillNode.SkillName)
         {
             case "health":
                 Health += skillNode.Amount;
@@ -66,6 +67,7 @@ public class EntityStats : MonoBehaviour
             default:
                 break;
         }
+        // TODO: add saving feature
     }
 
     public void AddCurrentStats(EntityEffects effect)

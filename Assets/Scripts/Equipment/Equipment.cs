@@ -21,6 +21,18 @@ public class Equipment : MonoBehaviour
     }
     public EquipmentType Type;
 
+    [HideInInspector]
+    // List of upgrade ids from the skill tree
+    public List<EquipmentUpgradeNode> CurrentUpgrades;
+
+    void Awake()
+    {
+        if (CurrentUpgrades == null)
+        {
+            CurrentUpgrades = new List<EquipmentUpgradeNode>();
+        }
+    }
+
     public void Load() 
     {
         // Check if the file exists
@@ -84,5 +96,34 @@ public class Equipment : MonoBehaviour
         }
         
         file.Close();
+    }
+
+    public void AddUpgrade(EquipmentUpgradeNode upgradeNode)
+    {
+        // Add upgrade upgrade and increment the respective stat
+        CurrentUpgrades.Add(upgradeNode);
+        switch (upgradeNode.UpgradeName)
+        {
+            case "durability":
+                Stats.Durability += upgradeNode.Amount;
+                break;
+            case "damage":
+                ((WeaponStats)Stats).Damage += upgradeNode.Amount;
+                break;
+            case "attack speed":
+                ((WeaponStats)Stats).AttackSpeed += upgradeNode.Amount;
+                break;
+            case "defence":
+                ((ShieldStats)Stats).Defence += upgradeNode.Amount;
+                break;
+            default:
+                break;
+        }
+        Save();
+    }
+
+    public bool CheckIfUpgradeUnlocked(EquipmentUpgradeNode upgradeNode)
+    {
+        return CurrentUpgrades.Contains(upgradeNode);
     }
 }

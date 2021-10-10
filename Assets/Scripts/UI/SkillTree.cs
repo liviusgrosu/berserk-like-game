@@ -19,6 +19,8 @@ class SkillTree : MonoBehaviour
     public Text StaminaText;
     public Text AttackSpeedText;
 
+    public SkillTreeNode StartingNode;
+
     private List<GameObject> _skillTreeNodes;
     private ListHelper<SkillTreeNode> _listHelper;
 
@@ -30,7 +32,10 @@ class SkillTree : MonoBehaviour
     void Start()
     {
         // Display the texts
-        UpdateTexts();
+        UpdateTextElement();
+
+        // Add the starting node
+        PlayerEntityStats.CurrentSkills.Add(StartingNode);
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)
@@ -54,7 +59,7 @@ class SkillTree : MonoBehaviour
             // Check if the skill has the prerequisites
             bool unlocked = false;
             bool sufficentExperience = false;
-            foreach(SkillTreeNode prerequiteSkill in skillUpgradeNode.GetComponent<SkillTreeNode>().PrerequisiteSkills)
+            foreach(SkillTreeNode prerequiteSkill in skillScript.PrerequisiteSkills)
             {
                 if (PlayerEntityStats.CheckIfUpgradeUnlocked(prerequiteSkill))
                 {
@@ -77,12 +82,11 @@ class SkillTree : MonoBehaviour
         // Decrease experience 
         LootManager.Experience -= skill.GetComponent<SkillTreeNode>().Cost;
 
-
         // Add to player stats
         PlayerEntityStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
 
         // Refresh the texts
-        UpdateTexts();
+        UpdateTextElement();
 
         // Update skill tree
         foreach(GameObject currentSkill in _skillTreeNodes)
@@ -103,7 +107,7 @@ class SkillTree : MonoBehaviour
         skill.GetComponent<Image>().color = Color.green;
     }
 
-    private void UpdateTexts()
+    private void UpdateTextElement()
     {
         // Display the experience text
         ExperienceText.text = $"Experience: {LootManager.Experience}";

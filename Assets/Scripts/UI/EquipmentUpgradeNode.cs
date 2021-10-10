@@ -2,14 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillTreeNode : MonoBehaviour
+public class EquipmentUpgradeNode : MonoBehaviour
 {
-    public string SkillName;
+    public string UpgradeName;
     public int Cost;
     public int Amount;
-    public List<SkillTreeNode> PrerequisiteSkills;
+    public List<EquipmentUpgradeNode> PrerequisiteUpgrades;
     public Text _costText;
-    public bool StartingNode;
 
     void Awake()
     {
@@ -19,9 +18,9 @@ public class SkillTreeNode : MonoBehaviour
             _costText.text = Cost.ToString();
         }
 
-        if (PrerequisiteSkills == null)
+        if (PrerequisiteUpgrades == null)
         {
-            PrerequisiteSkills = new List<SkillTreeNode>();
+            PrerequisiteUpgrades = new List<EquipmentUpgradeNode>();
         }
     }
 }
