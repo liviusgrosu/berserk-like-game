@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-using Utility;
+using UIUtility;
 
 class EquipmentUpgradeTree : MonoBehaviour
 {
@@ -20,11 +20,11 @@ class EquipmentUpgradeTree : MonoBehaviour
 
     public GameObject TextPrefab;
     public RectTransform TextRoot;
-    private List<GameObject> _statTexts;
+    private List<StatText> _statTexts;
 
     void Awake()
     {
-        _statTexts = new List<GameObject>();
+        _statTexts = new List<StatText>();
     }
 
     void Start()
@@ -39,36 +39,60 @@ class EquipmentUpgradeTree : MonoBehaviour
         }
 
         // Draw the texts for the base equipment class
-        CreateText(_equipmentObj.GetComponent<Equipment>().Stats.Durability);
+        CreateText("Durability", _equipmentObj.GetComponent<Equipment>().Stats.Durability);
 
         // Draw the texts for the specific equipment child class
         switch (_equipmentObj.GetComponent<Equipment>().Type)
         {
             case (Equipment.EquipmentType.Weapon):
-                CreateText(((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
-                CreateText(((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
+                CreateText("Damage", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
+                CreateText("Attack Speed", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
                 break;
             case (Equipment.EquipmentType.Shield):
-                CreateText(((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
+                CreateText("Defence", ((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
                 break;
             default:
                 break;
         }
     }
 
-    void CreateText(float stat)
+    void CreateText(string statName, float statValue)
     {
         // Establish new text position and instantiate it 
         Vector3 newPosition = TextRoot.position - new Vector3(0, _statTexts.Count() * 100f, 0);
         GameObject newTextPrefab = Instantiate(TextPrefab, newPosition, TextPrefab.transform.rotation);
         newTextPrefab.transform.parent = TextRoot;
         // Update the text field
-        newTextPrefab.GetComponent<Text>().text = $"Durability: {stat}";
-        _statTexts.Add(newTextPrefab);
+        UpdateTextElement(newTextPrefab, statName, statValue);
+        _statTexts.Add(new StatText(statName, newTextPrefab));
     }
 
-    void UpdateText()
+    void RefreshTextValues()
     {
+        // Update each text elements
+        foreach(StatText statText in _statTexts)
+        {
+            switch(statText.TextFieldName)
+            {
+                case "Durability":
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, _equipmentObj.GetComponent<Equipment>().Stats.Durability);
+                    break;
+                case "Damage":
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
+                    break;
+                case "Attack Speed":
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
+                    break;
+                case "Defence":
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
+                    break;
+            }
+        }
+    }
 
+    void UpdateTextElement(GameObject textObj, string statFieldName, float statValue)
+    {
+        // Update the text element
+        textObj.GetComponent<Text>().text = $"{statFieldName}: {statValue}";
     }
 }

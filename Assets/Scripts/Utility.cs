@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace Utility
+namespace GeneralUtility
 {
     public class ListHelper<T>
     {
@@ -18,5 +19,19 @@ namespace Utility
 
             return count == listB.Count;
         }
+    }
+}
+
+namespace UIUtility
+{
+    public class StatText
+    {
+        public string TextFieldName;
+        public GameObject TextObj;
+        public StatText(string TextFieldName, GameObject TextObj)
+        {
+            this.TextFieldName = TextFieldName;
+            this.TextObj = TextObj;
+        }       
     }
 }
