@@ -4670,9 +4670,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93bcf7e694c483a408b388d229de537a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DirectionCameraOffset: {fileID: 814490556}
   MovementSpeed: 5
+  MovementTime: 0.8
+  DirectionCameraOffset: {fileID: 814490556}
   TurningSpeed: 10
+  RollingSpeed: 10
+  RollingTime: 0.3
   GridGenerator: {fileID: 0}
 --- !u!114 &1585943352
 MonoBehaviour:
