@@ -99,4 +99,10 @@ public class EntityStats : MonoBehaviour
     {
         return CurrentSkills.Contains(skillNode);
     }
+
+    public void ReduceStamina(float amount)
+    {
+        // Reason for having function like is so we can introduce stamina reduction stats
+        CurrentStamina -= amount;
+    }
 }
