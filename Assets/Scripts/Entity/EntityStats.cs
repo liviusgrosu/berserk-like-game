@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EntityStats : MonoBehaviour
 {
+    [Header("Stats")]
     // Stats
     public float Health;
     public float Stamina;
@@ -11,17 +12,15 @@ public class EntityStats : MonoBehaviour
     public float StaminaRegeneration;
     public float Defence;
     public float AttackSpeed;
-
-    [HideInInspector]
-    // Current
-    public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
-    [HideInInspector]
+    // Current stats
+    [HideInInspector] public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
     // Used only for buffs
-    public float CurrentStaminaRegeneration = 0f;
-
-    [HideInInspector]
+    [HideInInspector] public float CurrentStaminaRegeneration = 0f;
     // List of upgrade ids from the skill tree
-    public List<SkillTreeNode> CurrentSkills;
+    [HideInInspector] public List<SkillTreeNode> CurrentSkills;
+    public float ActivateStaminaRegenTime = 0.7f;
+    private float _currentStaminaRegenDeactivationTime = 0f;
+    private bool _staminaProductionStopped;
 
     void Awake()
     {
@@ -36,7 +35,21 @@ public class EntityStats : MonoBehaviour
 
     void Update()
     {
-        CurrentStamina = Mathf.Clamp(CurrentStamina + (CurrentStaminaRegeneration + StaminaRegeneration) * Time.deltaTime, 0, Stamina);
+        // Regenerate stamina
+        if (!_staminaProductionStopped)
+        {
+            CurrentStamina = Mathf.Clamp(CurrentStamina + (CurrentStaminaRegeneration + StaminaRegeneration) * Time.deltaTime, 0, Stamina);
+        }
+        else
+        {
+            // TODO: add a stat that affects the time it takes for stamina regenation to activate
+            // Wait for stamina regeneration to activate
+            _currentStaminaRegenDeactivationTime += Time.deltaTime;
+            if (_currentStaminaRegenDeactivationTime >= ActivateStaminaRegenTime)
+            {
+                _staminaProductionStopped = false;
+            }
+        }
     }
 
     void SaveStatsToFile()
@@ -104,5 +117,8 @@ public class EntityStats : MonoBehaviour
     {
         // Reason for having function like is so we can introduce stamina reduction stats
         CurrentStamina -= amount;
+        // Stop stamina regeneration
+        _staminaProductionStopped = true;
+        _currentStaminaRegenDeactivationTime = 0.0f;
     }
 }

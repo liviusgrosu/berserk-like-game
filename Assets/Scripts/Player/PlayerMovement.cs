@@ -7,7 +7,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     // Movement variables
     public float MovementSpeed = 5.0f;
-    public float MovementTime = 0.8f;
+    public float RunningMultiplier = 1.5f;
+    public float RunningStaminaCost = 0.1f;
+    private float _runningSpeed;
+    private float _currentSpeed;
+    private bool _isRunning;
     [Header("Rotation")]
     // Rotation variables
     public float TurningSpeed = 10.0f;
@@ -32,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
+
+        _runningSpeed = MovementSpeed * RunningMultiplier;
+        _currentSpeed = MovementSpeed;
     }
 
     void Start()
@@ -56,6 +63,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // --- Movement ---
+        if (_isRunning)
+        {
+            PlayerStats.ReduceStamina(RunningStaminaCost * Time.deltaTime);
+            // Stop running if player has ran out of stamina
+            if (PlayerStats.CurrentStamina <= 0.0f)
+            {
+                _currentSpeed = MovementSpeed;
+                _isRunning = false;
+            }
+        }
+        
         if (_isRolling)
         {
             rigidbody.velocity = _rollingDirection * RollingSpeed;
@@ -66,6 +84,9 @@ public class PlayerMovement : MonoBehaviour
                 // Change collider
                 _collider.center += new Vector3(0.0f, 0.5f, 0.0f);
                 _collider.height *= 2f;
+                // Rest movement back regular speed
+                _currentSpeed = MovementSpeed;
+                _isRunning = false;
             }
         }
         else
@@ -78,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Eliminate double speed with multiple inputs
             movementDirection = movementDirection.normalized;
-            rigidbody.velocity = movementDirection * MovementSpeed;
+            rigidbody.velocity = movementDirection * _currentSpeed;
         }
     }
 
@@ -94,12 +115,23 @@ public class PlayerMovement : MonoBehaviour
             _currentRollingTime = RollingTime;
             _isRolling = true;
             // Get previous movement direction
-            _rollingDirection = rigidbody.velocity / MovementSpeed;
+            _rollingDirection = rigidbody.velocity / _currentSpeed;
             // Change collider
             _collider.height /= 2.0f;
             _collider.center -= new Vector3(0.0f, 0.5f, 0.0f);
             // Reduce stamina cost
             PlayerStats.ReduceStamina(RollingStaminaCost);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _currentSpeed = _runningSpeed;
+            _isRunning = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _currentSpeed = MovementSpeed;
+            _isRunning = false;
         }
     }
 }
