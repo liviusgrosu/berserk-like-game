@@ -8,7 +8,7 @@ using GeneralUtility;
 
 class SkillTree : MonoBehaviour
 {
-    public EntityStats PlayerEntityStats;
+    public EntityStats PlayerStats;
     public LootManager LootManager;
     // TEMP: for now set the mode to write
     public bool _writeMode = true;
@@ -35,7 +35,7 @@ class SkillTree : MonoBehaviour
         UpdateTextElement();
 
         // Add the starting node
-        PlayerEntityStats.CurrentSkills.Add(StartingNode);
+        PlayerStats.CurrentSkills.Add(StartingNode);
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)
@@ -50,7 +50,7 @@ class SkillTree : MonoBehaviour
         foreach(GameObject skillUpgradeNode in _skillTreeNodes)
         {
             SkillTreeNode skillScript = skillUpgradeNode.GetComponent<SkillTreeNode>();
-            if(PlayerEntityStats.CheckIfUpgradeUnlocked(skillScript))
+            if(PlayerStats.CheckIfUpgradeUnlocked(skillScript))
             {
                 skillUpgradeNode.GetComponent<Image>().color = Color.green;
                 continue;
@@ -61,7 +61,7 @@ class SkillTree : MonoBehaviour
             bool sufficentExperience = false;
             foreach(SkillTreeNode prerequiteSkill in skillScript.PrerequisiteSkills)
             {
-                if (PlayerEntityStats.CheckIfUpgradeUnlocked(prerequiteSkill))
+                if (PlayerStats.CheckIfUpgradeUnlocked(prerequiteSkill))
                 {
                     unlocked = true;
 
@@ -83,7 +83,7 @@ class SkillTree : MonoBehaviour
         LootManager.Experience -= skill.GetComponent<SkillTreeNode>().Cost;
 
         // Add to player stats
-        PlayerEntityStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
+        PlayerStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
 
         // Refresh the texts
         UpdateTextElement();
@@ -91,8 +91,8 @@ class SkillTree : MonoBehaviour
         // Update skill tree
         foreach(GameObject currentSkill in _skillTreeNodes)
         {
-            if (!PlayerEntityStats.CurrentSkills.Contains(currentSkill.GetComponent<SkillTreeNode>()) && 
-                _listHelper.CheckSublistExists(PlayerEntityStats.CurrentSkills, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
+            if (!PlayerStats.CurrentSkills.Contains(currentSkill.GetComponent<SkillTreeNode>()) && 
+                _listHelper.CheckSublistExists(PlayerStats.CurrentSkills, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
             {
                 // Check if the player can afford it
                 bool sufficentExperience = true ? LootManager.Experience >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
@@ -112,8 +112,8 @@ class SkillTree : MonoBehaviour
         // Display the experience text
         ExperienceText.text = $"Experience: {LootManager.Experience}";
         // Display the player stats
-        HealthText.text = $"Health: {PlayerEntityStats.Health}";
-        StaminaText.text = $"Stamina: {PlayerEntityStats.Stamina}";
-        AttackSpeedText.text = $"Attack Speed: {PlayerEntityStats.AttackSpeed}";
+        HealthText.text = $"Health: {PlayerStats.Health}";
+        StaminaText.text = $"Stamina: {PlayerStats.Stamina}";
+        AttackSpeedText.text = $"Attack Speed: {PlayerStats.AttackSpeed}";
     }
 }
