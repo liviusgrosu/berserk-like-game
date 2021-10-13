@@ -42,9 +42,6 @@ class EquipmentUpgradeTree : MonoBehaviour
             }
         }
 
-        // Add the starting node
-        _equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds.Add(StartingNode.ID);
-
         // Draw the texts for the base equipment class
         CreateText("Durability", _equipmentObj.GetComponent<Equipment>().Stats.Durability);
 
@@ -91,7 +88,7 @@ class EquipmentUpgradeTree : MonoBehaviour
             bool sufficentGems = false;
 
             // Check that the prerequisited are obtained
-            if (CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
+            if (upgradeScript.PrerequisiteUpgrades.Count == 0 || CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
             {
                 // Unlock the upgrade if all prerequisites are obtained
                 unlocked = true;
