@@ -43,7 +43,7 @@ class EquipmentUpgradeTree : MonoBehaviour
         }
 
         // Add the starting node
-        _equipmentObj.GetComponent<Equipment>().CurrentUpgrades.Add(StartingNode);
+        _equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds.Add(StartingNode.ID);
 
         // Draw the texts for the base equipment class
         CreateText("Durability", _equipmentObj.GetComponent<Equipment>().Stats.Durability);
@@ -64,6 +64,8 @@ class EquipmentUpgradeTree : MonoBehaviour
 
         // Refresh the text values
         RefreshTextValues();
+
+        List<int> savedUpgradeIds = _equipmentObj.GetComponent<Equipment>().LoadUpgrades();
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)
@@ -88,17 +90,14 @@ class EquipmentUpgradeTree : MonoBehaviour
             bool unlocked = false;
             bool sufficentGems = false;
 
-            foreach(EquipmentUpgradeNode prerequiteUpgrade in upgradeScript.PrerequisiteUpgrades)
+            // Check that the prerequisited are obtained
+            if (CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
             {
-                if (_equipmentObj.GetComponent<Equipment>().CheckIfUpgradeUnlocked(prerequiteUpgrade))
-                {
-                    unlocked = true;
+                // Unlock the upgrade if all prerequisites are obtained
+                unlocked = true;
 
-                    // Check if the player can afford it
-                    sufficentGems = true ? LootManager.Gems >= prerequiteUpgrade.Cost : false;
-
-                    break;
-                }
+                // Check if the player can afford it
+                sufficentGems = true ? LootManager.Gems >= upgradeScript.Cost : false;
             }
 
             upgradeNode.GetComponent<Button>().interactable = unlocked && sufficentGems && _writeMode;
@@ -162,8 +161,8 @@ class EquipmentUpgradeTree : MonoBehaviour
         // Update skill tree
         foreach(GameObject currentUpgrade in _upgradeTreeNodes)
         {
-            if (!_equipmentObj.GetComponent<Equipment>().CurrentUpgrades.Contains(currentUpgrade.GetComponent<EquipmentUpgradeNode>()) &&
-                _listHelper.CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgrades, currentUpgrade.GetComponent<EquipmentUpgradeNode>().PrerequisiteUpgrades))
+            if (!_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds.Contains(currentUpgrade.GetComponent<EquipmentUpgradeNode>().ID) &&
+                CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds, currentUpgrade.GetComponent<EquipmentUpgradeNode>().PrerequisiteUpgrades))
             {
                 // Check if the player can afford it
                 bool sufficentGems = true ? LootManager.Gems >= currentUpgrade.GetComponent<EquipmentUpgradeNode>().Cost : false;
@@ -176,5 +175,19 @@ class EquipmentUpgradeTree : MonoBehaviour
         // Change the UI
         upgrade.GetComponent<Button>().interactable = false;
         upgrade.GetComponent<Image>().color = Color.green;
+    }
+
+    private bool CheckSublistExists(List<int> upgradeIds, List<EquipmentUpgradeNode> PrerequisiteUpgrades)
+    {
+        // Check if all prerequisites are found in the upgrade IDs
+        int count = 0;
+        foreach(EquipmentUpgradeNode node in PrerequisiteUpgrades)
+        {
+            if (upgradeIds.Contains(node.ID))
+            {
+                count++;
+            }
+        }
+        return count == PrerequisiteUpgrades.Count;
     }
 }

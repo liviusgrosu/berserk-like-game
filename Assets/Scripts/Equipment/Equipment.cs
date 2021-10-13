@@ -23,17 +23,17 @@ public class Equipment : MonoBehaviour
 
     [HideInInspector]
     // List of upgrade ids from the skill tree
-    public List<EquipmentUpgradeNode> CurrentUpgrades;
+    public List<int> CurrentUpgradeIds;
 
     void Awake()
     {
-        if (CurrentUpgrades == null)
+        if (CurrentUpgradeIds == null)
         {
-            CurrentUpgrades = new List<EquipmentUpgradeNode>();
+            CurrentUpgradeIds = new List<int>();
         }
     }
 
-    public void Load() 
+    public void LoadStats() 
     {
         // Check if the file exists
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats"))
@@ -74,11 +74,13 @@ public class Equipment : MonoBehaviour
             }
             
             // Save new equipment
-            Save();
+            SaveStats();
+            // Create equipment upgrades save
+            SaveUpgrades();
         }
     }
     
-    public void Save()
+    public void SaveStats()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats");
@@ -98,10 +100,37 @@ public class Equipment : MonoBehaviour
         file.Close();
     }
 
+    public List<int> LoadUpgrades()
+    {
+        if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades"))
+        {
+            // Load the upgrade IDs if the file exists
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades", FileMode.Open);
+            CurrentUpgradeIds = (List<int>)bf.Deserialize(file);
+            return CurrentUpgradeIds;
+            
+        }
+        else 
+        {
+            // Create a new upgrade IDs list
+            return new List<int>();
+        }
+    }
+
+    public void SaveUpgrades()
+    {
+        // Save the upgrade IDs
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades");
+        bf.Serialize(file, (List<int>)CurrentUpgradeIds);
+        file.Close();
+    }
+
     public void AddUpgrade(EquipmentUpgradeNode upgradeNode)
     {
         // Add upgrade upgrade and increment the respective stat
-        CurrentUpgrades.Add(upgradeNode);
+        CurrentUpgradeIds.Add(upgradeNode.ID);
         switch (upgradeNode.UpgradeName)
         {
             case "durability":
@@ -119,11 +148,10 @@ public class Equipment : MonoBehaviour
             default:
                 break;
         }
-        Save();
     }
 
     public bool CheckIfUpgradeUnlocked(EquipmentUpgradeNode upgradeNode)
     {
-        return CurrentUpgrades.Contains(upgradeNode);
+        return CurrentUpgradeIds.Contains(upgradeNode.ID);
     }
 }

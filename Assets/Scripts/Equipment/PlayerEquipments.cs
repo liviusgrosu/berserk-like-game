@@ -63,7 +63,7 @@ public class PlayerEquipments : MonoBehaviour
                 GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, Quaternion.identity);
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
-                instantiatedObj.GetComponent<Equipment>().Load();
+                instantiatedObj.GetComponent<Equipment>().LoadStats();
                 EquipmentIntances.Add(instantiatedObj);
             }
         }
@@ -74,7 +74,10 @@ public class PlayerEquipments : MonoBehaviour
         // Save equipment stats 
         foreach(GameObject equipment in EquipmentIntances)
         {
-            equipment.GetComponent<Equipment>().Save();
+            // Save equipment stats
+            equipment.GetComponent<Equipment>().SaveStats();
+            // Save equipment upgrades
+            equipment.GetComponent<Equipment>().SaveUpgrades();
         }
     }
 }

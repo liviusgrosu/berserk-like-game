@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class EquipmentUpgradeNode : MonoBehaviour
 {
+    public int ID;
     public string UpgradeName;
     public int Cost;
     public int Amount;
