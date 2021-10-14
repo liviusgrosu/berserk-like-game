@@ -70,13 +70,10 @@ public class PlayerEquipments : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        // Save equipment stats 
         foreach(GameObject equipment in EquipmentIntances)
         {
-            // Save equipment stats
-            equipment.GetComponent<Equipment>().SaveStats();
-            // Save equipment upgrades
-            equipment.GetComponent<Equipment>().SaveUpgrades();
+            // Save equipment
+            equipment.GetComponent<Equipment>().Save();
         }
     }
 }

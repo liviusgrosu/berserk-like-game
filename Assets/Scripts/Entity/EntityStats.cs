@@ -26,8 +26,7 @@ public class EntityStats : MonoBehaviour
 
     void Awake()
     {
-        LoadStats();
-        LoadSkills();
+        Load();
 
         CurrentHealth = 2.0f;
         CurrentStamina = 2.0f;
@@ -111,8 +110,23 @@ public class EntityStats : MonoBehaviour
         _currentStaminaRegenDeactivationTime = 0.0f;
     }
 
-    private void LoadStats()
+    private void Save()
     {
+        // --- Stats ---
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entityStats");
+        // Serialize the entities stats and save it to its respective file
+        bf.Serialize(file, Stats);
+        file.Close();
+        // --- Skills ---
+        file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entitySkills");
+        bf.Serialize(file, CurrentSkillsId);
+        file.Close();
+    }
+
+    public void Load()
+    {
+        // --- Stats ---
         // Check if the file exists
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.entityStats"))
         {
@@ -126,45 +140,24 @@ public class EntityStats : MonoBehaviour
         {
             Stats = new EntityStat(10.0f, 10.0f, 1.0f, 1.0f, 1.0f);
         }
-    }
-
-    private void SaveStats()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entityStats");
-        // Serialize the entities stats and save it to its respective file
-        bf.Serialize(file, Stats);
-        file.Close();
-    }
-
-    public void LoadSkills()
-    {
+        // --- Skills ---
+        // Check if the file exists
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.entitySkills"))
         {
-            // Load the upgrade IDs if the file exists
+            // Load the skill IDs if the file exists
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.entitySkills", FileMode.Open);
             CurrentSkillsId = (List<int>)bf.Deserialize(file);   
         }
         else 
         {
-            // Create a new upgrade IDs list
+            // Create a new skill IDs list
             CurrentSkillsId = new List<int>();
         }
     }
 
-    public void SaveSkills()
-    {
-        // Save the upgrade IDs
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entitySkills");
-        bf.Serialize(file, CurrentSkillsId);
-        file.Close();
-    }
-
     void OnApplicationQuit()
     {
-        SaveStats();
-        SaveSkills();
+        Save();
     }
 }

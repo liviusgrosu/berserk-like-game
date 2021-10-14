@@ -27,12 +27,36 @@ public class Equipment : MonoBehaviour
 
     void Start()
     {
-        LoadStats();
-        LoadUpgrades();
+        Load();
+    }
+    
+    public void Save()
+    {
+        // --- Stats ---
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats");
+        // Serialize the equipment and save it to its respective file
+        switch (Type)
+        {
+            case (EquipmentType.Weapon):
+                bf.Serialize(file, (WeaponStats)Stats);
+                break;
+            case (EquipmentType.Shield):
+                bf.Serialize(file, (ShieldStats)Stats);
+                break;
+            default:
+                break; 
+        }
+        file.Close();
+        // --- Skills ---
+        file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades");
+        bf.Serialize(file, CurrentUpgradeIds);
+        file.Close();
     }
 
-    public void LoadStats() 
+    public void Load()
     {
+        // --- Stats ---
         // Check if the file exists
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats"))
         {
@@ -71,52 +95,19 @@ public class Equipment : MonoBehaviour
                     break; 
             }
         }
-    }
-    
-    public void SaveStats()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentStats");
-        // Serialize the equipment and save it to its respective file
-        switch (Type)
-        {
-            case (EquipmentType.Weapon):
-                bf.Serialize(file, (WeaponStats)Stats);
-                break;
-            case (EquipmentType.Shield):
-                bf.Serialize(file, (ShieldStats)Stats);
-                break;
-            default:
-                break; 
-        }
-        
-        file.Close();
-    }
-
-    public void LoadUpgrades()
-    {
+        // --- Skills ---
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades"))
         {
             // Load the upgrade IDs if the file exists
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades", FileMode.Open);
             CurrentUpgradeIds = (List<int>)bf.Deserialize(file);
-            
         }
         else 
         {
             // Create a new upgrade IDs list
             CurrentUpgradeIds = new List<int>();
         }
-    }
-
-    public void SaveUpgrades()
-    {
-        // Save the upgrade IDs
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades");
-        bf.Serialize(file, CurrentUpgradeIds);
-        file.Close();
     }
 
     public void AddUpgrade(EquipmentUpgradeNode upgradeNode)
