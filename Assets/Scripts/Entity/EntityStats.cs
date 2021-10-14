@@ -1,4 +1,8 @@
+using System;
+using System.IO;
 using System.Collections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,31 +10,27 @@ public class EntityStats : MonoBehaviour
 {
     [Header("Stats")]
     // Stats
-    public float Health;
-    public float Stamina;
-    // Passive stamina regeneration
-    public float StaminaRegeneration;
-    public float Defence;
-    public float AttackSpeed;
+
+    [HideInInspector]
+    public EntityStat Stats;
+
     // Current stats
     [HideInInspector] public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
     // Used only for buffs
     [HideInInspector] public float CurrentStaminaRegeneration = 0f;
     // List of upgrade ids from the skill tree
-    [HideInInspector] public List<SkillTreeNode> CurrentSkills;
+    [HideInInspector] public List<int> CurrentSkillsId;
     public float ActivateStaminaRegenTime = 0.7f;
     private float _currentStaminaRegenDeactivationTime = 0f;
     private bool _staminaProductionStopped;
 
     void Awake()
     {
-        if (CurrentSkills == null)
-        {
-            CurrentSkills = new List<SkillTreeNode>();
-        }
+        LoadStats();
+        LoadSkills();
 
-        CurrentHealth = 2;
-        CurrentStamina = 2;
+        CurrentHealth = 2.0f;
+        CurrentStamina = 2.0f;
     }
 
     void Update()
@@ -38,7 +38,7 @@ public class EntityStats : MonoBehaviour
         // Regenerate stamina
         if (!_staminaProductionStopped)
         {
-            CurrentStamina = Mathf.Clamp(CurrentStamina + (CurrentStaminaRegeneration + StaminaRegeneration) * Time.deltaTime, 0, Stamina);
+            CurrentStamina = Mathf.Clamp(CurrentStamina + (CurrentStaminaRegeneration + Stats.StaminaRegeneration) * Time.deltaTime, 0, Stats.Stamina);
         }
         else
         {
@@ -52,35 +52,24 @@ public class EntityStats : MonoBehaviour
         }
     }
 
-    void SaveStatsToFile()
-    {
-        // TODO: save stats to a file
-    }
-
-    void LoadStatsFromFile()
-    {
-        // TODO: load stats from a file
-    }
-
     public void AddUpgrade(SkillTreeNode skillNode)
     {
         // Add skill upgrade and increment the respective stat
-        CurrentSkills.Add(skillNode);
+        CurrentSkillsId.Add(skillNode.ID);
         switch (skillNode.SkillName)
         {
             case "health":
-                Health += skillNode.Amount;
+                Stats.Health += skillNode.Amount;
                 break;
             case "stamina":
-                Stamina += skillNode.Amount;
+                Stats.Stamina += skillNode.Amount;
                 break;
             case "attack speed":
-                AttackSpeed += skillNode.Amount;
+                Stats.AttackSpeed += skillNode.Amount;
                 break;
             default:
                 break;
         }
-        // TODO: add saving feature
     }
 
     public void AddCurrentStats(EntityEffects effect)
@@ -90,18 +79,18 @@ public class EntityStats : MonoBehaviour
         {
             case "health":
                 CurrentHealth += effect.Rate;
-                CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Health);
+                CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Stats.Health);
                 break;
             case "stamina":
                 CurrentStamina += effect.Rate;
-                CurrentStamina = Mathf.Clamp(CurrentStamina, 0, Stamina);
+                CurrentStamina = Mathf.Clamp(CurrentStamina, 0, Stats.Stamina);
                 break;
             case "stamina regeneration":
                 CurrentStaminaRegeneration += effect.Rate;
                 break;
             case "attack speed":
                 CurrentAttackSpeed += effect.Rate;
-                CurrentAttackSpeed = Mathf.Clamp(CurrentAttackSpeed, 0, AttackSpeed);
+                CurrentAttackSpeed = Mathf.Clamp(CurrentAttackSpeed, 0, Stats.AttackSpeed);
                 break;
             default:
                 break;
@@ -110,7 +99,7 @@ public class EntityStats : MonoBehaviour
 
     public bool CheckIfUpgradeUnlocked(SkillTreeNode skillNode)
     {
-        return CurrentSkills.Contains(skillNode);
+        return CurrentSkillsId.Contains(skillNode.ID);
     }
 
     public void ReduceStamina(float amount)
@@ -120,5 +109,62 @@ public class EntityStats : MonoBehaviour
         // Stop stamina regeneration
         _staminaProductionStopped = true;
         _currentStaminaRegenDeactivationTime = 0.0f;
+    }
+
+    private void LoadStats()
+    {
+        // Check if the file exists
+        if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.entityStats"))
+        {
+            // Open the file
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.entityStats", FileMode.Open);
+            Stats = (EntityStat)bf.Deserialize(file);
+            file.Close();
+        }
+        else
+        {
+            Stats = new EntityStat(10.0f, 10.0f, 1.0f, 1.0f, 1.0f);
+        }
+    }
+
+    private void SaveStats()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entityStats");
+        // Serialize the entities stats and save it to its respective file
+        bf.Serialize(file, Stats);
+        file.Close();
+    }
+
+    public void LoadSkills()
+    {
+        if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.entitySkills"))
+        {
+            // Load the upgrade IDs if the file exists
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.entitySkills", FileMode.Open);
+            CurrentSkillsId = (List<int>)bf.Deserialize(file);   
+        }
+        else 
+        {
+            // Create a new upgrade IDs list
+            CurrentSkillsId = new List<int>();
+        }
+    }
+
+    public void SaveSkills()
+    {
+        // Save the upgrade IDs
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.entitySkills");
+        bf.Serialize(file, CurrentSkillsId);
+        file.Close();
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveStats();
+        SaveSkills();
     }
 }
