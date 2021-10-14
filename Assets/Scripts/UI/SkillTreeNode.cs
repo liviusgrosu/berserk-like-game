@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class SkillTreeNode : MonoBehaviour
 {
+    public int ID;
     public string SkillName;
     public int Cost;
     public int Amount;

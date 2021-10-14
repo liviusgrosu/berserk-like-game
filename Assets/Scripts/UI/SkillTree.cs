@@ -19,8 +19,6 @@ class SkillTree : MonoBehaviour
     public Text StaminaText;
     public Text AttackSpeedText;
 
-    public SkillTreeNode StartingNode;
-
     private List<GameObject> _skillTreeNodes;
     private ListHelper<SkillTreeNode> _listHelper;
 
@@ -33,9 +31,6 @@ class SkillTree : MonoBehaviour
     {
         // Display the texts
         UpdateTextElement();
-
-        // Add the starting node
-        PlayerStats.CurrentSkills.Add(StartingNode);
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)
@@ -59,17 +54,12 @@ class SkillTree : MonoBehaviour
             // Check if the skill has the prerequisites
             bool unlocked = false;
             bool sufficentExperience = false;
-            foreach(SkillTreeNode prerequiteSkill in skillScript.PrerequisiteSkills)
+            if (skillScript.PrerequisiteSkills.Count == 0 || CheckSublistExists(PlayerStats.CurrentSkillsId,  skillScript.PrerequisiteSkills))
             {
-                if (PlayerStats.CheckIfUpgradeUnlocked(prerequiteSkill))
-                {
-                    unlocked = true;
+                unlocked = true;
 
-                    // Check if the player can afford it
-                    sufficentExperience = true ? LootManager.Experience >= prerequiteSkill.Cost : false;
-
-                    break;
-                }
+                // Check if the player can afford it
+                sufficentExperience = true ? LootManager.Experience >= skillScript.Cost : false;
             }
 
             skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentExperience && _writeMode;
@@ -91,8 +81,8 @@ class SkillTree : MonoBehaviour
         // Update skill tree
         foreach(GameObject currentSkill in _skillTreeNodes)
         {
-            if (!PlayerStats.CurrentSkills.Contains(currentSkill.GetComponent<SkillTreeNode>()) && 
-                _listHelper.CheckSublistExists(PlayerStats.CurrentSkills, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
+            if (!PlayerStats.CurrentSkillsId.Contains(currentSkill.GetComponent<SkillTreeNode>().ID) && 
+                CheckSublistExists(PlayerStats.CurrentSkillsId, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
             {
                 // Check if the player can afford it
                 bool sufficentExperience = true ? LootManager.Experience >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
@@ -112,8 +102,22 @@ class SkillTree : MonoBehaviour
         // Display the experience text
         ExperienceText.text = $"Experience: {LootManager.Experience}";
         // Display the player stats
-        HealthText.text = $"Health: {PlayerStats.Health}";
-        StaminaText.text = $"Stamina: {PlayerStats.Stamina}";
-        AttackSpeedText.text = $"Attack Speed: {PlayerStats.AttackSpeed}";
+        HealthText.text = $"Health: {PlayerStats.Stats.Health}";
+        StaminaText.text = $"Stamina: {PlayerStats.Stats.Stamina}";
+        AttackSpeedText.text = $"Attack Speed: {PlayerStats.Stats.AttackSpeed}";
+    }
+
+    private bool CheckSublistExists(List<int> skillIds, List<SkillTreeNode> PrerequisiteSkills)
+    {
+        // Check if all prerequisites are found in the upgrade IDs
+        int count = 0;
+        foreach(SkillTreeNode node in PrerequisiteSkills)
+        {
+            if (skillIds.Contains(node.ID))
+            {
+                count++;
+            }
+        }
+        return count == PrerequisiteSkills.Count;
     }
 }
