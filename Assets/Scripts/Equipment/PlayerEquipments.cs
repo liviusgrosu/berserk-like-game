@@ -64,6 +64,7 @@ public class PlayerEquipments : MonoBehaviour
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
                 instantiatedObj.GetComponent<Equipment>().LoadStats();
+                instantiatedObj.GetComponent<Equipment>().LoadUpgrades();
                 EquipmentIntances.Add(instantiatedObj);
             }
         }

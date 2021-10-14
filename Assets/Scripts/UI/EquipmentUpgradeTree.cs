@@ -16,7 +16,6 @@ class EquipmentUpgradeTree : MonoBehaviour
     public LootManager LootManager;
     public bool _writeMode = true;
     public Text GemsText;
-    public EquipmentUpgradeNode StartingNode;
     private List<GameObject> _upgradeTreeNodes;
     private ListHelper<EquipmentUpgradeNode> _listHelper;
 
@@ -61,8 +60,6 @@ class EquipmentUpgradeTree : MonoBehaviour
 
         // Refresh the text values
         RefreshTextValues();
-
-        List<int> savedUpgradeIds = _equipmentObj.GetComponent<Equipment>().LoadUpgrades();
 
         // Add each skill tree node into a list
         foreach(Transform child in transform)

@@ -24,15 +24,6 @@ public class Equipment : MonoBehaviour
     [HideInInspector]
     // List of upgrade ids from the skill tree
     public List<int> CurrentUpgradeIds;
-
-    void Awake()
-    {
-        if (CurrentUpgradeIds == null)
-        {
-            CurrentUpgradeIds = new List<int>();
-        }
-    }
-
     public void LoadStats() 
     {
         // Check if the file exists
@@ -72,11 +63,6 @@ public class Equipment : MonoBehaviour
                 default:
                     break; 
             }
-            
-            // Save new equipment
-            SaveStats();
-            // Create equipment upgrades save
-            SaveUpgrades();
         }
     }
     
@@ -100,7 +86,7 @@ public class Equipment : MonoBehaviour
         file.Close();
     }
 
-    public List<int> LoadUpgrades()
+    public void LoadUpgrades()
     {
         if (File.Exists($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades"))
         {
@@ -108,13 +94,12 @@ public class Equipment : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades", FileMode.Open);
             CurrentUpgradeIds = (List<int>)bf.Deserialize(file);
-            return CurrentUpgradeIds;
             
         }
         else 
         {
             // Create a new upgrade IDs list
-            return new List<int>();
+            CurrentUpgradeIds = new List<int>();
         }
     }
 
@@ -123,7 +108,7 @@ public class Equipment : MonoBehaviour
         // Save the upgrade IDs
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/{gameObject.name}.equipmentUpgrades");
-        bf.Serialize(file, (List<int>)CurrentUpgradeIds);
+        bf.Serialize(file, CurrentUpgradeIds);
         file.Close();
     }
 
