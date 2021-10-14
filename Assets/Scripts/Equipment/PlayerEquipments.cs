@@ -63,8 +63,6 @@ public class PlayerEquipments : MonoBehaviour
                 GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, Quaternion.identity);
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
-                instantiatedObj.GetComponent<Equipment>().LoadStats();
-                instantiatedObj.GetComponent<Equipment>().LoadUpgrades();
                 EquipmentIntances.Add(instantiatedObj);
             }
         }

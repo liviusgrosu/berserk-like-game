@@ -24,6 +24,13 @@ public class Equipment : MonoBehaviour
     [HideInInspector]
     // List of upgrade ids from the skill tree
     public List<int> CurrentUpgradeIds;
+
+    void Start()
+    {
+        LoadStats();
+        LoadUpgrades();
+    }
+
     public void LoadStats() 
     {
         // Check if the file exists
