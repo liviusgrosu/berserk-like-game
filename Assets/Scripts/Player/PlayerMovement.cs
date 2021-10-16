@@ -134,6 +134,8 @@ public class PlayerMovement : MonoBehaviour
             _collider.center -= new Vector3(0.0f, 0.5f, 0.0f);
             // Reduce stamina cost
             PlayerStats.ReduceStamina(RollingStaminaCost);
+            // Trigger the rolling animation
+            Animator.SetTrigger("Rolling");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
