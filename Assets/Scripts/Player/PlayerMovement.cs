@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Rotation")]
     // Rotation variables
     public float TurningSpeed = 10.0f;
+    public float turnSmoothTime = 0.2f;
+    private float turnSmoothVelocity;
     private RaycastHit mouseRay;
     // Rolling variables
     [Header("Rolling")]
@@ -28,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     public GeneratePath GridGenerator;
     public EntityStats PlayerStats;
+    public Animator Animator;
     private CapsuleCollider _collider;
     public Transform DirectionCameraOffset;
     private Rigidbody rigidbody;
@@ -58,8 +61,8 @@ public class PlayerMovement : MonoBehaviour
         {
             // Character will look where mouse is pointing relative to the world
             Quaternion targetRotation = Quaternion.LookRotation(hit.point - transform.position);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
+            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
 
         // --- Movement ---
@@ -99,8 +102,18 @@ public class PlayerMovement : MonoBehaviour
 
             // Eliminate double speed with multiple inputs
             movementDirection = movementDirection.normalized;
+
+            // Rotate the player based on their movement
+            if (movementDirection != Vector3.zero)
+            {
+                float targetRotation = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg;
+                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+            }
+
             rigidbody.velocity = movementDirection * _currentSpeed;
         }
+
+        Animator.SetFloat("speedPercent", rigidbody.velocity.magnitude / MovementSpeed);
     }
 
     void HandleInput()
