@@ -395,6 +395,10 @@ PrefabInstance:
       value: Skill Node (3)
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: PrerequisiteSkills.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: PrerequisiteSkills.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -413,6 +417,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: StartingNode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
@@ -640,6 +648,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: SkillName
       value: stamina
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
@@ -1253,7 +1265,6 @@ MonoBehaviour:
   HealthText: {fileID: 1394409832}
   StaminaText: {fileID: 2067279151}
   AttackSpeedText: {fileID: 1127235320}
-  StartingNode: {fileID: 0}
 --- !u!1 &504301713
 GameObject:
   m_ObjectHideFlags: 0
@@ -1702,6 +1713,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: SkillName
       value: health
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
@@ -2659,7 +2674,7 @@ Transform:
   m_Children:
   - {fileID: 814490556}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -2739,7 +2754,6 @@ MonoBehaviour:
   LootManager: {fileID: 1497091493}
   _writeMode: 1
   GemsText: {fileID: 1648096512}
-  StartingNode: {fileID: 0}
   TextPrefab: {fileID: 4469429416378831873, guid: bef5f7fd8a2f7a646b1b9d9fb9a7de4b, type: 3}
   TextRoot: {fileID: 1168220280}
 --- !u!1 &974830653
@@ -3516,6 +3530,10 @@ PrefabInstance:
       propertyPath: SkillName
       value: stamina
       objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
       value: 'Stamina
@@ -3655,6 +3673,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: SkillName
       value: attack speed
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
@@ -3798,7 +3820,7 @@ Transform:
   - {fileID: 1085759822}
   - {fileID: 346825849}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1314443707
 GameObject:
@@ -4212,6 +4234,10 @@ PrefabInstance:
       propertyPath: SkillName
       value: health
       objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
       value: 'Health
@@ -4586,6 +4612,10 @@ PrefabInstance:
       propertyPath: SkillName
       value: attack speed
       objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
       value: 'Attack Speed
@@ -4643,7 +4673,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1497091495
 MonoBehaviour:
@@ -4845,7 +4875,7 @@ Transform:
   - {fileID: 1804147191}
   - {fileID: 708456834}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!136 &1585943345
 CapsuleCollider:
@@ -4962,7 +4992,7 @@ MonoBehaviour:
   CurrentStamina: 0
   CurrentAttackSpeed: 0
   CurrentStaminaRegeneration: 0
-  CurrentSkills: []
+  CurrentSkillsId: 
   ActivateStaminaRegenTime: 0.7
 --- !u!114 &1585943351
 MonoBehaviour:
@@ -5296,7 +5326,7 @@ RectTransform:
   - {fileID: 1314443708}
   - {fileID: 1600988233}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5402,6 +5432,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690156812}
   m_CullTransparentMesh: 0
+--- !u!1001 &1774826330
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.771856
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.970005
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.9396763
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_Name
+      value: LowPoly-Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 8c145e05d3afdf040a3a2bf6d48ca1e7, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5fdf3709d87651c42812d2e0d1151ef5, type: 3}
 --- !u!1001 &1795071578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5455,7 +5546,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7895844510943282827, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7895844510943282827, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6009,7 +6100,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1869579299
 PrefabInstance:
@@ -6526,7 +6617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6729,6 +6820,10 @@ PrefabInstance:
       value: Skill Node (6)
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: PrerequisiteSkills.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: PrerequisiteSkills.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -6747,6 +6842,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: StartingNode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
@@ -7011,6 +7110,10 @@ PrefabInstance:
       value: Skill Node
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: PrerequisiteSkills.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: SkillName
       value: health
       objectReference: {fileID: 0}
@@ -7025,6 +7128,10 @@ PrefabInstance:
     - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: StartingNode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
+      propertyPath: ID
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3512121044715471714, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
       propertyPath: m_Text
