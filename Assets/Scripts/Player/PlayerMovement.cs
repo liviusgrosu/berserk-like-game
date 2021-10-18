@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private bool _isRunning;
     [Header("Rotation")]
     // Rotation variables
-    public float TurningSpeed = 10.0f;
     public float turnSmoothTime = 0.2f;
     private float turnSmoothVelocity;
     private RaycastHit mouseRay;

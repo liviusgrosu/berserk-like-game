@@ -496,7 +496,6 @@ MonoBehaviour:
   MovementSpeed: 5
   RunningMultiplier: 1.5
   RunningStaminaCost: 0.1
-  TurningSpeed: 10
   turnSmoothTime: 0.05
   RollingSpeed: 15
   RollingTime: 0.3
@@ -504,6 +503,7 @@ MonoBehaviour:
   GridGenerator: {fileID: 0}
   PlayerStats: {fileID: 75318125}
   Animator: {fileID: 75318120}
+  AttackComponent: {fileID: 75318128}
   DirectionCameraOffset: {fileID: 814490556}
 --- !u!114 &75318125
 MonoBehaviour:
@@ -572,6 +572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 75318120}
+  TurningSpeed: 10
 --- !u!1 &91909707
 GameObject:
   m_ObjectHideFlags: 0
@@ -5377,7 +5378,6 @@ MonoBehaviour:
   MovementSpeed: 5
   RunningMultiplier: 1.5
   RunningStaminaCost: 0.1
-  TurningSpeed: 10
   turnSmoothTime: 0.2
   RollingSpeed: 10
   RollingTime: 0.3
@@ -5385,6 +5385,7 @@ MonoBehaviour:
   GridGenerator: {fileID: 0}
   PlayerStats: {fileID: 1585943350}
   Animator: {fileID: 0}
+  AttackComponent: {fileID: 0}
   DirectionCameraOffset: {fileID: 814490556}
 --- !u!114 &1585943352
 MonoBehaviour:

@@ -13,6 +13,11 @@ public class PlayerEquipments : MonoBehaviour
     private List<string> _equipmentCarrying;
     [HideInInspector]
     public List<GameObject> EquipmentIntances;
+    public string TempCurrentEquipmentName;
+    // --- TEMP START ---
+    private GameObject TempCurrentEquipment;
+    // --- TEMP END ---
+    public Transform PlayerHand;
 
     void Awake()
     {
@@ -64,8 +69,22 @@ public class PlayerEquipments : MonoBehaviour
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
                 EquipmentIntances.Add(instantiatedObj);
+
+                // --- TEMP START ---
+                if (instantiatedObj.name.Contains(TempCurrentEquipmentName))
+                {
+                    TempCurrentEquipment = instantiatedObj;
+                    Equip();
+                }
+                // --- TEMP END ---
             }
         }
+    }
+
+    void Equip()
+    {
+        GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, PlayerHand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
+        equipmentModel.transform.parent = PlayerHand;
     }
 
     void OnApplicationQuit()
