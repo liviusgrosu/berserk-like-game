@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public GeneratePath GridGenerator;
     public EntityStats PlayerStats;
     public Animator Animator;
+    public EntityAttacking AttackComponent;
     private CapsuleCollider _collider;
     public Transform DirectionCameraOffset;
     private Rigidbody rigidbody;
@@ -104,13 +105,20 @@ public class PlayerMovement : MonoBehaviour
             movementDirection = movementDirection.normalized;
 
             // Rotate the player based on their movement
-            if (movementDirection != Vector3.zero)
+            if (movementDirection != Vector3.zero && !AttackComponent.IsAttacking())
             {
                 float targetRotation = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
             }
 
-            rigidbody.velocity = movementDirection * _currentSpeed;
+            if (!AttackComponent.IsAttacking())
+            {
+                rigidbody.velocity = movementDirection * _currentSpeed;
+            }
+            else
+            {
+                rigidbody.velocity = Vector3.zero;
+            }
         }
 
         Animator.SetFloat("speedPercent", rigidbody.velocity.magnitude / _runningSpeed);
