@@ -559,6 +559,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &75318128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75318119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11cf4f117c455be42ad26a870e664f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 75318120}
 --- !u!1 &91909707
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,7 +963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -983,6 +996,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_Controller
@@ -1493,7 +1510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9e85292ed4deb4098480e838310baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerStats: {fileID: 1585943350}
+  PlayerStats: {fileID: 75318125}
   LootManager: {fileID: 1497091493}
   _writeMode: 1
   ExperienceText: {fileID: 873233018}
@@ -2242,6 +2259,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 709061111}
   m_CullTransparentMesh: 0
+--- !u!1 &736677824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736677825}
+  - component: {fileID: 736677828}
+  - component: {fileID: 736677827}
+  m_Layer: 0
+  m_Name: Cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &736677825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736677824}
+  m_LocalRotation: {x: 0.5744701, y: -0.03166906, z: -0.0029805633, w: 0.81790733}
+  m_LocalPosition: {x: 0.000061, y: 0.000762, z: 0.003263}
+  m_LocalScale: {x: 0.00044009002, y: 0.0036027967, z: 0.00044009002}
+  m_Children: []
+  m_Father: {fileID: 1018094283}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 69.974, y: -9.281, z: -6.92}
+--- !u!23 &736677827
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736677824}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &736677828
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736677824}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &751104691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,7 +3032,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.35355335, y: 0.35355335, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -7.19, y: 4.86, z: -6.28}
+  m_LocalPosition: {x: -4.2, y: -1.11, z: -2.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 814490556}
@@ -3015,7 +3113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EquipmentName: Base Sword
-  PlayerEquipment: {fileID: 1585943352}
+  PlayerEquipment: {fileID: 75318122}
   LootManager: {fileID: 1497091493}
   _writeMode: 1
   GemsText: {fileID: 1648096512}
@@ -3176,6 +3274,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005774748}
   m_CullTransparentMesh: 0
+--- !u!4 &1018094283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 969414721584871595, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
+  m_PrefabInstance: {fileID: 282293557}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1049202489 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3512121044345751302, guid: 246ad3333333f8c4fbb2f3c94fa04ad3, type: 3}
@@ -4049,7 +4152,7 @@ MonoBehaviour:
   Inventory: {fileID: 1497091495}
   Icon: {fileID: 504301715}
   ItemCount: {fileID: 709061113}
-  PlayerBuffs: {fileID: 1585943349}
+  PlayerBuffs: {fileID: 75318123}
 --- !u!1 &1293841255
 GameObject:
   m_ObjectHideFlags: 0
@@ -5140,7 +5243,7 @@ Transform:
   - {fileID: 1804147191}
   - {fileID: 708456834}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!136 &1585943345
 CapsuleCollider:
@@ -6525,7 +6628,7 @@ MonoBehaviour:
   HealthBarSlider: {fileID: 1810824820}
   StaminaBar: {fileID: 2058439107}
   StaminaBarSlider: {fileID: 2058439108}
-  EntityStats: {fileID: 1585943350}
+  EntityStats: {fileID: 75318125}
 --- !u!1 &2031748789
 GameObject:
   m_ObjectHideFlags: 0

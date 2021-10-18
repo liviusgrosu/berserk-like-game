@@ -113,13 +113,14 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.velocity = movementDirection * _currentSpeed;
         }
 
-        Animator.SetFloat("speedPercent", rigidbody.velocity.magnitude / MovementSpeed);
+        Animator.SetFloat("speedPercent", rigidbody.velocity.magnitude / _runningSpeed);
     }
 
     void HandleInput()
     {
         // Handle rolling
-        if (Input.GetKeyDown(KeyCode.Space) && 
+        if (Input.GetKeyDown(KeyCode.Space) &&
+            !Animator.GetCurrentAnimatorStateInfo(0).IsName("Rolling") && 
             !_isRolling && 
             PlayerStats.CurrentStamina >= RollingStaminaCost &&
             Vector3.Magnitude(rigidbody.velocity) > 0.0f)
