@@ -575,6 +575,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animator: {fileID: 75318120}
   TurningSpeed: 10
+--- !u!114 &75318129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75318119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f75481ecaadd24fa62a714e2042c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &91909707
 GameObject:
   m_ObjectHideFlags: 0
@@ -6643,7 +6655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_Name
-      value: Enemy (1)
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_IsActive

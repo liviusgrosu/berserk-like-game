@@ -1,40 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EntityAttacking : MonoBehaviour
 {
     public Animator Animator;
     public float TurningSpeed = 10.0f;
     private bool _rotatingToTarget;
-    private RaycastHit _targetRayHit;
-    private Ray _targetRay;
+    private Vector3 _targetLookDirection;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree"))
-        {
-            Animator.SetTrigger("Attack");
-            _rotatingToTarget = true;
-            _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        }
-
+        // Rotate to the target
         if (_rotatingToTarget)
         {
-            if (Physics.Raycast(_targetRay, out _targetRayHit))
+            Quaternion targetRotation = Quaternion.LookRotation(_targetLookDirection - transform.position);
+            if (1.0f - Mathf.Abs(Quaternion.Dot(transform.rotation, targetRotation)) < 0.02f)
             {
-
-                // Character will look where mouse is pointing relative to the world
-                Quaternion targetRotation = Quaternion.LookRotation(_targetRayHit.point - transform.position);
-                if (1.0f - Mathf.Abs(Quaternion.Dot(transform.rotation, targetRotation)) < 0.02f)
-                {
-                    _rotatingToTarget = false;
-                    return;
-                }
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
-                transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                _rotatingToTarget = false;
+                return;
             }
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
+    }
+
+    public void TriggerAttack(Vector3 targetPosition)
+    {
+        // Only trigger attack when entity is not already attacking
+        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree"))
+        {
+            Animator.SetTrigger("Attack");
+            _targetLookDirection = targetPosition;
+            _rotatingToTarget = true;
         }
     }
 
