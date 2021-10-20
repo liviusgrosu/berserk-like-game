@@ -41,7 +41,6 @@ public class EntityStats : MonoBehaviour
         }
         else
         {
-            // TODO: add a stat that affects the time it takes for stamina regenation to activate
             // Wait for stamina regeneration to activate
             _currentStaminaRegenDeactivationTime += Time.deltaTime;
             if (_currentStaminaRegenDeactivationTime >= ActivateStaminaRegenTime)
@@ -108,6 +107,11 @@ public class EntityStats : MonoBehaviour
         // Stop stamina regeneration
         _staminaProductionStopped = true;
         _currentStaminaRegenDeactivationTime = 0.0f;
+    }
+
+    public void ReduceHealth(float amount)
+    {
+        CurrentHealth -= amount;
     }
 
     private void Save()

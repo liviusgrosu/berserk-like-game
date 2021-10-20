@@ -68,6 +68,7 @@ public class PlayerEquipments : MonoBehaviour
                 GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, Quaternion.identity);
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
+                instantiatedObj.GetComponent<Equipment>().Load();
                 EquipmentIntances.Add(instantiatedObj);
 
                 // --- TEMP START ---
@@ -85,6 +86,8 @@ public class PlayerEquipments : MonoBehaviour
     {
         GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, PlayerHand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
         equipmentModel.transform.parent = PlayerHand;
+        // Give the weapon collider the equipment stats
+        equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
     }
 
     void OnApplicationQuit()
