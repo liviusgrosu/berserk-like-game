@@ -12,9 +12,12 @@ public class EnemyStateBehaviour : MonoBehaviour
     public float AttackDistance;
     [Tooltip("Distance to start calculating pathing")]
     public float PathingDistance;
+    [Tooltip("Distance to start walking")]
+    public float StartWalkingDistance;
     public float MovementSpeed = 5.0f;
     public float RunningMultiplier = 1.5f;
     private float _runningSpeed;
+    private float _currentSpeed;
 
     [Header("Rotation")]
     // Rotation variables
@@ -49,6 +52,7 @@ public class EnemyStateBehaviour : MonoBehaviour
         _agent.isStopped = true;
         _rigidbody.velocity = Vector3.zero;
         _runningSpeed = MovementSpeed * RunningMultiplier;
+        _currentSpeed = MovementSpeed;
     }
 
     void Update()
@@ -77,8 +81,19 @@ public class EnemyStateBehaviour : MonoBehaviour
         else if (CurrentState == States.Engage)
         {
             // Speed
+            // Run to the player
+            if (distanceToPlayer > StartWalkingDistance)
+            {
+                _currentSpeed = _runningSpeed;
+            }
+            // walk to the player
+            else
+            {
+                _currentSpeed = MovementSpeed;
+            }
+
             Vector3 normalizedAgentVelocity = _agent.desiredVelocity.normalized; 
-            _rigidbody.velocity = normalizedAgentVelocity * MovementSpeed;
+            _rigidbody.velocity = normalizedAgentVelocity * _currentSpeed;
 
             // Rotate to the next goal point
             RotateToTarget(normalizedAgentVelocity);
