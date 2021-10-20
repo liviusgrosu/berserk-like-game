@@ -23,7 +23,6 @@ public class EnemyStateBehaviour : MonoBehaviour
     // Rotation variables
     public float turnSmoothTime = 0.2f;
     private float turnSmoothVelocity;
-
     [HideInInspector]
     public enum States
     {
@@ -32,23 +31,28 @@ public class EnemyStateBehaviour : MonoBehaviour
         Attack
     }
     public States CurrentState;
-    private Transform _player;
+    [HideInInspector]
+    public Transform Player;
     private NavMeshAgent _agent;
     private NavMeshPath _path;
     private Rigidbody _rigidbody;
     private Animator _animator;
+    private EnemyAttackingBehaviour _attackingBehaviour;
 
     void Start()
     {
         // We use start because enemies can spawn in and awake doesnt trigger then
         CurrentState = States.Idle;
         
+        // Get all relavent components
         _rigidbody = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _attackingBehaviour = GetComponent<EnemyAttackingBehaviour>();
         _path = new NavMeshPath();
-        _player = GameObject.Find("Player").transform;
+        Player = GameObject.Find("Player").transform;
 
+        // Setup default values
         _agent.isStopped = true;
         _rigidbody.velocity = Vector3.zero;
         _runningSpeed = MovementSpeed * RunningMultiplier;
@@ -58,12 +62,12 @@ public class EnemyStateBehaviour : MonoBehaviour
     void Update()
     {
         // Get distance to the player
-        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, Player.position);
 
         // Don't start calculating the pathing unless they're relatively close
         if (distanceToPlayer <= PathingDistance)
         {
-            _agent.destination = _player.position;
+            _agent.destination = Player.position;
         }
 
         if (CurrentState == States.Idle)
@@ -114,7 +118,7 @@ public class EnemyStateBehaviour : MonoBehaviour
         else if (CurrentState == States.Attack)
         {
             // Speed
-            Vector3 normalizedAgentVelocity = _player.position - transform.position;
+            Vector3 normalizedAgentVelocity = Player.position - transform.position;
             _rigidbody.velocity = Vector3.zero;
 
             // Rotate to the next goal point
