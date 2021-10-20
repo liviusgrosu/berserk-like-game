@@ -13,6 +13,8 @@ public class EnemyStateBehaviour : MonoBehaviour
     [Tooltip("Distance to start calculating pathing")]
     public float PathingDistance;
     public float MovementSpeed = 5.0f;
+    public float RunningMultiplier = 1.5f;
+    private float _runningSpeed;
 
     [Header("Rotation")]
     // Rotation variables
@@ -31,6 +33,7 @@ public class EnemyStateBehaviour : MonoBehaviour
     private NavMeshAgent _agent;
     private NavMeshPath _path;
     private Rigidbody _rigidbody;
+    private Animator _animator;
 
     void Start()
     {
@@ -39,11 +42,13 @@ public class EnemyStateBehaviour : MonoBehaviour
         
         _rigidbody = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
         _path = new NavMeshPath();
         _player = GameObject.Find("Player").transform;
 
         _agent.isStopped = true;
         _rigidbody.velocity = Vector3.zero;
+        _runningSpeed = MovementSpeed * RunningMultiplier;
     }
 
     void Update()
@@ -76,9 +81,7 @@ public class EnemyStateBehaviour : MonoBehaviour
             _rigidbody.velocity = normalizedAgentVelocity * MovementSpeed;
 
             // Rotate to the next goal point
-            float targetRotation = Mathf.Atan2(normalizedAgentVelocity.x, normalizedAgentVelocity.z) * Mathf.Rad2Deg;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
-            
+            RotateToTarget(normalizedAgentVelocity);
             // Go back to idle if player is too far away
             if  (distanceToPlayer > EngageDistance)
             {
@@ -96,7 +99,11 @@ public class EnemyStateBehaviour : MonoBehaviour
         else if (CurrentState == States.Attack)
         {
             // Speed
+            Vector3 normalizedAgentVelocity = _player.position - transform.position;
             _rigidbody.velocity = Vector3.zero;
+
+            // Rotate to the next goal point
+            RotateToTarget(normalizedAgentVelocity);
             
             // Pursuit the player if they are far enough
             if (distanceToPlayer > AttackDistance)
@@ -105,5 +112,14 @@ public class EnemyStateBehaviour : MonoBehaviour
                 _agent.isStopped = false;
             }
         }
+
+        _animator.SetFloat("speedPercent", _rigidbody.velocity.magnitude / _runningSpeed);
+    }
+
+    private void RotateToTarget(Vector3 normalizedAgentVelocity)
+    {
+        // Rotate to the next goal point
+            float targetRotation = Mathf.Atan2(normalizedAgentVelocity.x, normalizedAgentVelocity.z) * Mathf.Rad2Deg;
+            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
     }
 }
