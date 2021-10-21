@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using UnityEngine;
 
-public class PlayerEquipments : MonoBehaviour
+public class PlayerEquipments : MonoBehaviour, IEquipment
 {
     public Transform EquipmentParent;
     public List<string> StartingEquipment;
@@ -18,10 +18,12 @@ public class PlayerEquipments : MonoBehaviour
     private GameObject TempCurrentEquipment;
     // --- TEMP END ---
     public Transform Hand;
+    private EntityAttacking _entityAttacking;
 
     void Awake()
     {
         EquipmentIntances = new List<GameObject>();
+        _entityAttacking = GetComponent<EntityAttacking>();
         //  Create a new list regardless if its empty
         if (StartingEquipment == null)
         {
@@ -84,10 +86,14 @@ public class PlayerEquipments : MonoBehaviour
 
     void Equip()
     {
-        GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, Hand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
+        Equipment _currentEquipmentScript = TempCurrentEquipment.GetComponent<Equipment>();
+        
+        // Spawn the weapon model
+        GameObject equipmentModel = Instantiate(_currentEquipmentScript.ModelPrefab, Hand.position, _currentEquipmentScript.ModelPrefab.transform.rotation);
         equipmentModel.transform.parent = Hand;
-        // Give the weapon collider the equipment stats
-        equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
+        
+        // Give the weapon collider and enemyAttacking script the equipment stats
+        equipmentModel.GetComponent<WeaponCollider>().AssignStats(_currentEquipmentScript.Stats);
     }
 
     void OnApplicationQuit()
@@ -97,5 +103,10 @@ public class PlayerEquipments : MonoBehaviour
             // Save equipment
             equipment.GetComponent<Equipment>().Save();
         }
+    }
+
+    public EquipmentStats GetCurrentEquipmentStats()
+    {
+        return TempCurrentEquipment.GetComponent<Equipment>().Stats;
     }
 }

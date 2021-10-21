@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyEquipments : MonoBehaviour
+public class EnemyEquipments : MonoBehaviour, IEquipment
 {
     public GameObject TempCurrentEquipment;
 
@@ -19,5 +19,10 @@ public class EnemyEquipments : MonoBehaviour
         equipmentModel.transform.parent = Hand;
         // Give the weapon collider the equipment stats
         equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
+    }
+
+    public EquipmentStats GetCurrentEquipmentStats()
+    {
+        return TempCurrentEquipment.GetComponent<Equipment>().Stats;
     }
 }

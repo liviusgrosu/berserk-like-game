@@ -587,6 +587,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71d7a45d81aa6664d8fd10f1f795a460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IgnoreClickMask:
+    serializedVersion: 2
+    m_Bits: 4
 --- !u!1 &91909707
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,7 +715,7 @@ Transform:
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_Children: []
   m_Father: {fileID: 75318121}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &110245865
 MeshRenderer:
@@ -791,7 +794,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 75318121}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &159724251
 PrefabInstance:
@@ -1052,7 +1055,7 @@ Transform:
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &278798645
 MeshRenderer:
@@ -1365,6 +1368,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1316349763472522308, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_LocalRotation.x
@@ -2025,7 +2032,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &465135314
 GameObject:
@@ -2933,7 +2940,7 @@ Transform:
   m_LocalScale: {x: 0.00044009002, y: 0.0036027967, z: 0.00044009002}
   m_Children: []
   m_Father: {fileID: 75318121}
-  m_RootOrder: 3
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 69.974, y: -9.281, z: -6.92}
 --- !u!23 &736677827
 MeshRenderer:
@@ -3174,7 +3181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 75318121}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &782007394
 GameObject:
@@ -4649,7 +4656,7 @@ Transform:
   m_LocalScale: {x: 0.00044009002, y: 0.0036027967, z: 0.00044009002}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 3
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 69.974, y: -9.281, z: -6.92}
 --- !u!23 &1222855839
 MeshRenderer:
@@ -5775,7 +5782,7 @@ PrefabInstance:
       propertyPath: m_Text
       value: 'Attack Speed
 
-        +30'
+        +20%'
       objectReference: {fileID: 0}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: PrerequisiteUpgrades.Array.size
@@ -5791,7 +5798,7 @@ PrefabInstance:
       objectReference: {fileID: 1869579301}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: Amount
-      value: 30
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: ID
@@ -6673,7 +6680,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1648096511
 GameObject:
@@ -7234,7 +7241,7 @@ PrefabInstance:
       propertyPath: m_Text
       value: 'Attack Speed
 
-        +15'
+        +10%'
       objectReference: {fileID: 0}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: PrerequisiteUpgrades.Array.size
@@ -7251,6 +7258,10 @@ PrefabInstance:
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: ID
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
+      propertyPath: Amount
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
@@ -7693,7 +7704,7 @@ PrefabInstance:
       propertyPath: m_Text
       value: 'Attack Speed
 
-        +20'
+        +15%'
       objectReference: {fileID: 0}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: PrerequisiteUpgrades.Array.size
@@ -7709,7 +7720,7 @@ PrefabInstance:
       objectReference: {fileID: 1800269361}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: Amount
-      value: 20
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 4095774911079341241, guid: e340573f726ef244c977b797ee0ad4e6, type: 3}
       propertyPath: ID

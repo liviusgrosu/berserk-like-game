@@ -7,7 +7,7 @@ public class EquipmentUpgradeNode : MonoBehaviour
     public int ID;
     public string UpgradeName;
     public int Cost;
-    public int Amount;
+    public float Amount;
     public List<EquipmentUpgradeNode> PrerequisiteUpgrades;
     public Text _costText;
 
