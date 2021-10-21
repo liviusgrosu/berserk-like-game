@@ -127,13 +127,21 @@ public class PlayerMovement : MonoBehaviour
             // Start the rolling countdown
             _currentRollingTime = RollingTime;
             _isRolling = true;
+            
             // Get previous movement direction
-            _rollingDirection = rigidbody.velocity / _currentSpeed;
+            _rollingDirection = rigidbody.velocity.normalized;
+            
             // Change collider
             _collider.height /= 2.0f;
             _collider.center -= new Vector3(0.0f, 0.5f, 0.0f);
+
+            // Rotate towards the roll direction
+            transform.rotation = Quaternion.LookRotation(_rollingDirection);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
             // Reduce stamina cost
             PlayerStats.ReduceStamina(RollingStaminaCost);
+            
             // Trigger the rolling animation
             Animator.SetTrigger("Rolling");
         }
