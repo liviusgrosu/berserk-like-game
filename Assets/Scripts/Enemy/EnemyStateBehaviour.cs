@@ -125,7 +125,7 @@ public class EnemyStateBehaviour : MonoBehaviour
             RotateToTarget(normalizedAgentVelocity);
             
             // Pursuit the player if they are far enough
-            if (distanceToPlayer > AttackDistance)
+            if (distanceToPlayer > AttackDistance && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attacking"))
             {
                 CurrentState = States.Engage;
                 _agent.isStopped = false;
