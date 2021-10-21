@@ -26,6 +26,9 @@ ModelImporter:
   - first:
       74: 7399462096315819049
     second: Armature|Attacking
+  - first:
+      74: 5835666913685029746
+    second: Empty|Attacking
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -41,10 +44,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Armature|Rolling' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Upper Arm.L' has translation animation
-      that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -87,18 +87,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Idling
-      takeName: Armature|Idling
+      name: Armature|Attacking
+      takeName: Armature|Attacking
       internalID: 0
       firstFrame: 0
-      lastFrame: 103
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -174,18 +174,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Attacking
-      takeName: Armature|Attacking
+      name: Armature|Idling
+      takeName: Armature|Idling
       internalID: 0
       firstFrame: 0
-      lastFrame: 25
+      lastFrame: 69
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
