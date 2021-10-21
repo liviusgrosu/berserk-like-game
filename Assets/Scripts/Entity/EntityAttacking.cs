@@ -14,7 +14,7 @@ public class EntityAttacking : MonoBehaviour
         if (_rotatingToTarget)
         {
             Quaternion targetRotation = Quaternion.LookRotation(_targetLookDirection - transform.position);
-            if (1.0f - Mathf.Abs(Quaternion.Dot(transform.rotation, targetRotation)) < 0.02f)
+            if (1.0f - Mathf.Abs(Quaternion.Dot(transform.rotation, targetRotation)) < 0.05f)
             {
                 _rotatingToTarget = false;
                 return;

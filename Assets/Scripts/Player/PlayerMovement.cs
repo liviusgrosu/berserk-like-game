@@ -57,14 +57,6 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit; 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit))
-        {
-            // Character will look where mouse is pointing relative to the world
-            Quaternion targetRotation = Quaternion.LookRotation(hit.point - transform.position);
-            //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
-            //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-        }
-
         // --- Movement ---
         if (_isRunning)
         {
