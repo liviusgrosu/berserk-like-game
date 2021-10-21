@@ -13,11 +13,11 @@ public class PlayerEquipments : MonoBehaviour
     private List<string> _equipmentCarrying;
     [HideInInspector]
     public List<GameObject> EquipmentIntances;
-    public string TempCurrentEquipmentName;
     // --- TEMP START ---
+    public string TempCurrentEquipmentName;
     private GameObject TempCurrentEquipment;
     // --- TEMP END ---
-    public Transform PlayerHand;
+    public Transform Hand;
 
     void Awake()
     {
@@ -84,8 +84,8 @@ public class PlayerEquipments : MonoBehaviour
 
     void Equip()
     {
-        GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, PlayerHand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
-        equipmentModel.transform.parent = PlayerHand;
+        GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, Hand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
+        equipmentModel.transform.parent = Hand;
         // Give the weapon collider the equipment stats
         equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
     }
