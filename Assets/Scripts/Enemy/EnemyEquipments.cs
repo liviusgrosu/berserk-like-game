@@ -17,6 +17,8 @@ public class EnemyEquipments : MonoBehaviour, IEquipment
     {
         GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, Hand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
         equipmentModel.transform.parent = Hand;
+        // Load default stats
+        TempCurrentEquipment.GetComponent<Equipment>().LoadDefaultStats();
         // Give the weapon collider the equipment stats
         equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
     }

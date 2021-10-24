@@ -105,6 +105,26 @@ public class Equipment : MonoBehaviour
         }
     }
 
+    public void LoadDefaultStats()
+    {
+        // Create and load default stats for the an equipment
+        // Check if the file exists
+
+        switch (Type)
+        {
+            case (EquipmentType.Weapon):
+                // Initialize the weapon stats
+                Stats = new WeaponStats();
+                break;
+            case (EquipmentType.Shield):
+                // Initialize the shields stats
+                Stats = new ShieldStats();
+                break;
+            default:
+                break; 
+        }
+    }
+
     public void AddUpgrade(EquipmentUpgradeNode upgradeNode)
     {
         // Add upgrade upgrade and increment the respective stat
