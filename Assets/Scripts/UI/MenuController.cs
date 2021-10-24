@@ -109,4 +109,10 @@ public class MenuController : MonoBehaviour
                 break;
         }
     }
+
+    public bool IsMenuOpen()
+    {
+        // Check if menu is open or not
+        return _currentMenu != Menu.Overlay;
+    }
 }

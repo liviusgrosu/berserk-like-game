@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAttackingBehaviour : MonoBehaviour
 {
     public LayerMask IgnoreClickMask;
+    public MenuController MenuController;
     private EntityAttacking _entityAttacking;
     private RaycastHit _targetRayHit;
     private Ray _targetRay;
@@ -14,7 +15,7 @@ public class PlayerAttackingBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!MenuController.IsMenuOpen() && Input.GetMouseButtonDown(0))
         {
             // Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
