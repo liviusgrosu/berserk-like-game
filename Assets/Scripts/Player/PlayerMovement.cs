@@ -148,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            // Trigger running state
             _currentSpeed = _runningSpeed;
             _isRunning = true;
         }

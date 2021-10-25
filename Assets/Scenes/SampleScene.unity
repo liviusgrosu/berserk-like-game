@@ -497,7 +497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 5
   RunningMultiplier: 1.5
-  RunningStaminaCost: 0.1
+  RunningStaminaCost: 1
   turnSmoothTime: 0.05
   RollingSpeed: 15
   RollingTime: 0.3
@@ -6452,11 +6452,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_TagString
       value: Damagable
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1316349763472522308, guid: 5549cbd51cfa39141a39238bc4833b8e, type: 3}
       propertyPath: m_LocalRotation.x
@@ -7791,7 +7795,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1991575648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3255c2e950f2c2142b196c604842e5cc, type: 3}
+  m_Script: {fileID: 11500000, guid: af9267ebe28d3404283c202d6b7ca24a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HealthBar: {fileID: 1810824819}

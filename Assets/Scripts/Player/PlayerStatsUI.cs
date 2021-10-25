@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-class PlayerUI : MonoBehaviour
+class PlayerStatsUI : MonoBehaviour
 {
     public RectTransform HealthBar;
     public Slider HealthBarSlider;
