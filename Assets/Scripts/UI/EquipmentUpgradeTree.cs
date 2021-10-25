@@ -50,9 +50,11 @@ class EquipmentUpgradeTree : MonoBehaviour
             case (Equipment.EquipmentType.Weapon):
                 CreateText("Damage", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
                 CreateText("Attack Speed", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
+                CreateText("Stamina Use", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).StaminaUse);
                 break;
             case (Equipment.EquipmentType.Shield):
                 CreateText("Defence", ((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
+                CreateText("Stamina Use", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).StaminaUse);
                 break;
             default:
                 break;
