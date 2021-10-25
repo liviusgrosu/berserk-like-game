@@ -22,6 +22,22 @@ namespace GeneralUtility
     }
 }
 
+namespace PlayerData
+{
+    [System.Serializable]
+    public class ConsuamblesData
+    {
+        public string Name;
+        public int Quantity;
+
+        public ConsuamblesData(string name, int quantity)
+        {
+            Name = name;
+            Quantity = quantity;
+        }
+    }
+}
+
 namespace UIUtility
 {
     public class StatText

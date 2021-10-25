@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 public class PlayerEquipments : MonoBehaviour, IEquipment

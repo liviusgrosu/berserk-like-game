@@ -16,7 +16,7 @@ public class ConsumablesUI : MonoBehaviour
     void Start()
     {
         // Error checking if no consumables are in the inventory
-        if (Inventory.Consumables.Count == 0)
+        if (Inventory.ConsumableInventory.Count == 0)
         {
             Icon.gameObject.SetActive(false);
             ItemCount.gameObject.SetActive(false);
@@ -31,7 +31,7 @@ public class ConsumablesUI : MonoBehaviour
     void Update()
     {
         // If an item has recently been added to the inventory then initialize the UI
-        if (!_UIActive && Inventory.Consumables.Count != 0)
+        if (!_UIActive && Inventory.ConsumableInventory.Count != 0)
         {
             Init();
         }
@@ -39,7 +39,7 @@ public class ConsumablesUI : MonoBehaviour
         // Update the consumables count text
         if (ItemCount.gameObject.activeSelf)
         {
-            ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
+            ItemCount.text = Inventory.ConsumableInventory[_currentItemIdx].Count.ToString();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1) && _UIActive)
@@ -48,7 +48,7 @@ public class ConsumablesUI : MonoBehaviour
             _currentItemIdx--;
             if (_currentItemIdx < 0)
             {
-                _currentItemIdx = Inventory.Consumables.Count - 1;
+                _currentItemIdx = Inventory.ConsumableInventory.Count - 1;
             }
             UpdateCurrentItem();
         }
@@ -57,16 +57,18 @@ public class ConsumablesUI : MonoBehaviour
         {
             // Use current consumable item
             PlayerBuffs.AddBuff(_currentItem.Effect);
-            Inventory.Consumables[_currentItemIdx].Count--;
-            ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
-            if (Inventory.Consumables[_currentItemIdx].Count <= 0)
+            // Decrement the consumable count
+            Inventory.ConsumableInventory[_currentItemIdx].Count--;
+            // Update count text
+            ItemCount.text = Inventory.ConsumableInventory[_currentItemIdx].Count.ToString();
+            if (Inventory.ConsumableInventory[_currentItemIdx].Count <= 0)
             {
                 // Remove from inventory
-                Inventory.Consumables.RemoveAt(_currentItemIdx);
+                Inventory.ConsumableInventory.RemoveAt(_currentItemIdx);
                 _currentItemIdx++;
 
                 // Deactive the UI when no items are available
-                if (Inventory.Consumables.Count == 0)
+                if (Inventory.ConsumableInventory.Count == 0)
                 {
                     _UIActive = false;
                     Icon.gameObject.SetActive(false);
@@ -75,7 +77,7 @@ public class ConsumablesUI : MonoBehaviour
                 }
 
                 // Switch to the next item
-                if(_currentItemIdx >= Inventory.Consumables.Count)
+                if(_currentItemIdx >= Inventory.ConsumableInventory.Count)
                 {
                     _currentItemIdx = 0;
                 }
@@ -87,7 +89,7 @@ public class ConsumablesUI : MonoBehaviour
         {
             // Cycle to next consumable item
             _currentItemIdx++;
-            if (_currentItemIdx >= Inventory.Consumables.Count)
+            if (_currentItemIdx >= Inventory.ConsumableInventory.Count)
             {
                 _currentItemIdx = 0;
             }
@@ -98,10 +100,10 @@ public class ConsumablesUI : MonoBehaviour
     private void UpdateCurrentItem()
     {
         // Update the current item
-        _currentItem = Inventory.Consumables[_currentItemIdx].Consumable;
+        _currentItem = Inventory.ConsumableInventory[_currentItemIdx].Consumable;
         // Update the UI elements
         Icon.sprite = _currentItem.Icon;
-        ItemCount.text = Inventory.Consumables[_currentItemIdx].Count.ToString();
+        ItemCount.text = Inventory.ConsumableInventory[_currentItemIdx].Count.ToString();
     }
 
     private void Init()

@@ -1,49 +1,108 @@
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using PlayerData;
 
 
 public class Inventory : MonoBehaviour
 {
-    public List<ConsuambleInventory> Consumables;
+    public List<ConsuambleInventory> ConsumableInventory;
 
-    public GameObject HealthPotion, StaminaPotion, StaminaRegenerationPotion;
+    private List<ConsuamblesData> ConsuamblesFileData; 
 
     void Awake()
     {
         // Initialize the consumables list
-        Consumables = new List<ConsuambleInventory>();
-        // TEMP: Add some consumables
+        ConsumableInventory = new List<ConsuambleInventory>();
+        ConsuamblesFileData = new List<ConsuamblesData>();
 
-        AddConsumable(HealthPotion.GetComponent<ConsumableItem>(), 5);
-        AddConsumable(StaminaPotion.GetComponent<ConsumableItem>(), 3);
-        AddConsumable(StaminaRegenerationPotion.GetComponent<ConsumableItem>(), 1);
+        Load();
     }
 
     public void AddConsumable(ConsumableItem consumable, int amount)
     {
-        for(int i = 0; i < Consumables.Count; i++)
+        for(int i = 0; i < ConsumableInventory.Count; i++)
         {
             // If the consumable exists in the inventory then update the count
-            if (consumable.name == Consumables[i].Consumable.name)
+            if (consumable.name == ConsumableInventory[i].Consumable.name)
             {
-                Consumables[i].Count += amount;
+                ConsumableInventory[i].Count += amount;
                 return;
             }
         }
 
         // Add a new consumable item
-        Consumables.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
+        ConsumableInventory.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
+    }
+
+    private void Load()
+    {
+        // Check if the file exists
+        if (File.Exists($"{Application.persistentDataPath}/consumables.inventory"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/consumables.inventory", FileMode.Open);
+            ConsuamblesFileData = (List<ConsuamblesData>)bf.Deserialize(file);
+            file.Close();
+
+            foreach(ConsuamblesData consumable in ConsuamblesFileData)
+            {
+                GameObject item = Resources.Load<GameObject>($"Prefabs/Consumables/{consumable.Name}");
+                AddConsumable(item.GetComponent<ConsumableItem>(), consumable.Quantity);
+            }
+        }
+        else
+        {
+            // Add example consuambles
+            GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 5);
+
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
+
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
+        }
+    }
+
+    private void Save()
+    {
+        // Remove data incase of change inventory
+        ConsuamblesFileData = new List<ConsuamblesData>();
+
+        // Convert the consumable inventory to a saveable data structure
+        foreach(ConsuambleInventory consumable in ConsumableInventory)
+        {
+            ConsuamblesFileData.Add(new ConsuamblesData(consumable.Consumable.name, consumable.Count));
+        }
+
+        // Save consumables inventory
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/consumables.inventory");
+        bf.Serialize(file, ConsuamblesFileData);
+        file.Close();
     }
 
     void Update()
     {
-        // TEMP: Add some consumables
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Add example consuambles
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            AddConsumable(HealthPotion.GetComponent<ConsumableItem>(), 5);
-            AddConsumable(StaminaPotion.GetComponent<ConsumableItem>(), 3);
-            AddConsumable(StaminaRegenerationPotion.GetComponent<ConsumableItem>(), 1);
+            GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 5);
+
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
+
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        Save();
     }
 }
