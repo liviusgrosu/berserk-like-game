@@ -8,11 +8,13 @@ public class EnemyAttackingBehaviour : MonoBehaviour
     private float _currentAttackingCooldown;
     private EntityAttacking _entityAttacking;
     private EnemyStateBehaviour _stateBehaviour;
+    private IEquipment _equipments;
 
-    void Awake()
+    void Start()
     {
         _entityAttacking = GetComponent<EntityAttacking>();
         _stateBehaviour = GetComponent<EnemyStateBehaviour>();
+        _equipments = GetComponent<IEquipment>();
         
         // Attack right away
         _currentAttackingCooldown = AttackingCooldown;
@@ -26,7 +28,7 @@ public class EnemyAttackingBehaviour : MonoBehaviour
             _currentAttackingCooldown += Time.deltaTime;
             if (_currentAttackingCooldown >= AttackingCooldown)
             {
-                _entityAttacking.TriggerAttack(_stateBehaviour.Player.position);
+                _entityAttacking.TriggerAttack(_stateBehaviour.Player.position, ((WeaponStats)_equipments.GetCurrentEquipmentStats()).AttackSpeed);
                 _currentAttackingCooldown = 0.0f;
             }
         }

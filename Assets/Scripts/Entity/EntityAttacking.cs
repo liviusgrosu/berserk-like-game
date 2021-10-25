@@ -6,12 +6,6 @@ public class EntityAttacking : MonoBehaviour
     public float TurningSpeed = 10.0f;
     private bool _rotatingToTarget;
     private Vector3 _targetLookDirection;
-    private IEquipment _equipments;
-
-    void Start()
-    {
-        _equipments = GetComponent<IEquipment>();
-    }
 
     // Update is called once per frame
     void Update()
@@ -30,7 +24,7 @@ public class EntityAttacking : MonoBehaviour
         }
     }
 
-    public void TriggerAttack(Vector3 targetPosition)
+    public void TriggerAttack(Vector3 targetPosition, float attackSpeed)
     {
         // Only trigger attack when entity is not already attacking
         if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree"))
@@ -38,8 +32,7 @@ public class EntityAttacking : MonoBehaviour
             // Go into attack state
             Animator.SetTrigger("Attack");
             
-            // Change the 
-            float attackSpeed = ((WeaponStats)_equipments.GetCurrentEquipmentStats()).AttackSpeed;
+            // Change the animation speed from stats
             Animator.SetFloat("AttackingSpeedMultiplier", attackSpeed);
         
             _targetLookDirection = targetPosition;
