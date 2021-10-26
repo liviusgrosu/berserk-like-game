@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponCollider : MonoBehaviour
 {
-    private EquipmentStats _equipmentStats;
+    private Equipment _equipmentData;
     // TODO: add access to buffs to get attack damage buff
     private EntityAttacking EntityAttackState;
 
@@ -29,16 +29,16 @@ public class WeaponCollider : MonoBehaviour
             // Add key triggers in animations to allow window of damage dealt
 
             // Calculate damage
-            float damage = ((WeaponStats)_equipmentStats).Damage;
+            float damage = ((WeaponStats)_equipmentData.Stats).Damage;
 
             // Assign damage to the entity
             collider.GetComponent<EntityStats>().ReduceHealth(damage);
         }
     }
 
-    public void AssignStats(EquipmentStats equipmentStats)
+    public void AssignData(Equipment equipmentData)
     {
         // Give this script the current stats
-        _equipmentStats = equipmentStats;
+        _equipmentData = equipmentData;
     }
 }

@@ -20,7 +20,7 @@ public class EnemyEquipments : MonoBehaviour, IEquipment
         // Load default stats
         TempCurrentEquipment.GetComponent<Equipment>().LoadDefaultStats();
         // Give the weapon collider the equipment stats
-        equipmentModel.GetComponent<WeaponCollider>().AssignStats(TempCurrentEquipment.GetComponent<Equipment>().Stats);
+        equipmentModel.GetComponent<WeaponCollider>().AssignData(TempCurrentEquipment.GetComponent<Equipment>());
     }
 
     public EquipmentStats GetCurrentEquipmentStats()
