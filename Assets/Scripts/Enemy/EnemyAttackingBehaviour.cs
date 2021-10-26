@@ -26,6 +26,7 @@ public class EnemyAttackingBehaviour : MonoBehaviour
         {
             // Once entity is within attacking range start attacking on an interval
             _currentAttackingCooldown += Time.deltaTime;
+            // Set a cooldown between attacks
             if (_currentAttackingCooldown >= AttackingCooldown)
             {
                 _entityAttacking.TriggerAttack(_stateBehaviour.Player.position, ((WeaponStats)_equipments.GetCurrentEquipmentStats()).AttackSpeed);

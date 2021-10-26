@@ -138,7 +138,7 @@ public class EnemyStateBehaviour : MonoBehaviour
     private void RotateToTarget(Vector3 normalizedAgentVelocity)
     {
         // Rotate to the next goal point
-            float targetRotation = Mathf.Atan2(normalizedAgentVelocity.x, normalizedAgentVelocity.z) * Mathf.Rad2Deg;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+        float targetRotation = Mathf.Atan2(normalizedAgentVelocity.x, normalizedAgentVelocity.z) * Mathf.Rad2Deg;
+        transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
     }
 }

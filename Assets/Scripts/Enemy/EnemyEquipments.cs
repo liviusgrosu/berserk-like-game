@@ -15,6 +15,7 @@ public class EnemyEquipments : MonoBehaviour, IEquipment
 
     void Equip()
     {
+        // Create the model object
         GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, Hand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
         equipmentModel.transform.parent = Hand;
         // Load default stats

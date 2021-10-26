@@ -24,6 +24,7 @@ public class PlayerAttackingBehaviour : MonoBehaviour
 
     void Update()
     {
+        // Dont perform any actions when the menu is open
         if (MenuController.IsMenuOpen())
         {
             return;
@@ -41,7 +42,9 @@ public class PlayerAttackingBehaviour : MonoBehaviour
             // If a raycast collider is found then supply the target point to the attack script
             if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
             {
+                // Execute the attack animation
                 _entityAttacking.TriggerAttack(_targetRayHit.point, ((WeaponStats)_equipments.GetCurrentEquipmentStats()).AttackSpeed);
+                // Reduce stamina
                 _playerStats.ReduceStamina(((WeaponStats)_equipments.GetCurrentEquipmentStats()).StaminaUse);
             }
         }
