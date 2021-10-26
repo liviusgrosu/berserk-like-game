@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public float RollingTime = 1.0f;
     public float RollingStaminaCost = 2.0f;
     private float _currentRollingTime;
-    private bool _isRolling;
+    public bool _isRolling;
     private Vector3 _rollingDirection;
     // Misc.
     [Header("Components")]
@@ -96,13 +96,13 @@ public class PlayerMovement : MonoBehaviour
             movementDirection = movementDirection.normalized;
 
             // Rotate the player based on their movement
-            if (movementDirection != Vector3.zero && !AttackComponent.IsAttacking())
+            if (movementDirection != Vector3.zero && !AttackComponent.IsAttacking() && !AttackComponent.IsBlocking())
             {
                 float targetRotation = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
             }
 
-            if (!AttackComponent.IsAttacking())
+            if (!AttackComponent.IsAttacking() && !AttackComponent.IsBlocking())
             {
                 rigidbody.velocity = movementDirection * _currentSpeed;
             }
@@ -111,7 +111,6 @@ public class PlayerMovement : MonoBehaviour
                 rigidbody.velocity = Vector3.zero;
             }
         }
-
         Animator.SetFloat("speedPercent", rigidbody.velocity.magnitude / _runningSpeed);
     }
 
@@ -157,5 +156,10 @@ public class PlayerMovement : MonoBehaviour
             _currentSpeed = MovementSpeed;
             _isRunning = false;
         }
+    }
+
+    public bool IsRolling()
+    {
+        return Animator.GetCurrentAnimatorStateInfo(0).IsName("Rolling");
     }
 }

@@ -40,8 +40,28 @@ public class EntityAttacking : MonoBehaviour
         }
     }
 
+    public void PerformBlocking(Vector3 targetPosition, float attackSpeed)
+    {
+        // Go into attack state
+        Animator.SetTrigger("Block");
+
+        _targetLookDirection = targetPosition;
+        _rotatingToTarget = true;
+    }
+
+    public void StopBlocking()
+    {
+        // Go into attack state
+        Animator.SetTrigger("Stop Block");
+    }
+
     public bool IsAttacking()
     {
         return Animator.GetCurrentAnimatorStateInfo(0).IsName("Attacking");
+    }
+
+    public bool IsBlocking()
+    {
+        return Animator.GetCurrentAnimatorStateInfo(0).IsName("Blocking") || Animator.GetCurrentAnimatorStateInfo(0).IsName("Stop Blocking");
     }
 }
