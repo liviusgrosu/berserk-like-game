@@ -45,7 +45,8 @@ public class PlayerAttackingBehaviour : MonoBehaviour
                 _playerStats.ReduceStamina(((WeaponStats)_equipments.GetCurrentEquipmentStats()).StaminaUse);
             }
         }
-        else if (Input.GetMouseButtonDown(1))
+        
+        if (Input.GetMouseButtonDown(1))
         {
             // Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -56,7 +57,7 @@ public class PlayerAttackingBehaviour : MonoBehaviour
                 _entityAttacking.PerformBlocking(_targetRayHit.point, 1.0f);
             }
         }
-        else if (Input.GetMouseButtonUp(1))
+        else if(Input.GetMouseButtonUp(1))
         {
             // Stop the blocking animation
             _entityAttacking.StopBlocking();

@@ -22,6 +22,12 @@ public class EntityAttacking : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TurningSpeed);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
+
+        // Stop the trigger delay bug
+        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree"))
+        {
+            Animator.ResetTrigger("Stop Block");
+        }
     }
 
     public void TriggerAttack(Vector3 targetPosition, float attackSpeed)
@@ -52,6 +58,7 @@ public class EntityAttacking : MonoBehaviour
     public void StopBlocking()
     {
         // Go into attack state
+        Animator.ResetTrigger("Block");
         Animator.SetTrigger("Stop Block");
     }
 
