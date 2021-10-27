@@ -76,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
             if (_currentRollingTime <= 0.0f)
             {
                 _isRolling = false;
+                PlayerStats.EnableIFrames = false;
                 // Change collider
                 _collider.center += new Vector3(0.0f, 0.5f, 0.0f);
                 _collider.height *= 2f;
@@ -126,7 +127,10 @@ public class PlayerMovement : MonoBehaviour
             // Start the rolling countdown
             _currentRollingTime = RollingTime;
             _isRolling = true;
-            
+
+            // Enable I-frames
+            PlayerStats.EnableIFrames = true;
+
             // Get previous movement direction
             _rollingDirection = rigidbody.velocity.normalized;
             

@@ -20,6 +20,7 @@ public class EntityStats : MonoBehaviour
     public float ActivateStaminaRegenTime = 0.7f;
     private float _currentStaminaRegenDeactivationTime = 0f;
     private bool _staminaProductionStopped;
+    [HideInInspector] public bool EnableIFrames;
 
     void Awake()
     {
@@ -111,7 +112,11 @@ public class EntityStats : MonoBehaviour
 
     public void ReduceHealth(float amount)
     {
-        CurrentHealth -= amount;
+        // TODO: change this so that weapons can only ignore i frames
+        if (!EnableIFrames)
+        {
+            CurrentHealth -= amount;  
+        }
     }
 
     private void Save()

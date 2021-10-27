@@ -17,7 +17,6 @@ public class WeaponCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log(EntityAttackState.IsAttacking());
         // Don't deal damage unless attacking
         if (!EntityAttackState.IsAttacking())
         {
