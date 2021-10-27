@@ -92,7 +92,7 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
         equipmentModel.transform.parent = Hand;
         
         // Give the weapon collider and enemyAttacking script the equipment stats
-        equipmentModel.GetComponent<WeaponCollider>().AssignData(_currentEquipmentScript);
+        equipmentModel.GetComponent<WeaponCollider>().AssignData(_currentEquipmentScript, transform);
     }
 
     void OnApplicationQuit()

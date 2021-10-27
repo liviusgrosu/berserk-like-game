@@ -162,6 +162,7 @@ public class EntityStats : MonoBehaviour
 
     void OnApplicationQuit()
     {
+        // Don't save if the editor stats are being used
         if (!UseEditorStats)
         {
             Save();
