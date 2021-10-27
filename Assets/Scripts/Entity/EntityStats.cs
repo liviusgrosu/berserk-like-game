@@ -8,12 +8,9 @@ using UnityEngine;
 
 public class EntityStats : MonoBehaviour
 {
-    [Header("Stats")]
-    // Stats
-
-    [HideInInspector]
+    // Use stats that are filled in by editor
+    public bool UseEditorStats;
     public EntityStat Stats;
-
     // Current stats
     [HideInInspector] public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
     // Used only for buffs
@@ -26,10 +23,13 @@ public class EntityStats : MonoBehaviour
 
     void Awake()
     {
-        Load();
+        if (!UseEditorStats)
+        {
+            Load();
+        }
 
-        CurrentHealth = 2.0f;
-        CurrentStamina = 2.0f;
+        CurrentHealth = Stats.Health;
+        CurrentStamina = Stats.Stamina;
     }
 
     void Update()
@@ -162,6 +162,9 @@ public class EntityStats : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        Save();
+        if (!UseEditorStats)
+        {
+            Save();
+        }
     }
 }
