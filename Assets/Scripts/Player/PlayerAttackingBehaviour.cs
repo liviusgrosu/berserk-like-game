@@ -7,7 +7,7 @@ public class PlayerAttackingBehaviour : MonoBehaviour
     private EntityAttacking _entityAttacking;
     private RaycastHit _targetRayHit;
     private Ray _targetRay;
-    private IEquipment _equipments;
+    private PlayerEquipments _equipments;
     private EntityStats _playerStats;
     private Animator _animator;
     private PlayerMovement _movement;
@@ -16,7 +16,7 @@ public class PlayerAttackingBehaviour : MonoBehaviour
     void Awake()
     {
         _entityAttacking = GetComponent<EntityAttacking>();
-        _equipments = GetComponent<IEquipment>();
+        _equipments = GetComponent<PlayerEquipments>();
         _playerStats = GetComponent<EntityStats>();
         _animator = GetComponent<Animator>();
         _movement = GetComponent<PlayerMovement>();
@@ -43,9 +43,9 @@ public class PlayerAttackingBehaviour : MonoBehaviour
             if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
             {
                 // Execute the attack animation
-                _entityAttacking.TriggerAttack(_targetRayHit.point, ((WeaponStats)_equipments.GetCurrentEquipmentStats()).AttackSpeed);
+                _entityAttacking.TriggerAttack(_targetRayHit.point, _equipments.GetCurrentWeaponStats().AttackSpeed);
                 // Reduce stamina
-                _playerStats.ReduceStamina(((WeaponStats)_equipments.GetCurrentEquipmentStats()).StaminaUse);
+                _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse);
             }
         }
         

@@ -10,8 +10,8 @@ public class Equipment : MonoBehaviour
 {
     public GameObject ModelPrefab;
     
-    [HideInInspector]
     public EquipmentStats Stats;
+    public WeaponStats weaponStats;
 
     [HideInInspector]
     public enum EquipmentType

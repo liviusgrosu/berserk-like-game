@@ -41,24 +41,18 @@ class EquipmentUpgradeTree : MonoBehaviour
             }
         }
 
+        // REM: need to get the stats 
+        // TODO: for now this will only pull off of the weapon equipment class
+        // Maybe include a type in this script to choose preemptively the correct class
+
         // Draw the texts for the base equipment class
-        CreateText("Durability", _equipmentObj.GetComponent<Equipment>().Stats.Durability);
+        CreateText("Durability", _equipmentObj.GetComponent<WeaponEquipment>().Stats.Durability);
 
         // Draw the texts for the specific equipment child class
-        switch (_equipmentObj.GetComponent<Equipment>().Type)
-        {
-            case (Equipment.EquipmentType.Weapon):
-                CreateText("Damage", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
-                CreateText("Attack Speed", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
-                CreateText("Stamina Use", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).StaminaUse);
-                break;
-            case (Equipment.EquipmentType.Shield):
-                CreateText("Defence", ((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
-                CreateText("Stamina Use", ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).StaminaUse);
-                break;
-            default:
-                break;
-        }
+        CreateText("Damage", _equipmentObj.GetComponent<WeaponEquipment>().Stats.Damage);
+        CreateText("Attack Speed", _equipmentObj.GetComponent<WeaponEquipment>().Stats.AttackSpeed);
+        CreateText("Stamina Use", _equipmentObj.GetComponent<WeaponEquipment>().Stats.StaminaUse);
+
 
         // Refresh the text values
         RefreshTextValues();
@@ -76,7 +70,7 @@ class EquipmentUpgradeTree : MonoBehaviour
         foreach(GameObject upgradeNode in _upgradeTreeNodes)
         {
             EquipmentUpgradeNode upgradeScript = upgradeNode.GetComponent<EquipmentUpgradeNode>();
-            if(_equipmentObj.GetComponent<Equipment>().CheckIfUpgradeUnlocked(upgradeScript))
+            if(_equipmentObj.GetComponent<WeaponEquipment>().CheckIfUpgradeUnlocked(upgradeScript))
             {
                 upgradeNode.GetComponent<Image>().color = Color.green;
                 continue;
@@ -87,7 +81,7 @@ class EquipmentUpgradeTree : MonoBehaviour
             bool sufficentGems = false;
 
             // Check that the prerequisited are obtained
-            if (upgradeScript.PrerequisiteUpgrades.Count == 0 || CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
+            if (upgradeScript.PrerequisiteUpgrades.Count == 0 || CheckSublistExists(_equipmentObj.GetComponent<WeaponEquipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
             {
                 // Unlock the upgrade if all prerequisites are obtained
                 unlocked = true;
@@ -120,16 +114,13 @@ class EquipmentUpgradeTree : MonoBehaviour
             switch(statText.TextFieldName)
             {
                 case "Durability":
-                    UpdateTextElement(statText.TextObj, statText.TextFieldName, _equipmentObj.GetComponent<Equipment>().Stats.Durability);
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, _equipmentObj.GetComponent<WeaponEquipment>().Stats.Durability);
                     break;
                 case "Damage":
-                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).Damage);
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, _equipmentObj.GetComponent<WeaponEquipment>().Stats.Damage);
                     break;
                 case "Attack Speed":
-                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((WeaponStats)_equipmentObj.GetComponent<Equipment>().Stats).AttackSpeed);
-                    break;
-                case "Defence":
-                    UpdateTextElement(statText.TextObj, statText.TextFieldName, ((ShieldStats)_equipmentObj.GetComponent<Equipment>().Stats).Defence);
+                    UpdateTextElement(statText.TextObj, statText.TextFieldName, _equipmentObj.GetComponent<WeaponEquipment>().Stats.AttackSpeed);
                     break;
             }
         }
@@ -149,7 +140,7 @@ class EquipmentUpgradeTree : MonoBehaviour
         LootManager.Gems -= upgrade.GetComponent<EquipmentUpgradeNode>().Cost;
 
         // Add to equipment stats
-        _equipmentObj.GetComponent<Equipment>().AddUpgrade(upgrade.GetComponent<EquipmentUpgradeNode>());
+        _equipmentObj.GetComponent<WeaponEquipment>().AddUpgrade(upgrade.GetComponent<EquipmentUpgradeNode>());
         
         // Refresh the texts
         RefreshTextValues();
@@ -157,8 +148,8 @@ class EquipmentUpgradeTree : MonoBehaviour
         // Update skill tree
         foreach(GameObject currentUpgrade in _upgradeTreeNodes)
         {
-            if (!_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds.Contains(currentUpgrade.GetComponent<EquipmentUpgradeNode>().ID) &&
-                CheckSublistExists(_equipmentObj.GetComponent<Equipment>().CurrentUpgradeIds, currentUpgrade.GetComponent<EquipmentUpgradeNode>().PrerequisiteUpgrades))
+            if (!_equipmentObj.GetComponent<WeaponEquipment>().CurrentUpgradeIds.Contains(currentUpgrade.GetComponent<EquipmentUpgradeNode>().ID) &&
+                CheckSublistExists(_equipmentObj.GetComponent<WeaponEquipment>().CurrentUpgradeIds, currentUpgrade.GetComponent<EquipmentUpgradeNode>().PrerequisiteUpgrades))
             {
                 // Check if the player can afford it
                 bool sufficentGems = true ? LootManager.Gems >= currentUpgrade.GetComponent<EquipmentUpgradeNode>().Cost : false;

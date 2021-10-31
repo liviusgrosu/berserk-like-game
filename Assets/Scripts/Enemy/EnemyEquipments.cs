@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyEquipments : MonoBehaviour, IEquipment
+//public class EnemyEquipments : MonoBehaviour, IEquipment
+public class EnemyEquipments : MonoBehaviour
 {
-    public GameObject TempCurrentEquipment;
+    public GameObject Weapon;
 
     public Transform Hand;
 
@@ -16,16 +17,12 @@ public class EnemyEquipments : MonoBehaviour, IEquipment
     void Equip()
     {
         // Create the model object
-        GameObject equipmentModel = Instantiate(TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab, Hand.position, TempCurrentEquipment.GetComponent<Equipment>().ModelPrefab.transform.rotation);
-        equipmentModel.transform.parent = Hand;
-        // Load default stats
-        TempCurrentEquipment.GetComponent<Equipment>().LoadDefaultStats();
-        // Give the weapon collider the equipment stats
-        equipmentModel.GetComponent<WeaponCollider>().AssignData(TempCurrentEquipment.GetComponent<Equipment>(), transform);
+        GameObject weaponEquipment = Instantiate(Weapon, Hand.position, Weapon.transform.rotation);
+        weaponEquipment.transform.parent = Hand;
     }
 
-    public EquipmentStats GetCurrentEquipmentStats()
+    public WeaponStats GetCurrentEquipmentStats()
     {
-        return TempCurrentEquipment.GetComponent<Equipment>().Stats;
+        return Weapon.GetComponent<WeaponEquipment>().Stats;
     }
 }

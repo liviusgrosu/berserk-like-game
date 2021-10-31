@@ -5,5 +5,7 @@ using System.Collections;
 //method.
 public interface IEquipment
 {
-    EquipmentStats GetCurrentEquipmentStats();
+    //EquipmentStats GetCurrentEquipmentStats();
+    void Load();
+    void Save();
 }

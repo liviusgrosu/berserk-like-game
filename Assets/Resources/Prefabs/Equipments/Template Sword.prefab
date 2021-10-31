@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8309318685074252986}
   - component: {fileID: 7514798952893861178}
   - component: {fileID: -3202223195653259562}
+  - component: {fileID: 5641213614079915466}
   m_Layer: 0
   m_Name: Template Sword
   m_TagString: Untagged
@@ -126,3 +127,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5641213614079915466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641646476814217609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2af672db4b57dec4fbd15976e970162f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Stats:
+    Durability: 100
+    Damage: 1
+    AttackSpeed: 1
+    StaminaUse: 2
+  CurrentUpgradeIds: 

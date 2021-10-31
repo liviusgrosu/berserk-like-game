@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class PlayerEquipments : MonoBehaviour, IEquipment
+//public class PlayerEquipments : MonoBehaviour, IEquipment
+
+public class PlayerEquipments : MonoBehaviour
 {
     public Transform EquipmentParent;
     public List<string> StartingEquipment;
@@ -13,8 +15,8 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
     [HideInInspector]
     public List<GameObject> EquipmentIntances;
     // --- TEMP START ---
-    public string TempCurrentEquipmentName;
-    private GameObject TempCurrentEquipment;
+    public string TempCurrentWeaponName;
+    private GameObject CurrentWeapon;
     // --- TEMP END ---
     public Transform Hand;
     private EntityAttacking _entityAttacking;
@@ -35,10 +37,10 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
     void Load()
     {
         // Check if the file exists
-        if (File.Exists($"{Application.persistentDataPath}/save.equipment"))
+        if (File.Exists($"{Application.persistentDataPath}/Equipments/equipment.inventory"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open($"{Application.persistentDataPath}/save.equipment", FileMode.Open);
+            FileStream file = File.Open($"{Application.persistentDataPath}/Equipments/equipment.inventory", FileMode.Open);
             _equipmentCarrying = (List<string>)bf.Deserialize(file);
             file.Close();
         }
@@ -54,7 +56,7 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
     {
         // Save current equipment
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create($"{Application.persistentDataPath}/save.equipment");
+        FileStream file = File.Create($"{Application.persistentDataPath}/Equipments/save.equipment");
         bf.Serialize(file, _equipmentCarrying);
     }
 
@@ -63,19 +65,24 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
         foreach(String equipmentName in _equipmentCarrying)
         {
             GameObject prefab = Resources.Load<GameObject>($"Prefabs/Equipments/{equipmentName}");
+
             if (prefab != null)
             {
                 // Create the instance and load its stats
-                GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, Quaternion.identity);
+                GameObject instantiatedObj = Instantiate(prefab, EquipmentParent.position, prefab.transform.rotation);
                 instantiatedObj.name = equipmentName;
                 instantiatedObj.transform.parent = EquipmentParent;
-                instantiatedObj.GetComponent<Equipment>().Load();
+                // Disable some components 
+                instantiatedObj.GetComponent<MeshCollider>().enabled = false;
+                instantiatedObj.GetComponent<MeshRenderer>().enabled = false;
+                // Load the stats
+                instantiatedObj.GetComponent<IEquipment>().Load();
                 EquipmentIntances.Add(instantiatedObj);
 
                 // --- TEMP START ---
-                if (instantiatedObj.name.Contains(TempCurrentEquipmentName))
+                if (instantiatedObj.name.Contains(TempCurrentWeaponName))
                 {
-                    TempCurrentEquipment = instantiatedObj;
+                    CurrentWeapon = instantiatedObj;
                     Equip();
                 }
                 // --- TEMP END ---
@@ -85,14 +92,16 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
 
     void Equip()
     {
-        Equipment _currentEquipmentScript = TempCurrentEquipment.GetComponent<Equipment>();
-        
-        // Spawn the weapon model
-        GameObject equipmentModel = Instantiate(_currentEquipmentScript.ModelPrefab, Hand.position, _currentEquipmentScript.ModelPrefab.transform.rotation);
-        equipmentModel.transform.parent = Hand;
-        
-        // Give the weapon collider and enemyAttacking script the equipment stats
-        equipmentModel.GetComponent<WeaponCollider>().AssignData(_currentEquipmentScript, transform);
+        CurrentWeapon.GetComponent<MeshCollider>().enabled = true;
+        CurrentWeapon.GetComponent<MeshRenderer>().enabled = true;
+
+        CurrentWeapon.transform.position = Hand.position;
+        CurrentWeapon.transform.parent = Hand;
+    }
+
+    void Unequip()
+    {
+
     }
 
     void OnApplicationQuit()
@@ -100,12 +109,12 @@ public class PlayerEquipments : MonoBehaviour, IEquipment
         foreach(GameObject equipment in EquipmentIntances)
         {
             // Save equipment
-            equipment.GetComponent<Equipment>().Save();
+            equipment.GetComponent<WeaponEquipment>().Save();
         }
     }
 
-    public EquipmentStats GetCurrentEquipmentStats()
+    public WeaponStats GetCurrentWeaponStats()
     {
-        return TempCurrentEquipment.GetComponent<Equipment>().Stats;
+        return CurrentWeapon.GetComponent<WeaponEquipment>().Stats;
     }
 }
