@@ -17,5 +17,11 @@ public class EnemyHealthBar : MonoBehaviour
     {
         // Update the health bar
         HealthBarSlider.value = EntityStats.CurrentHealth;
+
+        // Hide the health bar when the enemy dies
+        if (HealthBarSlider.value <= 0.0f)
+        {
+            HealthBarSlider.gameObject.SetActive(false);
+        }
     }
 }
