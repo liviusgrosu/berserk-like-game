@@ -14,6 +14,8 @@ public class EnemyStateBehaviour : MonoBehaviour
     public float PathingDistance;
     [Tooltip("Distance to start walking")]
     public float StartWalkingDistance;
+    [Tooltip("Distance to despawn after death")]
+    public float DespawnAfterDeathDistance;
     public float MovementSpeed = 5.0f;
     public float RunningMultiplier = 1.5f;
     private float _runningSpeed;
@@ -38,6 +40,7 @@ public class EnemyStateBehaviour : MonoBehaviour
     private Rigidbody _rigidbody;
     private Animator _animator;
     private EnemyAttackingBehaviour _attackingBehaviour;
+    private EntityStats _entityStats;
 
     void Start()
     {
@@ -48,6 +51,7 @@ public class EnemyStateBehaviour : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _entityStats = GetComponent<EntityStats>();
         _attackingBehaviour = GetComponent<EnemyAttackingBehaviour>();
         _path = new NavMeshPath();
         Player = GameObject.Find("Player").transform;
@@ -63,6 +67,27 @@ public class EnemyStateBehaviour : MonoBehaviour
     {
         // Get distance to the player
         float distanceToPlayer = Vector3.Distance(transform.position, Player.position);
+
+        if (_entityStats.CurrentHealth <= 0.0f)
+        {
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Dying"))
+            {
+                // Only execute this block once upon death
+                _animator.SetTrigger("Die");
+                // REM: might not need to do this...
+                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.isKinematic = true;
+                transform.GetComponent<CapsuleCollider>().enabled = false;
+                _agent.enabled = false;
+            }
+
+            if (distanceToPlayer >= DespawnAfterDeathDistance)
+            {
+                Destroy(this.gameObject);
+            }
+
+            return;
+        }
 
         // Don't start calculating the pathing unless they're relatively close
         if (distanceToPlayer <= PathingDistance)
