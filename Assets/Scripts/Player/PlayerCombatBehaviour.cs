@@ -4,7 +4,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
 {
     public LayerMask IgnoreClickMask;
     public MenuController MenuController;
-    private EntityAttacking _entityAttacking;
+    private EntityCombat _EntityCombat;
     private RaycastHit _targetRayHit;
     private Ray _targetRay;
     private PlayerEquipments _equipments;
@@ -15,7 +15,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
 
     void Awake()
     {
-        _entityAttacking = GetComponent<EntityAttacking>();
+        _EntityCombat = GetComponent<EntityCombat>();
         _equipments = GetComponent<PlayerEquipments>();
         _playerStats = GetComponent<EntityStats>();
         _animator = GetComponent<Animator>();
@@ -31,8 +31,8 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
         }
 
         if (Input.GetMouseButtonDown(0) &&
-            !_entityAttacking.IsAttacking() && 
-            !_entityAttacking.IsBlocking() &&
+            !_EntityCombat.IsAttacking() && 
+            !_EntityCombat.IsBlocking() &&
             !_movement.IsRolling() &&
             _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse)
         {
@@ -44,7 +44,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
             if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
             {
                 // Execute the attack animation
-                _entityAttacking.TriggerAttack(_targetRayHit.point, _equipments.GetCurrentWeaponStats().AttackSpeed);
+                _EntityCombat.TriggerAttack(_targetRayHit.point, _equipments.GetCurrentWeaponStats().AttackSpeed);
                 // Reduce stamina
                 _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse);
             }
@@ -61,13 +61,13 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
             // If a raycast collider is found then supply the target point to the attack script
             if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
             {
-                _entityAttacking.PerformBlocking(_targetRayHit.point, 1.0f);
+                _EntityCombat.PerformBlocking(_targetRayHit.point, 1.0f);
             }
         }
         else if(Input.GetMouseButtonUp(1))
         {
             // Stop the blocking animation
-            _entityAttacking.StopBlocking();
+            _EntityCombat.StopBlocking();
         }
     }
 

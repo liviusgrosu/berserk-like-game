@@ -19,12 +19,12 @@ public class PlayerEquipments : MonoBehaviour
     private GameObject CurrentWeapon;
     // --- TEMP END ---
     public Transform Hand;
-    private EntityAttacking _entityAttacking;
+    private EntityCombat _EntityCombat;
 
     void Awake()
     {
         EquipmentIntances = new List<GameObject>();
-        _entityAttacking = GetComponent<EntityAttacking>();
+        _EntityCombat = GetComponent<EntityCombat>();
         //  Create a new list regardless if its empty
         if (StartingEquipment == null)
         {

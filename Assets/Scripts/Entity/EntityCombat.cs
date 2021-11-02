@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EntityAttacking : MonoBehaviour
+public class EntityCombat : MonoBehaviour
 {
     public Animator Animator;
     public float TurningSpeed = 10.0f;
@@ -69,6 +69,8 @@ public class EntityAttacking : MonoBehaviour
 
     public bool IsBlocking()
     {
-        return Animator.GetCurrentAnimatorStateInfo(0).IsName("Blocking") || Animator.GetCurrentAnimatorStateInfo(0).IsName("Stop Blocking");
+        return Animator.GetCurrentAnimatorStateInfo(0).IsName("Blocking") || 
+                Animator.GetCurrentAnimatorStateInfo(0).IsName("Stop Blocking") || 
+                Animator.GetCurrentAnimatorStateInfo(0).IsName("Break Guard");
     }
 }

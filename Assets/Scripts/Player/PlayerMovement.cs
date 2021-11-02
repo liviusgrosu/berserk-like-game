@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public GeneratePath GridGenerator;
     public EntityStats PlayerStats;
     public Animator Animator;
-    public EntityAttacking AttackComponent;
+    public EntityCombat AttackComponent;
     private CapsuleCollider _collider;
     public Transform DirectionCameraOffset;
     private Rigidbody rigidbody;

@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttackingBehaviour : MonoBehaviour
+public class EnemyAttackingBehaviour : MonoBehaviour, IEntity
 {
     public float AttackingCooldown = 2.0f;
     private float _currentAttackingCooldown;
-    private EntityAttacking _entityAttacking;
+    private EntityCombat _EntityCombat;
     private EnemyStateBehaviour _stateBehaviour;
     private EnemyEquipments _equipments;
+    private EntityStats _entityStats;
 
     void Start()
     {
-        _entityAttacking = GetComponent<EntityAttacking>();
+        _EntityCombat = GetComponent<EntityCombat>();
         _stateBehaviour = GetComponent<EnemyStateBehaviour>();
         _equipments = GetComponent<EnemyEquipments>();
+        _entityStats = GetComponent<EntityStats>();
         
         // Attack right away
         _currentAttackingCooldown = AttackingCooldown;
@@ -29,7 +31,7 @@ public class EnemyAttackingBehaviour : MonoBehaviour
             // Set a cooldown between attacks
             if (_currentAttackingCooldown >= AttackingCooldown)
             {
-                _entityAttacking.TriggerAttack(_stateBehaviour.Player.position, _equipments.GetCurrentEquipmentStats().AttackSpeed);
+                _EntityCombat.TriggerAttack(_stateBehaviour.Player.position, _equipments.GetCurrentEquipmentStats().AttackSpeed);
                 _currentAttackingCooldown = 0.0f;
             }
         }
@@ -38,5 +40,10 @@ public class EnemyAttackingBehaviour : MonoBehaviour
             // Next time target gets within attacking range, attack right away
             _currentAttackingCooldown = AttackingCooldown;
         }
+    }
+
+    public void RecieveHit(float damage)
+    {
+        _entityStats.ReduceHealth(damage);
     }
 }

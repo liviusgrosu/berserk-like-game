@@ -5,12 +5,12 @@ using UnityEngine;
 public class WeaponCollider : MonoBehaviour
 {
     // TODO: add access to buffs to get attack damage buff
-    private EntityAttacking EntityAttackState;
+    private EntityCombat EntityAttackState;
 
     void Start()
     {
         // TODO: we might need to change this depending on how the gameobject is structured
-        EntityAttackState = transform.root.GetComponent<EntityAttacking>();
+        EntityAttackState = transform.root.GetComponent<EntityCombat>();
     }
 
     void OnTriggerEnter(Collider collider)
