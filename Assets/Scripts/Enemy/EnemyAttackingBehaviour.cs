@@ -44,6 +44,7 @@ public class EnemyAttackingBehaviour : MonoBehaviour, IEntity
 
     public void RecieveHit(float damage)
     {
+        // Reduce entity health
         _entityStats.ReduceHealth(damage);
     }
 }
