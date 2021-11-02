@@ -9,3 +9,8 @@ public interface IEquipment
     void Load();
     void Save();
 }
+
+public interface IEntity
+{
+    void RecieveHit(float damage);
+}

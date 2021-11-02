@@ -586,7 +586,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 75318119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71d7a45d81aa6664d8fd10f1f795a460, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a2a5232331a2ae468350c6bfd609a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IgnoreClickMask:
@@ -977,7 +977,7 @@ Transform:
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &278798645
 MeshRenderer:
@@ -1964,7 +1964,7 @@ RectTransform:
   m_Children:
   - {fileID: 1486282260}
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2085,7 +2085,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &465135314
 GameObject:
@@ -4608,7 +4608,7 @@ Transform:
   m_LocalScale: {x: 0.00044009002, y: 0.0036027967, z: 0.00044009002}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 69.974, y: -9.281, z: -6.92}
 --- !u!23 &1222855839
 MeshRenderer:
@@ -5292,6 +5292,7 @@ MonoBehaviour:
   AttackDistance: 1.5
   PathingDistance: 30
   StartWalkingDistance: 6
+  DespawnAfterDeathDistance: 30
   MovementSpeed: 2
   RunningMultiplier: 1.5
   turnSmoothTime: 0.2
@@ -6723,7 +6724,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1346962698}
-  m_RootOrder: 3
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1648096511
 GameObject:

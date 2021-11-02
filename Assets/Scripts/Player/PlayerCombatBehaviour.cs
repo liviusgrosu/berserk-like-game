@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAttackingBehaviour : MonoBehaviour
+public class PlayerCombatBehaviour : MonoBehaviour, IEntity
 {
     public LayerMask IgnoreClickMask;
     public MenuController MenuController;
@@ -33,7 +33,8 @@ public class PlayerAttackingBehaviour : MonoBehaviour
         if (Input.GetMouseButtonDown(0) &&
             !_entityAttacking.IsAttacking() && 
             !_entityAttacking.IsBlocking() &&
-            !_movement.IsRolling())
+            !_movement.IsRolling() &&
+            _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse)
         {
             
             // Get ray off of what the mouse pointing to 
@@ -49,10 +50,13 @@ public class PlayerAttackingBehaviour : MonoBehaviour
             }
         }
         
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f)
         {
             // Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // Reduce current stamina
+            _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse / 2.0f);
 
             // If a raycast collider is found then supply the target point to the attack script
             if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
@@ -64,6 +68,32 @@ public class PlayerAttackingBehaviour : MonoBehaviour
         {
             // Stop the blocking animation
             _entityAttacking.StopBlocking();
+        }
+    }
+
+    public void RecieveHit(float damage)
+    {
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
+        {
+            _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse);
+            
+            if (_playerStats.CurrentStamina < _equipments.GetCurrentWeaponStats().StaminaUse)
+            {
+                // Break guard
+                _animator.SetTrigger("Break Guard");
+                // Recieve only half damage
+                _playerStats.ReduceHealth(damage / 2.0f);
+            }
+            else
+            {
+                // Block the attack and perform a block attack animation
+                _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse);
+                _animator.SetTrigger("Block Attack");
+            }
+        }
+        else
+        {
+            _playerStats.ReduceHealth(damage);
         }
     }
 }

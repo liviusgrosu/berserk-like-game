@@ -31,7 +31,7 @@ public class WeaponCollider : MonoBehaviour
             float damage = GetComponent<WeaponEquipment>().Stats.Damage;
 
             // Assign damage to the entity
-            collider.GetComponent<EntityStats>().ReduceHealth(damage);
+            collider.GetComponent<IEntity>().RecieveHit(damage);
         }
     }
 }
