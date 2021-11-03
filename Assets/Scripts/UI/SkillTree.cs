@@ -14,7 +14,7 @@ class SkillTree : MonoBehaviour
     public bool _writeMode = true;
 
     [Header("Stats Text")]
-    public Text ExperienceText;
+    public Text SoulCountText;
     public Text HealthText;
     public Text StaminaText;
     public Text AttackSpeedText;
@@ -53,24 +53,24 @@ class SkillTree : MonoBehaviour
 
             // Check if the skill has the prerequisites
             bool unlocked = false;
-            bool sufficentExperience = false;
+            bool sufficentSouls = false;
             if (skillScript.PrerequisiteSkills.Count == 0 || CheckSublistExists(PlayerStats.CurrentSkillsId,  skillScript.PrerequisiteSkills))
             {
                 unlocked = true;
 
                 // Check if the player can afford it
-                sufficentExperience = true ? LootManager.Experience >= skillScript.Cost : false;
+                sufficentSouls = true ? LootManager.SoulCount >= skillScript.Cost : false;
             }
 
-            skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentExperience && _writeMode;
+            skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls && _writeMode;
             skillUpgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
         }
     }
 
     public void AddSkill(Transform skill)
     {
-        // Decrease experience 
-        LootManager.Experience -= skill.GetComponent<SkillTreeNode>().Cost;
+        // Decrease souls 
+        LootManager.SoulCount -= skill.GetComponent<SkillTreeNode>().Cost;
 
         // Add to player stats
         PlayerStats.AddUpgrade(skill.GetComponent<SkillTreeNode>());
@@ -85,10 +85,10 @@ class SkillTree : MonoBehaviour
                 CheckSublistExists(PlayerStats.CurrentSkillsId, currentSkill.GetComponent<SkillTreeNode>().PrerequisiteSkills))
             {
                 // Check if the player can afford it
-                bool sufficentExperience = true ? LootManager.Experience >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
+                bool sufficentSouls = true ? LootManager.SoulCount >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
 
                 currentSkill.GetComponent<Image>().color = Color.yellow;
-                currentSkill.GetComponent<Button>().interactable = sufficentExperience && _writeMode;   
+                currentSkill.GetComponent<Button>().interactable = sufficentSouls && _writeMode;   
             }
         }
 
@@ -99,8 +99,8 @@ class SkillTree : MonoBehaviour
 
     private void UpdateTextElement()
     {
-        // Display the experience text
-        ExperienceText.text = $"Experience: {LootManager.Experience}";
+        // Display the souls text
+        SoulCountText.text = $"Souls: {LootManager.SoulCount}";
         // Display the player stats
         HealthText.text = $"Health: {PlayerStats.Stats.Health}";
         StaminaText.text = $"Stamina: {PlayerStats.Stats.Stamina}";

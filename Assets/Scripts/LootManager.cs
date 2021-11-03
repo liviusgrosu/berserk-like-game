@@ -6,10 +6,7 @@ using UnityEngine;
 
 public class LootManager : MonoBehaviour
 {
-    public int Experience;
-    public int Gems;
-    public int Coins;
-
+    public int SoulCount;
     void Awake()
     {
         Load();
@@ -22,21 +19,13 @@ public class LootManager : MonoBehaviour
             // Get the file and data
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open($"{Application.persistentDataPath}/loot.inventory", FileMode.Open);
-            (int Experience, int Gems, int Coins) lootData = ((int, int, int))bf.Deserialize(file);
-            
-            // Assign new data
-            Experience = lootData.Experience;
-            Gems = lootData.Gems;
-            Coins = lootData.Coins;
-            
+            SoulCount = (int)bf.Deserialize(file);            
             file.Close();
         }
         else 
         {
             // Default values
-            Experience = 500;
-            Gems = 100;
-            Coins = 1000;
+            SoulCount = 1000;
         }
     }
     private void Save()
@@ -44,7 +33,7 @@ public class LootManager : MonoBehaviour
         // Save loot
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/loot.inventory");
-        bf.Serialize(file, (Experience, Gems, Coins));
+        bf.Serialize(file, SoulCount);
         file.Close();
     }
 

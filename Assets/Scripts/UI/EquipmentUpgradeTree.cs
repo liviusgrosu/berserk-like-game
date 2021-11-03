@@ -15,7 +15,7 @@ class EquipmentUpgradeTree : MonoBehaviour
     private GameObject _equipmentObj;
     public LootManager LootManager;
     public bool _writeMode = true;
-    public Text GemsText;
+    public Text SoulsText;
     private List<GameObject> _upgradeTreeNodes;
     private ListHelper<EquipmentUpgradeNode> _listHelper;
 
@@ -78,7 +78,7 @@ class EquipmentUpgradeTree : MonoBehaviour
             
             // Check if the skill has the prerequisites
             bool unlocked = false;
-            bool sufficentGems = false;
+            bool sufficentSouls = false;
 
             // Check that the prerequisited are obtained
             if (upgradeScript.PrerequisiteUpgrades.Count == 0 || CheckSublistExists(_equipmentObj.GetComponent<WeaponEquipment>().CurrentUpgradeIds,  upgradeScript.PrerequisiteUpgrades))
@@ -87,10 +87,10 @@ class EquipmentUpgradeTree : MonoBehaviour
                 unlocked = true;
 
                 // Check if the player can afford it
-                sufficentGems = true ? LootManager.Gems >= upgradeScript.Cost : false;
+                sufficentSouls = true ? LootManager.SoulCount >= upgradeScript.Cost : false;
             }
 
-            upgradeNode.GetComponent<Button>().interactable = unlocked && sufficentGems && _writeMode;
+            upgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls && _writeMode;
             upgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
         }
     }
@@ -124,8 +124,8 @@ class EquipmentUpgradeTree : MonoBehaviour
                     break;
             }
         }
-        // Display the experience text
-        GemsText.text = $"Gems: {LootManager.Gems}";
+        // Display the souls text
+        SoulsText.text = $"Souls: {LootManager.SoulCount}";
     }
 
     void UpdateTextElement(GameObject textObj, string statFieldName, float statValue)
@@ -136,8 +136,8 @@ class EquipmentUpgradeTree : MonoBehaviour
 
     public void AddUpgrade(Transform upgrade)
     {
-        // Decrease experience 
-        LootManager.Gems -= upgrade.GetComponent<EquipmentUpgradeNode>().Cost;
+        // Decrease souls 
+        LootManager.SoulCount -= upgrade.GetComponent<EquipmentUpgradeNode>().Cost;
 
         // Add to equipment stats
         _equipmentObj.GetComponent<WeaponEquipment>().AddUpgrade(upgrade.GetComponent<EquipmentUpgradeNode>());
@@ -152,10 +152,10 @@ class EquipmentUpgradeTree : MonoBehaviour
                 CheckSublistExists(_equipmentObj.GetComponent<WeaponEquipment>().CurrentUpgradeIds, currentUpgrade.GetComponent<EquipmentUpgradeNode>().PrerequisiteUpgrades))
             {
                 // Check if the player can afford it
-                bool sufficentGems = true ? LootManager.Gems >= currentUpgrade.GetComponent<EquipmentUpgradeNode>().Cost : false;
+                bool sufficentSouls = true ? LootManager.SoulCount >= currentUpgrade.GetComponent<EquipmentUpgradeNode>().Cost : false;
 
                 currentUpgrade.GetComponent<Image>().color = Color.yellow;
-                currentUpgrade.GetComponent<Button>().interactable = sufficentGems && _writeMode;   
+                currentUpgrade.GetComponent<Button>().interactable = sufficentSouls && _writeMode;   
             }
         }
 
