@@ -65,4 +65,16 @@ public class SoulCountUI : MonoBehaviour
             }
         }
     }
+
+    void OnDisable()
+    {
+        // Finish the counting process
+        _isCounting = false;
+        _uiSoulCount = LootManager.SoulCount;
+        SoulCount.text = ((int)_uiSoulCount).ToString();
+
+        // Finish the fading process
+        AquiredSoulCount.color =  new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        _fadeOutAquiredSoulText = false;
+    }
 }
