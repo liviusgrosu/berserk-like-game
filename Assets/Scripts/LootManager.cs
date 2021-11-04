@@ -6,7 +6,20 @@ using UnityEngine;
 
 public class LootManager : MonoBehaviour
 {
+    [HideInInspector]
     public int SoulCount;
+
+    [Tooltip("Various soul sizes")]
+    [Header("Soul Prefabs")]
+    public GameObject SmallSoulPrefab;
+    public GameObject MediumSoulPrefab;
+    public GameObject LargeSoulPrefab;
+
+    [Tooltip("Set ranges between soul sizes to spawn the correct size")]
+    [Header("Soul Ranges")]
+    public int MediumSoulStartAmount;
+    public int LargeSoulStartAmount;
+
     void Awake()
     {
         Load();

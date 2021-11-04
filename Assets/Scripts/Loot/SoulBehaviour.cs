@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoulMovement : MonoBehaviour
+public class SoulBehaviour : MonoBehaviour
 {
+    [HideInInspector]
     public int SoulAmount;
     private Transform _player;
     // Movement
@@ -15,16 +16,41 @@ public class SoulMovement : MonoBehaviour
     // Floating effect
     private Vector3 pointA, pointB;
     private float step, time;
+    // Spawning effect
+    private Vector3 _startingScale;
+    private bool _resizing;
     void Start()
     {
-        _player = GameObject.Find("Player Centre").transform;
+        _player = GameObject.Find("Player Chest").transform;
 
-        pointA = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
-        pointB = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+        // Init floating points
+        pointA = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+        pointB = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
+
+        // Init scale
+        _startingScale = transform.localScale;
+        // Hide the soul prefab
+        transform.localScale = Vector3.zero;
+        _resizing = true;
     }
 
     void Update()
     {
+        if (_resizing)
+        {
+            // Scale the soul up to its original scale
+            time += Time.deltaTime / 15.0f;
+            step = time * (3f - 2f * time) / 0.125f;
+            transform.localScale = Vector3.Slerp(Vector3.zero, _startingScale, step);
+            if (step >= 1.0f)
+            {
+                step = 0.0f;
+                time = 0.0f;
+                _resizing = false;
+            }
+            return;
+        }
+
         if (Vector3.Distance(transform.position, _player.position) <= startMovementRange)
         {
             // Start moving when the player is in range

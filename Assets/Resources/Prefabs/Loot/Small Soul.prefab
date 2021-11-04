@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 6619259984143516455}
   - component: {fileID: 6619259984143516456}
   - component: {fileID: 6619259984143516458}
+  - component: {fileID: 718650838}
   m_Layer: 0
-  m_Name: Soul
+  m_Name: Small Soul
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,3 +96,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 1
+--- !u!114 &718650838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6619259984143516459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64fba22fa422d2b4da656e73541b2251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoulAmount: 0
+  SpeedMultiplier: 2
+  TopSpeed: 15
+  startMovementRange: 10

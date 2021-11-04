@@ -77,7 +77,8 @@ public class EnemyStateBehaviour : MonoBehaviour
                 // REM: might not need to do this...
                 _rigidbody.velocity = Vector3.zero;
                 _rigidbody.isKinematic = true;
-                transform.GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<EntityDropSouls>().DropSouls();
                 _agent.enabled = false;
             }
 
