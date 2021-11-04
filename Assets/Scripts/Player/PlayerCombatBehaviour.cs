@@ -50,7 +50,10 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
             }
         }
         
-        if (Input.GetMouseButtonDown(1) && _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f)
+        if (Input.GetMouseButtonDown(1) && 
+            _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f &&
+            !_EntityCombat.IsAttacking() &&
+            !_movement.IsRolling())
         {
             // Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
