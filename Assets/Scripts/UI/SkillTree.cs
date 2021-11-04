@@ -17,7 +17,6 @@ class SkillTree : MonoBehaviour
     public Text SoulCountText;
     public Text HealthText;
     public Text StaminaText;
-    public Text AttackSpeedText;
 
     private List<GameObject> _skillTreeNodes;
     private ListHelper<SkillTreeNode> _listHelper;
@@ -104,7 +103,6 @@ class SkillTree : MonoBehaviour
         // Display the player stats
         HealthText.text = $"Health: {PlayerStats.Stats.Health}";
         StaminaText.text = $"Stamina: {PlayerStats.Stats.Stamina}";
-        AttackSpeedText.text = $"Attack Speed: {PlayerStats.Stats.AttackSpeed}";
     }
 
     private bool CheckSublistExists(List<int> skillIds, List<SkillTreeNode> PrerequisiteSkills)

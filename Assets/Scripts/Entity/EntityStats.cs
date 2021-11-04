@@ -63,9 +63,6 @@ public class EntityStats : MonoBehaviour
             case "stamina":
                 Stats.Stamina += skillNode.Amount;
                 break;
-            case "attack speed":
-                Stats.AttackSpeed += skillNode.Amount;
-                break;
             default:
                 break;
         }
@@ -86,10 +83,6 @@ public class EntityStats : MonoBehaviour
                 break;
             case "stamina regeneration":
                 CurrentStaminaRegeneration += effect.Rate;
-                break;
-            case "attack speed":
-                CurrentAttackSpeed += effect.Rate;
-                CurrentAttackSpeed = Mathf.Clamp(CurrentAttackSpeed, 0, Stats.AttackSpeed);
                 break;
             default:
                 break;
@@ -147,7 +140,7 @@ public class EntityStats : MonoBehaviour
         }
         else
         {
-            Stats = new EntityStat(10.0f, 10.0f, 1.0f, 1.0f, 1.0f);
+            Stats = new EntityStat(10.0f, 10.0f, 1.0f, 1.0f);
         }
         // --- Skills ---
         // Check if the file exists
