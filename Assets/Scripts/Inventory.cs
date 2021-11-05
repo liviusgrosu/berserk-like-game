@@ -8,15 +8,13 @@ using PlayerData;
 
 public class Inventory : MonoBehaviour
 {
+    // Contains the consumable and count
     public List<ConsuambleInventory> ConsumableInventory;
-
-    private List<ConsuamblesData> ConsuamblesFileData; 
 
     void Awake()
     {
         // Initialize the consumables list
         ConsumableInventory = new List<ConsuambleInventory>();
-        ConsuamblesFileData = new List<ConsuamblesData>();
 
         Load();
     }
@@ -44,7 +42,7 @@ public class Inventory : MonoBehaviour
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open($"{Application.persistentDataPath}/consumables.inventory", FileMode.Open);
-            ConsuamblesFileData = (List<ConsuamblesData>)bf.Deserialize(file);
+            List<ConsuamblesData> ConsuamblesFileData = (List<ConsuamblesData>)bf.Deserialize(file);
             file.Close();
 
             foreach(ConsuamblesData consumable in ConsuamblesFileData)
@@ -59,8 +57,8 @@ public class Inventory : MonoBehaviour
             GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 5);
 
-            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
-            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
+            // item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
+            // AddConsumable(item.GetComponent<ConsumableItem>(), 4);
 
             item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 4);
@@ -70,7 +68,7 @@ public class Inventory : MonoBehaviour
     private void Save()
     {
         // Remove data incase of change inventory
-        ConsuamblesFileData = new List<ConsuamblesData>();
+        List<ConsuamblesData> ConsuamblesFileData = new List<ConsuamblesData>();
 
         // Convert the consumable inventory to a saveable data structure
         foreach(ConsuambleInventory consumable in ConsumableInventory)
