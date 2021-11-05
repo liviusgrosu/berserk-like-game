@@ -35,6 +35,9 @@ public class EntityStats : MonoBehaviour
 
     void Update()
     {
+        // Clamp the stats
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Stats.Health);
+
         // Regenerate stamina
         if (!_staminaProductionStopped)
         {
