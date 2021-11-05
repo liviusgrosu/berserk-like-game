@@ -14,3 +14,8 @@ public interface IEntity
 {
     void RecieveHit(float damage);
 }
+
+public interface IStatEffect
+{
+    void ProvideStats(EntityStats stats);
+}
