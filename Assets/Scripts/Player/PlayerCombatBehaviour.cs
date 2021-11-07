@@ -11,6 +11,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
     private EntityStats _playerStats;
     private Animator _animator;
     private PlayerMovement _movement;
+    private bool _performingBlock;
 
     void Awake()
     {
@@ -30,8 +31,9 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
         }
 
         if (Input.GetMouseButtonDown(0) &&
-            !_EntityCombat.IsAttacking() && 
-            !_EntityCombat.IsBlocking() &&
+            !_EntityCombat.IsAttacking() &&
+            !_EntityCombat.IsBlocking() && 
+            !_performingBlock &&
             !_movement.RollingAnimationExecuting &&
             _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse)
         {
@@ -48,13 +50,16 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
                 _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse);
             }
         }
-        
-        if (Input.GetMouseButtonDown(1) && 
-            _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f &&
+
+        if (Input.GetMouseButton(1) && 
             !_EntityCombat.IsAttacking() &&
-            !_movement.RollingAnimationExecuting)
+            !_EntityCombat.IsBlocking() &&
+            !_performingBlock && 
+            !_movement.RollingAnimationExecuting && 
+            _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f)
         {
-            // Get ray off of what the mouse pointing to 
+            _performingBlock = true;
+            //Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             // Reduce current stamina
@@ -66,11 +71,35 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
                 _EntityCombat.PerformBlocking(_targetRayHit.point, 1.0f);
             }
         }
-        else if(Input.GetMouseButtonUp(1))
+        
+        if(Input.GetMouseButtonUp(1))
         {
-            // Stop the blocking animation
             _EntityCombat.StopBlocking();
+            _performingBlock = false;
         }
+
+        // if (Input.GetMouseButtonDown(1) && 
+        //     _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f &&
+        //     !_EntityCombat.IsAttacking() &&
+        //     !_movement.RollingAnimationExecuting)
+        // {
+        //     // Get ray off of what the mouse pointing to 
+        //     _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        //     // Reduce current stamina
+        //     _playerStats.ReduceStamina(_equipments.GetCurrentWeaponStats().StaminaUse / 2.0f);
+
+        //     // If a raycast collider is found then supply the target point to the attack script
+        //     if (Physics.Raycast(_targetRay, out _targetRayHit, Mathf.Infinity, ~IgnoreClickMask))
+        //     {
+        //         _EntityCombat.PerformBlocking(_targetRayHit.point, 1.0f);
+        //     }
+        // }
+        // else if(Input.GetMouseButtonUp(1))
+        // {
+        //     // Stop the blocking animation
+        //     _EntityCombat.StopBlocking();
+        // }
         
     }
 

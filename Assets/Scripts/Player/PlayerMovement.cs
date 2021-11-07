@@ -173,6 +173,5 @@ public class PlayerMovement : MonoBehaviour
         // Sets the window of rolling animation
         // Player can chain other animations when rolling animation is finished
         RollingAnimationExecuting = state == 1;
-        Debug.Log(RollingAnimationExecuting);
     }
 }

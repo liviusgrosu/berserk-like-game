@@ -143,7 +143,7 @@ public class EntityStats : MonoBehaviour
         }
         else
         {
-            Stats = new EntityStat(10.0f, 10.0f, 1.0f);
+            Stats = new EntityStat(10.0f, 10.0f, 10.0f);
         }
         // --- Skills ---
         // Check if the file exists
