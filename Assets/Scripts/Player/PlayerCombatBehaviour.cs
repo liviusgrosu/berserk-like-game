@@ -12,7 +12,6 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
     private Animator _animator;
     private PlayerMovement _movement;
 
-
     void Awake()
     {
         _EntityCombat = GetComponent<EntityCombat>();
@@ -33,7 +32,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
         if (Input.GetMouseButtonDown(0) &&
             !_EntityCombat.IsAttacking() && 
             !_EntityCombat.IsBlocking() &&
-            !_movement.IsRolling() &&
+            !_movement.RollingAnimationExecuting &&
             _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse)
         {
             
@@ -53,7 +52,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
         if (Input.GetMouseButtonDown(1) && 
             _playerStats.CurrentStamina >= _equipments.GetCurrentWeaponStats().StaminaUse / 2.0f &&
             !_EntityCombat.IsAttacking() &&
-            !_movement.IsRolling())
+            !_movement.RollingAnimationExecuting)
         {
             // Get ray off of what the mouse pointing to 
             _targetRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -72,6 +71,7 @@ public class PlayerCombatBehaviour : MonoBehaviour, IEntity
             // Stop the blocking animation
             _EntityCombat.StopBlocking();
         }
+        
     }
 
     public void RecieveHit(float damage)

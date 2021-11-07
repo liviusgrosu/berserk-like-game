@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
     public float RollingTime = 1.0f;
     public float RollingStaminaCost = 2.0f;
     private float _currentRollingTime;
-    public bool _isRolling;
+    private bool _isRolling;
+    public bool RollingAnimationExecuting;
     private Vector3 _rollingDirection;
     // Misc.
     [Header("Components")]
@@ -165,5 +166,13 @@ public class PlayerMovement : MonoBehaviour
     public bool IsRolling()
     {
         return Animator.GetCurrentAnimatorStateInfo(0).IsName("Rolling");
+    }
+
+    public void SetRollingAnimationState(int state)
+    {
+        // Sets the window of rolling animation
+        // Player can chain other animations when rolling animation is finished
+        RollingAnimationExecuting = state == 1;
+        Debug.Log(RollingAnimationExecuting);
     }
 }

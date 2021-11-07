@@ -36,7 +36,7 @@ public class EntityCombat : MonoBehaviour
     public void TriggerAttack(Vector3 targetPosition, float attackSpeed)
     {
         // Only trigger attack when entity is not already attacking
-        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree"))
+        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Blend Tree") || Animator.GetCurrentAnimatorStateInfo(0).IsName("Rolling"))
         {
             // Go into attack state
             Animator.SetTrigger("Attack");
