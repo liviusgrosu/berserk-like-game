@@ -9,12 +9,10 @@ public class EntityStat
     public float Stamina;
     // Passive stamina regeneration
     public float StaminaRegeneration;
-    public float Defence;
-    public EntityStat(float health, float stamina, float staminaRegeneration, float defence)
+    public EntityStat(float health, float stamina, float staminaRegeneration)
     {
         Health = health;
         Stamina = stamina;
         StaminaRegeneration = staminaRegeneration;
-        Defence = defence;
     }
 }
