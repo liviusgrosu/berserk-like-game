@@ -6,6 +6,9 @@ public class EntityCombat : MonoBehaviour
     public float TurningSpeed = 10.0f;
     private bool _rotatingToTarget;
     private Vector3 _targetLookDirection;
+    // Used for targeting and weapon collider
+    // Some enemies can affect other enemies in terms of weapon damage
+    public bool AffectOnlyPlayer;
 
     // Update is called once per frame
     void Update()

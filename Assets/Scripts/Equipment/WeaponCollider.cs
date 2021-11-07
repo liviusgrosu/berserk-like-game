@@ -21,8 +21,14 @@ public class WeaponCollider : MonoBehaviour
             return;
         }
         
-        if (collider.tag == "Damagable" && collider.name != transform.root.name)
+        if (collider.tag == "Damagable" && collider.name != transform.root.name )
         {
+            // Don't damage other enemies if toggled
+            if (EntityAttackState.AffectOnlyPlayer && collider.name != "Player")
+            {
+                return;
+            }
+
             // TODO BEGIN: 
             // attack triggers multiple times 
             // Add key triggers in animations to allow window of damage dealt
