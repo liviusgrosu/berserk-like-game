@@ -91,9 +91,6 @@ public class Inventory : MonoBehaviour
             GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 5);
 
-            item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
-            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
-
             item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 4);
         }
