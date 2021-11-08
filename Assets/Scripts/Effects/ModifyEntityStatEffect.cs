@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
     public float Duration;
     private float _currentDuration;
     private EntityStats _entityStats;
+    private Action<GameObject> _destroyCallback;
+
 
     void Update()
     {
@@ -23,14 +26,18 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
         {
             // Revert the effect
             ModifyStat(-Amount);
-
+            // Remove the effect from the effect list
+            _destroyCallback(this.gameObject);
+            // Destroy the effect once its done
             Destroy(this.gameObject);
         }
     }
 
-    public void ProvideStats(EntityStats stats)
+    public void ProvideStats(EntityStats stats, Action<GameObject> destroyCallback)
     {
         _entityStats = stats;
+        _destroyCallback = destroyCallback;
+
         _currentDuration = 0.0f;
 
         // Apply the effect
@@ -39,6 +46,7 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
 
     private void ModifyStat(float amount)
     {
+        // Add the change to the players entites stat
         switch(StatName)
         {
             case "Stamina Regeneration":

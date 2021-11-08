@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 //This is a basic interface with a single required
 //method.
@@ -18,6 +19,6 @@ public interface IEntity
 
 public interface IStatEffect
 {
-    void ProvideStats(EntityStats stats);
+    void ProvideStats(EntityStats stats, Action<GameObject> destroyCallback);
     Sprite GetIcon();
 }

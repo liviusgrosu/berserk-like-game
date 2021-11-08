@@ -17,6 +17,7 @@ public class PlayerEffectsUI : MonoBehaviour
 
     void Update()
     {
+        // Only update the effects if theres been a change with the player effects
         if (_effectsCount != _playerBuffs.Effects.Count)
         {
             // Destroy all the current effect icons

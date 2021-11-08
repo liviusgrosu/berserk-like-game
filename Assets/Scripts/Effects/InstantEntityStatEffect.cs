@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class InstantEntityStatEffect : MonoBehaviour, IStatEffect
     public float Amount;
     public Sprite Icon;
     private EntityStats _entityStats;
+    private Action<GameObject> _destroyCallback;
 
     void Update()
     {
@@ -28,14 +30,17 @@ public class InstantEntityStatEffect : MonoBehaviour, IStatEffect
                 break;
         }
 
+        // Remove the effect from the effect list
+        _destroyCallback(this.gameObject);
         // Remove the effect once its done
         Destroy(this.gameObject);
     }
 
-    public void ProvideStats(EntityStats stats)
+    public void ProvideStats(EntityStats stats, Action<GameObject> destroyCallback)
     {
         // Recieve the stats
         _entityStats = stats;
+        _destroyCallback = destroyCallback;
     }
 
     public Sprite GetIcon()
