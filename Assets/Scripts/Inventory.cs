@@ -10,6 +10,7 @@ public class Inventory : MonoBehaviour
 {
     // Contains the consumable and count
     public List<ConsuambleInventory> ConsumableInventory;
+    public PickupPopup PickupPopup;
 
     void Awake()
     {
@@ -37,10 +38,12 @@ public class Inventory : MonoBehaviour
 
     public void AddLoot(GameObject loot, int amount)
     {
-        if (loot.GetComponent<ConsumableItem>())
+        ConsumableItem consumableItem = loot.GetComponent<ConsumableItem>();
+        if (consumableItem != null)
         {
             // Add the consumable
-            AddConsumable(loot.GetComponent<ConsumableItem>(), amount);
+            AddConsumable(consumableItem, amount);
+            PickupPopup.DisplayPickup(consumableItem.Icon, consumableItem.Name, amount);
         }
     }
 

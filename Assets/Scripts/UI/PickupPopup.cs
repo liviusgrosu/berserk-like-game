@@ -17,27 +17,62 @@ public class PickupPopup : MonoBehaviour
     [Header("Effect")]
     public float MovementMultiplier = 1.0f;
     private float _step, _time;
+    public float FadeInTime = 1.0f;
+    public float IdleTime = 2.0f;
+    public float FadeOutTime = 1.0f;
 
-    private enum State
+    private enum PopupState
     {
+        None,
         FadeIn,
-        Idle,
+        Idle, 
         FadeOut
     };
-    private State _state;
+    private PopupState _state;
+
+    void Start()
+    {
+        _state = PopupState.None;
+        FadePopup(0.0f);
+    }
 
     void Update()
     {
-        if (_step < 1.0f)
+        // Fade in the popup
+        if (_state == PopupState.FadeIn)
         {
-            // Interpolate the popup appearing in screen to its final position
             _time += Time.deltaTime * MovementMultiplier;
-            _step = _time / 2.0f;
-            _step = _step * _step * (3f - 2f * _step);
 
-            PopupParent.transform.position = Vector3.Lerp(StartingPoint.position, EndPoint.position, _step);
-            _step += Time.deltaTime;
-            FadePopup(_step);
+            PopupParent.transform.position = Vector3.Lerp(StartingPoint.position, EndPoint.position, _time / FadeInTime);
+            FadePopup(_time / FadeInTime);
+
+            if (_time >= FadeInTime)
+            {
+                _state = PopupState.Idle;
+                _time = 0.0f;
+            }
+        }
+
+        // Keep the popup idling
+        if (_state == PopupState.Idle)
+        {
+            _time += Time.deltaTime;
+            if (_time >= IdleTime)
+            {
+                _state = PopupState.FadeOut;
+                _time = 0.0f;
+            }
+        }
+
+        // Fade out the popup
+        if (_state == PopupState.FadeOut)
+        {
+            _time += Time.deltaTime;
+            FadePopup(1.0f - _time / FadeOutTime);
+            if (_time >= FadeOutTime)
+            {
+                _state = PopupState.None;
+            }
         }
     }
 
@@ -50,8 +85,15 @@ public class PickupPopup : MonoBehaviour
         ItemCount.color = new Color(ItemCount.color.r, ItemCount.color.g, ItemCount.color.b, fadeFactor);
     }
 
-    void DisplayPickup()
+    public void DisplayPickup(Sprite icon, string itemName, int amount)
     {
-
+        // Fill in the popup information
+        ItemIcon.sprite = icon;
+        ItemName.text = itemName;
+        ItemCount.text = amount.ToString();
+        
+        // Start displaying
+        _state = PopupState.FadeIn;
+        _time = 0.0f;
     }
 }
