@@ -95,5 +95,6 @@ public class PickupPopup : MonoBehaviour
         // Start displaying
         _state = PopupState.FadeIn;
         _time = 0.0f;
+        FadePopup(0.0f);
     }
 }
