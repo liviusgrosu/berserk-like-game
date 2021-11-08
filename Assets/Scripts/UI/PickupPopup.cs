@@ -18,6 +18,14 @@ public class PickupPopup : MonoBehaviour
     public float MovementMultiplier = 1.0f;
     private float _step, _time;
 
+    private enum State
+    {
+        FadeIn,
+        Idle,
+        FadeOut
+    };
+    private State _state;
+
     void Update()
     {
         if (_step < 1.0f)
@@ -46,5 +54,10 @@ public class PickupPopup : MonoBehaviour
         ItemIcon.color = new Color(ItemIcon.color.r, ItemIcon.color.g, ItemIcon.color.b, fadeFactor);
         ItemName.color = new Color(ItemName.color.r, ItemName.color.g, ItemName.color.b, fadeFactor);
         ItemCount.color = new Color(ItemCount.color.r, ItemCount.color.g, ItemCount.color.b, fadeFactor);
+    }
+
+    void DisplayPickup()
+    {
+
     }
 }

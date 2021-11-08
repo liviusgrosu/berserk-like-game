@@ -79,6 +79,7 @@ public class EnemyStateBehaviour : MonoBehaviour
                 _rigidbody.isKinematic = true;
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<EntityDropSouls>().DropSouls();
+                GetComponent<EntityDropLoot>().DropLoot();
                 _agent.enabled = false;
             }
 
