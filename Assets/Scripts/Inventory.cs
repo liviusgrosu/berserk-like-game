@@ -69,8 +69,11 @@ public class Inventory : MonoBehaviour
             GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 5);
 
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Health Regeneration Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 5);
+
             item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
-            AddConsumable(item.GetComponent<ConsumableItem>(), 4);
+            AddConsumable(item.GetComponent<ConsumableItem>(), 5);
         }
     }
 
@@ -98,6 +101,9 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
+            AddConsumable(item.GetComponent<ConsumableItem>(), 5);
+
+            item = Resources.Load<GameObject>("Prefabs/Consumables/Health Regeneration Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 5);
 
             item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");

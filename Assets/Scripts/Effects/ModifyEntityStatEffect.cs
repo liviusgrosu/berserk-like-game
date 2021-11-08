@@ -49,6 +49,9 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
         // Add the change to the players entites stat
         switch(StatName)
         {
+            case "Health Regeneration":
+                _entityStats.CurrentHealthRegeneration += amount;
+                break;
             case "Stamina Regeneration":
                 _entityStats.CurrentStaminaRegeneration += amount;
                 break;

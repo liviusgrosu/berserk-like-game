@@ -14,11 +14,11 @@ public class EntityStats : MonoBehaviour
     // Current stats
     [HideInInspector] public float CurrentHealth, CurrentStamina, CurrentAttackSpeed;
     // Used only for buffs
-    [HideInInspector] public float CurrentStaminaRegeneration = 0f;
+    [HideInInspector] public float CurrentStaminaRegeneration = 0.0f, CurrentHealthRegeneration = 0.0f;
     // List of upgrade ids from the skill tree
     [HideInInspector] public List<int> CurrentSkillsId;
     public float ActivateStaminaRegenTime = 0.7f;
-    private float _currentStaminaRegenDeactivationTime = 0f;
+    private float _currentStaminaRegenDeactivationTime = 0.0f;
     private bool _staminaProductionStopped;
     [HideInInspector] public bool EnableIFrames;
 
@@ -35,8 +35,8 @@ public class EntityStats : MonoBehaviour
 
     void Update()
     {
-        // Clamp the stats
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Stats.Health);
+        // Clamp & regenerate the stats
+        CurrentHealth = Mathf.Clamp(CurrentHealth + (CurrentHealthRegeneration + Stats.HealthRegeneration) * Time.deltaTime, 0, Stats.Health);
 
         // Regenerate stamina
         if (!_staminaProductionStopped)
@@ -65,27 +65,6 @@ public class EntityStats : MonoBehaviour
                 break;
             case "stamina":
                 Stats.Stamina += skillNode.Amount;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void AddCurrentStats(EntityEffects effect)
-    {
-        string effectName = effect.Name;
-        switch (effectName)
-        {
-            case "health":
-                CurrentHealth += effect.Rate;
-                CurrentHealth = Mathf.Clamp(CurrentHealth, 0, Stats.Health);
-                break;
-            case "stamina":
-                CurrentStamina += effect.Rate;
-                CurrentStamina = Mathf.Clamp(CurrentStamina, 0, Stats.Stamina);
-                break;
-            case "stamina regeneration":
-                CurrentStaminaRegeneration += effect.Rate;
                 break;
             default:
                 break;
@@ -143,7 +122,7 @@ public class EntityStats : MonoBehaviour
         }
         else
         {
-            Stats = new EntityStat(10.0f, 10.0f, 10.0f);
+            Stats = new EntityStat(10.0f, 10.0f, 0.0f, 10.0f);
         }
         // --- Skills ---
         // Check if the file exists

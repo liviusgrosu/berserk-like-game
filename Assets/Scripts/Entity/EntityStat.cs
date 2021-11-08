@@ -7,12 +7,13 @@ public class EntityStat
 {
     public float Health;
     public float Stamina;
-    // Passive stamina regeneration
+    public float HealthRegeneration;    
     public float StaminaRegeneration;
-    public EntityStat(float health, float stamina, float staminaRegeneration)
+    public EntityStat(float health, float stamina, float healthRegeneration, float staminaRegeneration)
     {
         Health = health;
         Stamina = stamina;
+        HealthRegeneration = healthRegeneration;
         StaminaRegeneration = staminaRegeneration;
     }
 }
