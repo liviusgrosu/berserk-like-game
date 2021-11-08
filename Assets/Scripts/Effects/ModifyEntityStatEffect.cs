@@ -6,6 +6,7 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
 {
     public string StatName;
     public float Amount;
+    public Sprite Icon;
     public float Duration;
     private float _currentDuration;
     private EntityStats _entityStats;
@@ -44,5 +45,10 @@ public class ModifyEntityStatEffect : MonoBehaviour, IStatEffect
                 _entityStats.CurrentStaminaRegeneration += amount;
                 break;
         }
+    }
+
+    public Sprite GetIcon()
+    {
+        return Icon;
     }
 }

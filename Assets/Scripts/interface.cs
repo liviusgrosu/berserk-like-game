@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 //This is a basic interface with a single required
@@ -18,4 +19,5 @@ public interface IEntity
 public interface IStatEffect
 {
     void ProvideStats(EntityStats stats);
+    Sprite GetIcon();
 }

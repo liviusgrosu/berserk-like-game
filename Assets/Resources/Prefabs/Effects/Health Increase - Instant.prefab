@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1671514211084955190}
   - component: {fileID: 7718471856732190163}
   m_Layer: 0
-  m_Name: Health Increase Effect
+  m_Name: Health Increase - Instant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StatName: Health
   Amount: 50
+  Icon: {fileID: 0}

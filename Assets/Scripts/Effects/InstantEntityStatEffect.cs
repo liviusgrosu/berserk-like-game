@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InstantEntityStatEffect : MonoBehaviour, IStatEffect
 {
     public string StatName;
     public float Amount;
+    public Sprite Icon;
     private EntityStats _entityStats;
 
     void Update()
@@ -15,6 +17,7 @@ public class InstantEntityStatEffect : MonoBehaviour, IStatEffect
             return;
         }
 
+        // Add the change to the players entites stat
         switch(StatName)
         {
             case "Health":
@@ -25,11 +28,19 @@ public class InstantEntityStatEffect : MonoBehaviour, IStatEffect
                 break;
         }
 
+        // Remove the effect once its done
         Destroy(this.gameObject);
     }
 
     public void ProvideStats(EntityStats stats)
     {
+        // Recieve the stats
         _entityStats = stats;
+    }
+
+    public Sprite GetIcon()
+    {
+        // Get the icon
+        return Icon;
     }
 }

@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: health
-  Icon: {fileID: 21300000, guid: 965d5d84db1ddf34bb295a27b195e136, type: 3}
+  Icon: {fileID: 21300000, guid: 44bcf3a136fb80b4580ad8cd3f5ae7ca, type: 3}
   Effect: {fileID: 1671514211084955144, guid: ec92ec9018a6d4b46b09c8e015c284e2, type: 3}

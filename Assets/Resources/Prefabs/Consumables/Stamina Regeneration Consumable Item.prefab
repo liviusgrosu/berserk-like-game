@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: stamina regeneration
-  Icon: {fileID: 21300000, guid: 2477c23f214f9574383887f4828ebdd6, type: 3}
+  Icon: {fileID: 21300000, guid: 901d5890a7263594e960fec2cae231be, type: 3}
   Effect: {fileID: 1671514211084955144, guid: 402525f329d3b914ba15922675cbd66c, type: 3}

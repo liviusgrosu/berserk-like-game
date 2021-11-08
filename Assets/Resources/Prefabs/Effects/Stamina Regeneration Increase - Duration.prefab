@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1671514211084955190}
   - component: {fileID: 8515127064856856905}
   m_Layer: 0
-  m_Name: Stamina Regeneration Stat Increase
+  m_Name: Stamina Regeneration Increase - Duration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,4 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StatName: Stamina Regeneration
   Amount: 5
-  Duration: 10
+  Icon: {fileID: 21300000, guid: 5b029054592e66449b7d72beb7f741c5, type: 3}
+  Duration: 2
