@@ -8,7 +8,7 @@ public class DebugChangePlayerStats : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             PlayerStats.CurrentStamina -= 10.0f;
             PlayerStats.CurrentHealth -= 10.0f;

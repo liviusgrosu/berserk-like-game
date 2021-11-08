@@ -5,18 +5,22 @@ using UnityEngine.UI;
 
 public class LootBehaviour : MonoBehaviour
 {
-    [HideInInspector]
     public GameObject LootData;
+    public int Amount;
     private GameObject PickUpText;
     public GameObject PickUpTextPrefab;
 
     private float _time;
     public float FadeDuration = 1.0f;
 
+    private bool CanPickUp;
+    private Inventory Inventory;
+
     void Start()
     {
         // Instantiate the text and assign it to the prompt game object
         Transform promptsParent = GameObject.Find("Prompts").transform;
+        Inventory = GameObject.Find("Game Manager").GetComponent<Inventory>();
         PickUpText = Instantiate(PickUpTextPrefab, promptsParent.position, Quaternion.identity);
         PickUpText.transform.parent = promptsParent;
         // Update the text
@@ -32,6 +36,15 @@ public class LootBehaviour : MonoBehaviour
         // TODO: adjust for various screen resolutions
         pos = new Vector3(pos.x, pos.y - 50.0f, pos.z);
         PickUpText.GetComponent<RectTransform>().transform.position = pos;
+
+        if (Input.GetKey(KeyCode.E) && CanPickUp && LootData != null)
+        {
+            // Add the loot to the players inventory
+            Inventory.AddLoot(LootData, Amount);
+            // Destroy the gameobject and the pick up prompt text
+            Destroy(PickUpText);
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter(Collider collider)
@@ -41,6 +54,7 @@ public class LootBehaviour : MonoBehaviour
             // Start fading in the pick up prompt text
             _time = 0.0f;
             StartCoroutine(FadeIn());
+            CanPickUp = true;
         }
     }
 
@@ -51,6 +65,7 @@ public class LootBehaviour : MonoBehaviour
             // Start fading out the pick up prompt text
             _time = FadeDuration;
             StartCoroutine(FadeOut());
+            CanPickUp = false;
         }
     }
 

@@ -6,6 +6,7 @@ public class EntityDropLoot : MonoBehaviour
 {
     public Transform SpawnPoint;
     public GameObject LootData;
+    public int Amount;
     public GameObject LootContainerPrefab;
 
     public void DropLoot()
@@ -15,6 +16,7 @@ public class EntityDropLoot : MonoBehaviour
             // Drop loot container and save the loot item into it
             GameObject loot = Instantiate(LootContainerPrefab, SpawnPoint.position, LootContainerPrefab.transform.rotation);
             loot.GetComponent<LootBehaviour>().LootData = LootData;
+            loot.GetComponent<LootBehaviour>().Amount = Amount;
         }
     }
 }

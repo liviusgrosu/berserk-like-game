@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour
         Load();
     }
 
-    public void AddConsumable(ConsumableItem consumable, int amount)
+    private void AddConsumable(ConsumableItem consumable, int amount)
     {
         for(int i = 0; i < ConsumableInventory.Count; i++)
         {
@@ -33,6 +33,15 @@ public class Inventory : MonoBehaviour
 
         // Add a new consumable item
         ConsumableInventory.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
+    }
+
+    public void AddLoot(GameObject loot, int amount)
+    {
+        if (loot.GetComponent<ConsumableItem>())
+        {
+            // Add the consumable
+            AddConsumable(loot.GetComponent<ConsumableItem>(), amount);
+        }
     }
 
     private void Load()
@@ -56,9 +65,6 @@ public class Inventory : MonoBehaviour
             // Add example consuambles
             GameObject item = Resources.Load<GameObject>("Prefabs/Consumables/Health Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 5);
-
-            // item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Consumable Item");
-            // AddConsumable(item.GetComponent<ConsumableItem>(), 4);
 
             item = Resources.Load<GameObject>("Prefabs/Consumables/Stamina Regeneration Consumable Item");
             AddConsumable(item.GetComponent<ConsumableItem>(), 4);

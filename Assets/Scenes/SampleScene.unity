@@ -8067,6 +8067,10 @@ PrefabInstance:
       propertyPath: FadeDuration
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 4534123699206417443, guid: 25988cf4ca0d26f45bfec8d0939d7992, type: 3}
+      propertyPath: Amount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5690252821948656148, guid: 25988cf4ca0d26f45bfec8d0939d7992, type: 3}
       propertyPath: m_Name
       value: Generic Loot
@@ -11472,6 +11476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnPoint: {fileID: 1418285858}
   LootData: {fileID: 7243667632073724920, guid: 64b03ce6b08c713418e784fcbb9edf37, type: 3}
+  Amount: 0
   LootContainerPrefab: {fileID: 5690252821948656148, guid: 25988cf4ca0d26f45bfec8d0939d7992, type: 3}
 --- !u!1 &919132149437581412
 GameObject:

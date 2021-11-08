@@ -39,12 +39,6 @@ public class PickupPopup : MonoBehaviour
             _step += Time.deltaTime;
             FadePopup(_step);
         }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            // DEBUG: Reset the popup
-            _step = _time = 0.0f;
-        }
     }
 
     void FadePopup(float fadeFactor)
