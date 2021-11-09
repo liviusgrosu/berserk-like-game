@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5795126010230393724}
   - component: {fileID: 4534123699206417443}
   - component: {fileID: 1512177325}
+  - component: {fileID: 5015557187272242719}
   m_Layer: 0
   m_Name: Generic Loot
   m_TagString: Untagged
@@ -97,8 +98,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LootData: {fileID: 0}
   Amount: 0
-  PickUpTextPrefab: {fileID: 4469429416378831873, guid: 2bac9a0387ebc31429e14fedc9b3b78c, type: 3}
-  FadeDuration: 0.1
 --- !u!135 &1512177325
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -112,3 +111,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5015557187272242719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690252821948656148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9421b6480394b846b77de5e025dbb2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractText: '[E] Pickup'
+  InteractTextPrefab: {fileID: 4469429416378831873, guid: 2bac9a0387ebc31429e14fedc9b3b78c, type: 3}
+  FadeDuration: 0.1

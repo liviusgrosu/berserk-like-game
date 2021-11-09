@@ -22,3 +22,8 @@ public interface IStatEffect
     void ProvideStats(EntityStats stats, Action<GameObject> destroyCallback);
     Sprite GetIcon();
 }
+
+public interface IInteract
+{
+    void Interact();
+}
