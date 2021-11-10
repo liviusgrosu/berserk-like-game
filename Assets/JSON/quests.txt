@@ -1,0 +1,10 @@
+{
+	"Trouble in the Forest Pt.1"
+	{
+		"description": "Kill all the wolves in the forest",
+		"goals": ["kill 10 wolves"],
+		"item rewards": ,
+		"soul reward": ,
+		"status": "not started"
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"Kill 10 Wolves"
+	{
+		"type": "kill",
+		"enemy": "wolves",
+		"amount": 10
+	}
+}
