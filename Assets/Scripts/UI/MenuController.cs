@@ -81,7 +81,7 @@ public class MenuController : MonoBehaviour
         ChangeMenu(NavBarButton.MenuToSwitchTo);
     }
 
-    public void ChangeMenu(Menu menu)
+    public void ChangeMenu(Menu menu, bool writeMode = false)
     {
         DeactivateMenus();
         switch (menu)
@@ -90,6 +90,9 @@ public class MenuController : MonoBehaviour
                 // Toggle all the character skills UI elements
                 _currentMenu = Menu.CharacterSkills;
                 CharacterSkillMenu.SetActive(true);
+                CharacterSkillMenu.GetComponent<SkillTree>().WriteMode = writeMode;
+                // Toggle the UI on after setting the write mode
+                CharacterSkillMenu.GetComponent<SkillTree>().Initialize();
                 NavBar.SetActive(true);
                 UpdateNavBar();
                 break;
@@ -102,6 +105,9 @@ public class MenuController : MonoBehaviour
                 // Toggle all the weapon upgrade UI elements
                 _currentMenu = Menu.WeaponUpgrade;
                 WeaponUpgradeMenu.SetActive(true);
+                WeaponUpgradeMenu.GetComponent<EquipmentUpgradeTree>().WriteMode = writeMode;
+                // Toggle the UI on after setting the write mode
+                WeaponUpgradeMenu.GetComponent<EquipmentUpgradeTree>().Initialize();
                 NavBar.SetActive(true);
                 UpdateNavBar();
                 break;

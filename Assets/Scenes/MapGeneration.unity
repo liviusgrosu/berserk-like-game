@@ -608,6 +608,18 @@ PrefabInstance:
       propertyPath: WestModel
       value: 
       objectReference: {fileID: 2025440138090154381}
+    - target: {fileID: 7895844510943282826, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
+      propertyPath: PlatformModel
+      value: 
+      objectReference: {fileID: 919132149155446097, guid: 0acc0fe1b7e00bc4b9870ce295e92923, type: 3}
+    - target: {fileID: 7895844510943282826, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
+      propertyPath: WallModel
+      value: 
+      objectReference: {fileID: 919132149155446097, guid: c0d2aeaeea7b0f0448e91c143b7f93ec, type: 3}
+    - target: {fileID: 7895844510943282826, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
+      propertyPath: CornerModel
+      value: 
+      objectReference: {fileID: 919132149155446097, guid: 03eacf20179ff7e4ca5a84e5f4db5310, type: 3}
     - target: {fileID: 7895844510943282827, guid: cf7cf35ad18c33e4ab246da2022397d3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.0955253

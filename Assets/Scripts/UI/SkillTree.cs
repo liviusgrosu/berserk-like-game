@@ -11,7 +11,7 @@ class SkillTree : MonoBehaviour
     public EntityStats PlayerStats;
     public LootManager LootManager;
     // TEMP: for now set the mode to write
-    public bool _writeMode = true;
+    public bool WriteMode = true;
 
     [Header("Stats Text")]
     public Text SoulCountText;
@@ -26,7 +26,8 @@ class SkillTree : MonoBehaviour
         _listHelper = new ListHelper<SkillTreeNode>();
         _skillTreeNodes = new List<GameObject>();
     }
-    void Start()
+
+    public void Initialize()
     {
         // Display the texts
         UpdateTextElement();
@@ -61,8 +62,16 @@ class SkillTree : MonoBehaviour
                 sufficentSouls = true ? LootManager.SoulCount >= skillScript.Cost : false;
             }
 
-            skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls && _writeMode;
-            skillUpgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
+            if (WriteMode)
+            {
+                skillUpgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls;
+                skillUpgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
+            }
+            else
+            {
+                skillUpgradeNode.GetComponent<Button>().interactable = false;
+                skillUpgradeNode.GetComponent<Image>().color = Color.grey;
+            }
         }
     }
 
@@ -87,7 +96,7 @@ class SkillTree : MonoBehaviour
                 bool sufficentSouls = true ? LootManager.SoulCount >= currentSkill.GetComponent<SkillTreeNode>().Cost : false;
 
                 currentSkill.GetComponent<Image>().color = Color.yellow;
-                currentSkill.GetComponent<Button>().interactable = sufficentSouls && _writeMode;   
+                currentSkill.GetComponent<Button>().interactable = sufficentSouls;
             }
         }
 

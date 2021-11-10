@@ -14,7 +14,7 @@ class EquipmentUpgradeTree : MonoBehaviour
     public PlayerEquipments PlayerEquipment;
     private GameObject _equipmentObj;
     public LootManager LootManager;
-    public bool _writeMode = true;
+    public bool WriteMode = true;
     public Text SoulsText;
     private List<GameObject> _upgradeTreeNodes;
     private ListHelper<EquipmentUpgradeNode> _listHelper;
@@ -30,7 +30,7 @@ class EquipmentUpgradeTree : MonoBehaviour
         _upgradeTreeNodes = new List<GameObject>();
     }
 
-    void Start()
+    public void Initialize()
     {
         // Find the equipment
         foreach(GameObject equipment in PlayerEquipment.EquipmentIntances)
@@ -41,7 +41,6 @@ class EquipmentUpgradeTree : MonoBehaviour
             }
         }
 
-        // REM: need to get the stats 
         // TODO: for now this will only pull off of the weapon equipment class
         // Maybe include a type in this script to choose preemptively the correct class
 
@@ -90,8 +89,16 @@ class EquipmentUpgradeTree : MonoBehaviour
                 sufficentSouls = true ? LootManager.SoulCount >= upgradeScript.Cost : false;
             }
 
-            upgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls && _writeMode;
-            upgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
+            if (WriteMode)
+            {
+                upgradeNode.GetComponent<Button>().interactable = unlocked && sufficentSouls;
+                upgradeNode.GetComponent<Image>().color = unlocked ? Color.yellow : Color.grey;
+            }
+            else
+            {                
+                upgradeNode.GetComponent<Button>().interactable = false;
+                upgradeNode.GetComponent<Image>().color = Color.grey;
+            }
         }
     }
 
@@ -155,7 +162,7 @@ class EquipmentUpgradeTree : MonoBehaviour
                 bool sufficentSouls = true ? LootManager.SoulCount >= currentUpgrade.GetComponent<EquipmentUpgradeNode>().Cost : false;
 
                 currentUpgrade.GetComponent<Image>().color = Color.yellow;
-                currentUpgrade.GetComponent<Button>().interactable = sufficentSouls && _writeMode;   
+                currentUpgrade.GetComponent<Button>().interactable = sufficentSouls;   
             }
         }
 

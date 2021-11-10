@@ -125,4 +125,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractText: '[E] Pickup'
   InteractTextPrefab: {fileID: 4469429416378831873, guid: 2bac9a0387ebc31429e14fedc9b3b78c, type: 3}
+  DestroyTextAfter: 1
   FadeDuration: 0.1
