@@ -93,8 +93,12 @@ public class MenuController : MonoBehaviour
                 CharacterSkillMenu.GetComponent<SkillTree>().WriteMode = writeMode;
                 // Toggle the UI on after setting the write mode
                 CharacterSkillMenu.GetComponent<SkillTree>().Initialize();
-                NavBar.SetActive(true);
-                UpdateNavBar();
+                NavBar.SetActive(!writeMode);
+                if (!writeMode)
+                {
+                    // Don't call the nav bar when its not in use
+                    UpdateNavBar();
+                }
                 break;
             case Menu.Overlay:
                 // Toggle all overlay UI elements
@@ -108,8 +112,11 @@ public class MenuController : MonoBehaviour
                 WeaponUpgradeMenu.GetComponent<EquipmentUpgradeTree>().WriteMode = writeMode;
                 // Toggle the UI on after setting the write mode
                 WeaponUpgradeMenu.GetComponent<EquipmentUpgradeTree>().Initialize();
-                NavBar.SetActive(true);
-                UpdateNavBar();
+                NavBar.SetActive(!writeMode);
+                if (!writeMode)
+                {
+                    UpdateNavBar();
+                }
                 break;
             default:
                 break;
