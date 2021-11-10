@@ -132,7 +132,7 @@ class EquipmentUpgradeTree : MonoBehaviour
             }
         }
         // Display the souls text
-        SoulsText.text = $"Souls: {LootManager.SoulCount}";
+        SoulsText.text = WriteMode ? $"Souls: {LootManager.SoulCount}" : "";
     }
 
     void UpdateTextElement(GameObject textObj, string statFieldName, float statValue)

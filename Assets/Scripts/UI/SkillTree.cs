@@ -108,7 +108,7 @@ class SkillTree : MonoBehaviour
     private void UpdateTextElement()
     {
         // Display the souls text
-        SoulCountText.text = $"Souls: {LootManager.SoulCount}";
+        SoulCountText.text = WriteMode ? $"Souls: {LootManager.SoulCount}" : "";
         // Display the player stats
         HealthText.text = $"Health: {PlayerStats.Stats.Health}";
         StaminaText.text = $"Stamina: {PlayerStats.Stats.Stamina}";
