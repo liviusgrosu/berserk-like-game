@@ -8,6 +8,7 @@ public class Interactable : MonoBehaviour
     public string InteractText;
     private GameObject _interactTextObj;
     public GameObject InteractTextPrefab;
+    public bool DestroyTextAfter;
 
     private float _time;
     public float FadeDuration = 1.0f;
@@ -38,7 +39,12 @@ public class Interactable : MonoBehaviour
         {
             // Call the interact function found in this gameobject
             GetComponent<IInteract>().Interact();
-            Destroy(_interactTextObj);
+            
+            if (DestroyTextAfter)
+            {
+                // Destroy text if need be
+                Destroy(_interactTextObj);
+            }
         }
     }
 
