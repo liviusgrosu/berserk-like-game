@@ -1,36 +1,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
+[System.Serializable]
 public class Quest
 {
     // TODO: might need get; set;
     public string Title;
-    public string Description;
     public List<QuestObjective> Objectives;
+    private List<QuestObjective> _currentObjectives;
     public string[] ItemRewards;
     public int SoulReward;
     public enum Status
     {
         NotStarted,
-        Pending,
-        Finished,
+        Active,
+        Completed,
         Failed
     };
+    [HideInInspector]
     public Status CurrentStatus;
 
-    public Quest(string title, string description, string[] itemRewards, string soulReward, string status)
+    public Quest(string title, string[] itemRewards, string soulReward)
     {
         // Instantiate the quest base parameters
         Title = title;
-        Description = description;
         ItemRewards = itemRewards;
         // JSON stores it as a string so needs to be converted to an int
         SoulReward = Int32.Parse(soulReward);
-
-        // Get the status of the quest
-        Enum.TryParse(status, out CurrentStatus);
-
         Objectives = new List<QuestObjective>();
     }
 }

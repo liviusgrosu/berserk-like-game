@@ -3,34 +3,63 @@
 	[
 		{
 			"Title": "Trouble in the Forest Pt1",
-			"Description": "Kill all the wolves in the forest",
-			"Objectives": ["kill 10 wolves"],
+			"Objectives": ["Kill 5 Soldiers", "Kill 5 Bandits", "Talk to Mayor"],
+			"Conditions": [],
+			"Trigger": "Talk to Mayor",
+			"ObjectivesOrder": ["1", "1", "2"],
 			"ItemRewards": ["Health Consumable Item"],
-			"SoulReward": "200",
-			"Status": "Pending"
+			"SoulReward": "200"
 		},
 		{
 			"Title": "Find the Pendant",
-			"Description": "Find the blacksmith wifes bronze pendant",
-			"Objectives": ["Find Bronze Pendant"],
+			"Conditions": ["Trouble in the Forest Pt1"],
+			"Trigger": "Talk to Soul Artist",
+			"Objectives": ["Find Bronze Pendant", "Talk to Blacksmith"],
+			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
-			"SoulReward": "1000",
-			"Status": "Finished"
+			"SoulReward": "1000"
 		}
 	],
 	"Objectives": 
 	[		
 		{
 			"Title": "Kill 10 Wolves",
-			"Type": "kill",
-			"Enemy": "wolves",
-			"Amount": 10
+			"Type": "Kill",
+			"Enemy": "Wolves",
+			"Amount": "10"
+		},
+		{
+			"Title": "Kill 5 Soldiers",
+			"Type": "Kill",
+			"Enemy": "Soldiers",
+			"Amount": "5"
+		},
+		{
+			"Title": "Kill 5 Bandits",
+			"Type": "Kill",
+			"Enemy": "Bandits",
+			"Amount": "5"
+		},
+		{
+			"Title": "Talk to Soul Artist",
+			"Type": "Talk",
+			"NPC": "SoulArtist"
+		},
+		{
+			"Title": "Talk to Mayor",
+			"Type": "Talk",
+			"NPC": "Mayor"
 		},
 		{
 			"Title": "Find Bronze Pendant",
-			"Type": "find",
+			"Type": "Item",
 			"Item": "Bronze Pendant",
-			"Amount": 1
+			"Amount": "1"
+		},
+		{
+			"Title": "Talk to Blacksmith",
+			"Type": "Talk",
+			"NPC": "Blacksmith"
 		}
 	]
 }

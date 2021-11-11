@@ -9,37 +9,47 @@ using Newtonsoft.Json;
 
 public class QuestManager : MonoBehaviour
 {
-    public List<Quest> Quests;
+    public List<Quest> ActiveQuests;
+    public List<Quest> CompletedQuests;
+
+    public string TempCurrentQuestName;
+
+    // TODO: add a save and load features for current and completed quests
+
     void Awake()
     {
-        Quests = new List<Quest>();
+        ActiveQuests = new List<Quest>();
+        CompletedQuests = new List<Quest>();
 
-        DataSet dataSet = JsonConvert.DeserializeObject<DataSet>(File.ReadAllText("./Assets/JSON/temp.json"));
+        DataSet dataSet = JsonConvert.DeserializeObject<DataSet>(File.ReadAllText("./Assets/JSON/quests.json"));
         DataTable questDataTable = dataSet.Tables["Quests"];
         DataTable objectiveDataTable = dataSet.Tables["Objectives"];
 
         foreach(DataRow questRow in questDataTable.Rows)
         {
-            if ((string)questRow["Status"] == "NotStarted")
-            {
-                // Don't add this quest to the current quests
-                continue;
-            }
             Quest currentQuest = new Quest(
-                                    (string)questRow["Title"], 
-                                    (string)questRow["Description"],
+                                    (string)questRow["Title"],
                                     (string[])questRow["ItemRewards"], 
-                                    (string)questRow["SoulReward"],
-                                    (string)questRow["Status"]
+                                    (string)questRow["SoulReward"]
                                     );
 
+            // Don't process the quest in the database if its not currently active
+            if (TempCurrentQuestName != currentQuest.Title)
+            {
+                continue;
+            }
+
+            // Get all the quest objectives and their order
+            string[] objectives = (string[])questRow["Objectives"];
+            string[] objectiveOrder = (string[])questRow["ObjectivesOrder"];
             // TODO: optimize this search
             // Go through all the objectives of the quests and the corresponding objective in the JSON objective
-            foreach(string objectiveName in (string[])questRow["Objectives"])
+            for(int objIdx = 0; objIdx < objectives.Length; objIdx++)
             {
+                // Go through the objective database and get the objective that matches the current index for the quest
                 foreach(DataRow objectiveRow in objectiveDataTable.Rows)
                 {
-                    if (objectiveName == (string)objectiveRow["Title"])
+                    if (objectives[objIdx] == (string)objectiveRow["Title"])
                     {
                         // Add the objective depending on its type
                         switch((string)objectiveRow["Type"])
@@ -49,7 +59,8 @@ public class QuestManager : MonoBehaviour
                                 KillObjective killObjective = new KillObjective(
                                                                     (string)objectiveRow["Title"], 
                                                                     (string)objectiveRow["Enemy"], 
-                                                                    (string)objectiveRow["Amount"]
+                                                                    (string)objectiveRow["Amount"],
+                                                                    objectiveOrder[objIdx]
                                                                     );
                                 currentQuest.Objectives.Add(killObjective);
                                 break;
@@ -58,7 +69,8 @@ public class QuestManager : MonoBehaviour
                                 ItemObjective itemObjective = new ItemObjective(
                                                                     (string)objectiveRow["Title"], 
                                                                     (string)objectiveRow["Item"], 
-                                                                    (string)objectiveRow["Amount"]
+                                                                    (string)objectiveRow["Amount"],
+                                                                    objectiveOrder[objIdx]
                                                                     );
                                 currentQuest.Objectives.Add(itemObjective);
                                 break;
@@ -66,7 +78,8 @@ public class QuestManager : MonoBehaviour
                                 // Add a talk objective
                                 TalkObjective talkObjective = new TalkObjective(
                                                                 (string)objectiveRow["Title"], 
-                                                                (string)objectiveRow["NPC"]
+                                                                (string)objectiveRow["NPC"],
+                                                                objectiveOrder[objIdx]
                                                                 );
                                 currentQuest.Objectives.Add(talkObjective);
                                 break;
@@ -75,7 +88,14 @@ public class QuestManager : MonoBehaviour
                 }
             }
 
-            Quests.Add(currentQuest);
+            // Add this to the current quests
+            ActiveQuests.Add(currentQuest);
         }
+    }
+
+    void HandleTalkEvent(string npcName)
+    {
+        // TODO: check the not-started quests with the NPC and see if we can start it
+        
     }
 }

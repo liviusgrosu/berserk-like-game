@@ -4,18 +4,21 @@
 		{
 			"Title": "Trouble in the Forest Pt1",
 			"Description": "Kill all the wolves in the forest",
-			"Objectives": ["Kill 10 Wolves", "Talk to Mayor"],
+			"Objectives": ["Talk to Mayor", "Kill 10 Wolves", "Talk to Mayor"],
+			"ObjectiveOrder": ["1", "2", "3"],
 			"ItemRewards": ["Health Consumable Item"],
 			"SoulReward": "200",
-			"Status": "Pending"
+			"Status": "NotStarted"
 		},
 		{
 			"Title": "Find the Pendant",
 			"Description": "Find the blacksmith wifes bronze pendant",
+			"Conditions": [""],
+			"Trigger": ["Talk to Blacksmith"],
 			"Objectives": ["Find Bronze Pendant", "Talk to Blacksmith"],
 			"ItemRewards": [],
 			"SoulReward": "1000",
-			"Status": "Pending"
+			"Status": "NotStarted"
 		}
 	],
 	"Objectives": 
