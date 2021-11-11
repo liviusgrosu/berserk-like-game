@@ -9,7 +9,8 @@ public class Quest
     // TODO: might need get; set;
     public string Title;
     public List<QuestObjective> Objectives;
-    private List<QuestObjective> _currentObjectives;
+    public List<QuestObjective> CurrentObjective;
+    private int _objectiveIndex;
     public string[] ItemRewards;
     public int SoulReward;
     public enum Status
@@ -30,5 +31,27 @@ public class Quest
         // JSON stores it as a string so needs to be converted to an int
         SoulReward = Int32.Parse(soulReward);
         Objectives = new List<QuestObjective>();
+        CurrentObjective = new List<QuestObjective>();
+    }
+
+    // TEMP
+    public void UpdateObjectives()
+    {
+        foreach(QuestObjective objective in Objectives)
+        {
+            if (objective.Order == _objectiveIndex)
+            {
+                CurrentObjective.Add(objective);
+            }
+        }
+    }
+
+    public void UpdateQuest()
+    {
+        if (CurrentObjective.Count == 0)
+        {
+            _objectiveIndex++;
+            UpdateObjectives();
+        }
     }
 }

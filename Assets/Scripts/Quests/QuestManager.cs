@@ -91,11 +91,55 @@ public class QuestManager : MonoBehaviour
             // Add this to the current quests
             ActiveQuests.Add(currentQuest);
         }
+
+        // TEMP
+        foreach(Quest quest in ActiveQuests)
+        {
+            quest.UpdateObjectives();
+        }
     }
 
-    void HandleTalkEvent(string npcName)
+    public void TriggerEvent(QuestObjective.Type eventType, string eventName)
     {
-        // TODO: check the not-started quests with the NPC and see if we can start it
-        
+        // Search through the current objectives and check that this event modifies/completes it
+        foreach(Quest quest in ActiveQuests)
+        {
+            foreach(QuestObjective objective in quest.CurrentObjective)
+            {
+                if (eventType == objective.ObjectiveType)
+                {
+                    if (eventType == QuestObjective.Type.Kill)
+                    {
+                        // Modify the kill objective
+                        KillObjective killObjective = ((KillObjective)objective); 
+                        if (killObjective.Enemy == eventName)
+                        {
+                            // If the enemy killed is part of the objective then modify it
+                            killObjective.CurrentAmount++;
+                            if (killObjective.CurrentAmount == killObjective.Amount)
+                            {
+                                // Kill objective is complete
+                                quest.CurrentObjective.Remove(objective);
+                                Debug.Log($"Kill {eventName} - objective complete");
+                                break;
+                            }
+                        }
+                    }
+                    else if (eventType ==  QuestObjective.Type.Talk)
+                    {
+                        // Modify the kill objective
+                        TalkObjective talkObjective = ((TalkObjective)objective); 
+                        if (talkObjective.NPC == eventName)
+                        {
+                            // Complete the objective if the right NPC is talked to
+                            quest.CurrentObjective.Remove(objective);
+                            Debug.Log($"Talked to {eventName} - objective complete");
+                            break;
+                        }
+                    }
+                } 
+            }
+            quest.UpdateQuest();
+        }
     }
 }

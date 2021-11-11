@@ -80,6 +80,7 @@ public class EnemyStateBehaviour : MonoBehaviour
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<EntityDropSouls>().DropSouls();
                 GetComponent<EntityDropLoot>().DropLoot();
+                GameObject.Find("Game Manager").GetComponent<QuestManager>().TriggerEvent(QuestObjective.Type.Kill, name);
                 _agent.enabled = false;
             }
 
