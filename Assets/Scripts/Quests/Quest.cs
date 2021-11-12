@@ -14,15 +14,6 @@ public class Quest
     private int _objectiveIndex;
     public string[] ItemRewards;
     public int SoulReward;
-    public enum Status
-    {
-        NotStarted,
-        Active,
-        Completed,
-        Failed
-    };
-    [HideInInspector]
-    public Status CurrentStatus;
 
     public Quest(string title, string[] itemRewards, string soulReward)
     {
@@ -60,7 +51,7 @@ public class Quest
         if (CurrentObjective.Count == 0)
         {
             // If no new objectives are found then the quest is complete
-            CurrentStatus = Status.Completed;
+            
             // TODO: give rewards to the player
             // TODO: add in dialogue for the NPC in order to give rewards to the player
         }

@@ -130,7 +130,7 @@ public class QuestManager : MonoBehaviour
 
     public void TriggerEvent(QuestObjective.Type eventType, string eventName)
     {
-        foreach(Quest quest in AllQuests.Except(ActiveQuests))
+        foreach(Quest quest in AllQuests.Except(ActiveQuests).Except(CompletedQuests))
         {
             string triggerObjective = quest.TriggerObjective.Title;
             if (eventType == quest.TriggerObjective.ObjectiveType)
@@ -142,12 +142,15 @@ public class QuestManager : MonoBehaviour
                     if (talkObjective.NPC == eventName)
                     {
                         ActiveQuests.Add(quest);
+                        Debug.Log($"Quest added - {quest.Title}");
                         quest.UpdateQuest();
                         return;
                     }
                 }
             }
         }
+
+        Quest questToRemove = null;
 
         // Search through the current objectives and check that this event modifies/completes it
         foreach(Quest quest in ActiveQuests)
@@ -187,9 +190,20 @@ public class QuestManager : MonoBehaviour
                     }
                 } 
             }
-            // TODO: store the completed quest to use a trigger for new ones
 
             quest.UpdateQuest();
+
+            if (quest.CurrentObjective.Count == 0)
+            {
+                // If there are no more objectives for this active quest then it is considered completed
+                questToRemove = quest;
+            }
+        }
+
+        if (questToRemove != null)
+        {
+            CompletedQuests.Add(questToRemove);
+            ActiveQuests.Remove(questToRemove);
         }
     }
 }
