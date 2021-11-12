@@ -14,7 +14,7 @@
 			"Title": "Find the Pendant",
 			"Conditions": ["Trouble in the Forest Pt1"],
 			"TriggerObjective": "Talk to Soul Artist",
-			"Objectives": ["Find Bronze Pendant", "Talk to Blacksmith"],
+			"Objectives": ["Find Bronze Pendant", "Talk to Soul Artist"],
 			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
 			"SoulReward": "1000"
@@ -43,7 +43,7 @@
 		{
 			"Title": "Talk to Soul Artist",
 			"Type": "Talk",
-			"NPC": "SoulArtist"
+			"NPC": "Soul Artist"
 		},
 		{
 			"Title": "Talk to Mayor",

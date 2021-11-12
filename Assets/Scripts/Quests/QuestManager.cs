@@ -14,9 +14,6 @@ public class QuestManager : MonoBehaviour
     public List<Quest> AllQuests;
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
-
-    // TODO: add a save and load features for current and completed quests
-
     void Awake()
     {
         AllQuests = new List<Quest>();
@@ -33,7 +30,8 @@ public class QuestManager : MonoBehaviour
             Quest currentQuest = new Quest(
                                     (string)questRow["Title"],
                                     (string[])questRow["ItemRewards"], 
-                                    (string)questRow["SoulReward"]
+                                    (string)questRow["SoulReward"],
+                                    (string[])questRow["Conditions"]
                                     );
 
             // Get all the quest objectives and their order
@@ -64,12 +62,6 @@ public class QuestManager : MonoBehaviour
         }
 
         Load();
-
-        // TEMP
-        // foreach(Quest quest in ActiveQuests)
-        // {
-        //     quest.UpdateQuest();
-        // }
     }
 
     private void Save()
@@ -139,8 +131,10 @@ public class QuestManager : MonoBehaviour
                 if (eventType == QuestObjective.Type.Talk)
                 {
                     TalkObjective talkObjective = (TalkObjective)quest.TriggerObjective;
-                    if (talkObjective.NPC == eventName)
+                    if (talkObjective.NPC == eventName && QuestMeetsConditions(quest))
                     {
+                        // Check that the player meets the quest conditions
+
                         ActiveQuests.Add(quest);
                         Debug.Log($"Quest added - {quest.Title}");
                         quest.UpdateQuest();
@@ -150,6 +144,7 @@ public class QuestManager : MonoBehaviour
             }
         }
 
+        // If the updated quest has no objectives then store it to be removed from the active quests list
         Quest questToRemove = null;
 
         // Search through the current objectives and check that this event modifies/completes it
@@ -202,8 +197,38 @@ public class QuestManager : MonoBehaviour
 
         if (questToRemove != null)
         {
+            // If theres a quest to remove, remove it from the active list and place it in the completed quest
             CompletedQuests.Add(questToRemove);
             ActiveQuests.Remove(questToRemove);
         }
+    }
+
+    private bool QuestMeetsConditions(Quest quest)
+    {
+        if (quest.Conditions.Length == 0)
+        {
+            // No conditions
+            return true;
+        }
+
+        bool questConditions = false;
+
+        foreach(string condition in quest.Conditions)
+        {
+            // Check if the condition is a quest
+            foreach(Quest completedQuest in CompletedQuests)
+            {
+                if (completedQuest.Title == condition)
+                {
+                    questConditions = true;
+                }
+            }
+
+            // TODO: Check if the condition is an objective
+        }
+
+        Debug.Log("Meet all conditions: " + questConditions);
+
+        return questConditions;
     }
 }

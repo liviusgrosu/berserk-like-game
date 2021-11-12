@@ -35,7 +35,7 @@ public class Interactable : MonoBehaviour
         pos = new Vector3(pos.x, pos.y - 50.0f, pos.z);
         _interactTextObj.GetComponent<RectTransform>().transform.position = pos;
 
-        if (Input.GetKey(KeyCode.E) && CanInteract)
+        if (Input.GetKeyDown(KeyCode.E) && CanInteract)
         {
             // Call the interact function found in this gameobject
             GetComponent<IInteract>().Interact();

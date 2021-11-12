@@ -11,11 +11,12 @@ public class Quest
     public List<QuestObjective> Objectives;
     public List<QuestObjective> CurrentObjective;
     public QuestObjective TriggerObjective;
+    public string[] Conditions;
     private int _objectiveIndex;
     public string[] ItemRewards;
     public int SoulReward;
 
-    public Quest(string title, string[] itemRewards, string soulReward)
+    public Quest(string title, string[] itemRewards, string soulReward, string[] conditions)
     {
         // Instantiate the quest base parameters
         Title = title;
@@ -25,18 +26,7 @@ public class Quest
         Objectives = new List<QuestObjective>();
         CurrentObjective = new List<QuestObjective>();
         TriggerObjective = new QuestObjective();
-    }
-
-    // TEMP
-    public void UpdateObjectives()
-    {
-        foreach(QuestObjective objective in Objectives)
-        {
-            if (objective.Order == _objectiveIndex)
-            {
-                CurrentObjective.Add(objective);
-            }
-        }
+        Conditions = conditions;
     }
 
     public void UpdateQuest()
@@ -45,15 +35,15 @@ public class Quest
         {
             // Update with new objectives
             _objectiveIndex++;
-            UpdateObjectives();
-        }
 
-        if (CurrentObjective.Count == 0)
-        {
-            // If no new objectives are found then the quest is complete
-            
-            // TODO: give rewards to the player
-            // TODO: add in dialogue for the NPC in order to give rewards to the player
+            // Update the objectives
+            foreach(QuestObjective objective in Objectives)
+            {
+                if (objective.Order == _objectiveIndex)
+                {
+                    CurrentObjective.Add(objective);
+                }
+            }
         }
     }
 }
