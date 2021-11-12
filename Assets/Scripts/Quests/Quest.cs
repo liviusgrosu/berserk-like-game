@@ -10,6 +10,7 @@ public class Quest
     public string Title;
     public List<QuestObjective> Objectives;
     public List<QuestObjective> CurrentObjective;
+    public QuestObjective TriggerObjective;
     private int _objectiveIndex;
     public string[] ItemRewards;
     public int SoulReward;
@@ -32,6 +33,7 @@ public class Quest
         SoulReward = Int32.Parse(soulReward);
         Objectives = new List<QuestObjective>();
         CurrentObjective = new List<QuestObjective>();
+        TriggerObjective = new QuestObjective();
     }
 
     // TEMP
@@ -50,8 +52,17 @@ public class Quest
     {
         if (CurrentObjective.Count == 0)
         {
+            // Update with new objectives
             _objectiveIndex++;
             UpdateObjectives();
+        }
+
+        if (CurrentObjective.Count == 0)
+        {
+            // If no new objectives are found then the quest is complete
+            CurrentStatus = Status.Completed;
+            // TODO: give rewards to the player
+            // TODO: add in dialogue for the NPC in order to give rewards to the player
         }
     }
 }

@@ -3,21 +3,23 @@ using System.IO;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using UnityEngine;
 using Newtonsoft.Json;
 
 
 public class QuestManager : MonoBehaviour
 {
+    public List<Quest> AllQuests;
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
-
-    public string TempCurrentQuestName;
 
     // TODO: add a save and load features for current and completed quests
 
     void Awake()
     {
+        AllQuests = new List<Quest>();
         ActiveQuests = new List<Quest>();
         CompletedQuests = new List<Quest>();
 
@@ -25,6 +27,7 @@ public class QuestManager : MonoBehaviour
         DataTable questDataTable = dataSet.Tables["Quests"];
         DataTable objectiveDataTable = dataSet.Tables["Objectives"];
 
+        // Go through the quest datatable
         foreach(DataRow questRow in questDataTable.Rows)
         {
             Quest currentQuest = new Quest(
@@ -32,12 +35,6 @@ public class QuestManager : MonoBehaviour
                                     (string[])questRow["ItemRewards"], 
                                     (string)questRow["SoulReward"]
                                     );
-
-            // Don't process the quest in the database if its not currently active
-            if (TempCurrentQuestName != currentQuest.Title)
-            {
-                continue;
-            }
 
             // Get all the quest objectives and their order
             string[] objectives = (string[])questRow["Objectives"];
@@ -52,55 +49,106 @@ public class QuestManager : MonoBehaviour
                     if (objectives[objIdx] == (string)objectiveRow["Title"])
                     {
                         // Add the objective depending on its type
-                        switch((string)objectiveRow["Type"])
-                        {
-                            case "Kill":
-                                // Add a kill objective
-                                KillObjective killObjective = new KillObjective(
-                                                                    (string)objectiveRow["Title"], 
-                                                                    (string)objectiveRow["Enemy"], 
-                                                                    (string)objectiveRow["Amount"],
-                                                                    objectiveOrder[objIdx]
-                                                                    );
-                                currentQuest.Objectives.Add(killObjective);
-                                break;
-                            case "Item":
-                                // Add a find item objective
-                                ItemObjective itemObjective = new ItemObjective(
-                                                                    (string)objectiveRow["Title"], 
-                                                                    (string)objectiveRow["Item"], 
-                                                                    (string)objectiveRow["Amount"],
-                                                                    objectiveOrder[objIdx]
-                                                                    );
-                                currentQuest.Objectives.Add(itemObjective);
-                                break;
-                            case "Talk":
-                                // Add a talk objective
-                                TalkObjective talkObjective = new TalkObjective(
-                                                                (string)objectiveRow["Title"], 
-                                                                (string)objectiveRow["NPC"],
-                                                                objectiveOrder[objIdx]
-                                                                );
-                                currentQuest.Objectives.Add(talkObjective);
-                                break;
-                        }
+                        currentQuest.Objectives.Add(GetObjective(objectiveRow, objectiveOrder[objIdx]));
+                    }
+
+                    if ((string)questRow["TriggerObjective"] == (string)objectiveRow["Title"])
+                    {
+                        currentQuest.TriggerObjective = GetObjective(objectiveRow, "-1");
                     }
                 }
             }
 
             // Add this to the current quests
-            ActiveQuests.Add(currentQuest);
+            AllQuests.Add(currentQuest);
         }
 
+        Load();
+
         // TEMP
-        foreach(Quest quest in ActiveQuests)
+        // foreach(Quest quest in ActiveQuests)
+        // {
+        //     quest.UpdateQuest();
+        // }
+    }
+
+    private void Save()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create($"{Application.persistentDataPath}/quests.active");
+        bf.Serialize(file, ActiveQuests);
+        file.Close();
+    }
+
+    private void Load()
+    {
+        if (File.Exists($"{Application.persistentDataPath}/quests.save"))
         {
-            quest.UpdateObjectives();
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/quests.active", FileMode.Open);
+            ActiveQuests = (List<Quest>)bf.Deserialize(file);
+            file.Close();
         }
+    }
+
+    private QuestObjective GetObjective(DataRow objective, string order)
+    {
+        QuestObjective questObjective = null;
+        // Add the objective depending on its type
+        switch((string)objective["Type"])
+        {
+            case "Kill":
+                // Add a kill objective
+                questObjective = new KillObjective(
+                                                    (string)objective["Title"], 
+                                                    (string)objective["Enemy"], 
+                                                    (string)objective["Amount"],
+                                                    order
+                                                    );
+                break;
+            case "Item":
+                // Add a find item objective
+                questObjective = new ItemObjective(
+                                                    (string)objective["Title"], 
+                                                    (string)objective["Item"], 
+                                                    (string)objective["Amount"],
+                                                    order
+                                                    );
+                break;
+            case "Talk":
+                // Add a talk objective
+                questObjective = new TalkObjective(
+                                                    (string)objective["Title"], 
+                                                    (string)objective["NPC"],
+                                                    order
+                                                    );
+                break;
+        }
+
+        return questObjective;
     }
 
     public void TriggerEvent(QuestObjective.Type eventType, string eventName)
     {
+        foreach(Quest quest in AllQuests.Except(ActiveQuests))
+        {
+            string triggerObjective = quest.TriggerObjective.Title;
+            if (eventType == quest.TriggerObjective.ObjectiveType)
+            {
+                // If the trigger is a talk objective
+                if (eventType == QuestObjective.Type.Talk)
+                {
+                    TalkObjective talkObjective = (TalkObjective)quest.TriggerObjective;
+                    if (talkObjective.NPC == eventName)
+                    {
+                        ActiveQuests.Add(quest);
+                        quest.UpdateQuest();
+                        return;
+                    }
+                }
+            }
+        }
+
         // Search through the current objectives and check that this event modifies/completes it
         foreach(Quest quest in ActiveQuests)
         {
@@ -139,6 +187,8 @@ public class QuestManager : MonoBehaviour
                     }
                 } 
             }
+            // TODO: store the completed quest to use a trigger for new ones
+
             quest.UpdateQuest();
         }
     }

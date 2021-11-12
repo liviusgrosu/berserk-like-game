@@ -5,17 +5,17 @@
 			"Title": "Trouble in the Forest Pt1",
 			"Objectives": ["Kill 1 Soldiers", "Kill 1 Bandits", "Talk to Mayor"],
 			"Conditions": [],
-			"Trigger": "Talk to Mayor",
-			"ObjectivesOrder": ["0", "0", "1"],
+			"TriggerObjective": "Talk to Mayor",
+			"ObjectivesOrder": ["1", "1", "2"],
 			"ItemRewards": ["Health Consumable Item"],
 			"SoulReward": "200"
 		},
 		{
 			"Title": "Find the Pendant",
 			"Conditions": ["Trouble in the Forest Pt1"],
-			"Trigger": "Talk to Soul Artist",
+			"TriggerObjective": "Talk to Soul Artist",
 			"Objectives": ["Find Bronze Pendant", "Talk to Blacksmith"],
-			"ObjectivesOrder": ["0", "1"],
+			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
 			"SoulReward": "1000"
 		}
