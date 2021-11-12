@@ -14,6 +14,8 @@ public class QuestManager : MonoBehaviour
     public List<Quest> AllQuests;
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
+    private _inventory _inventory;
+
     void Awake()
     {
         AllQuests = new List<Quest>();
@@ -183,6 +185,18 @@ public class QuestManager : MonoBehaviour
                             break;
                         }
                     }
+                    else if (eventType == QuestObjective.Type.Item)
+                    {
+                        // Modify the item objective
+                        ItemObjective itemObjective = ((ItemObjective)objective);
+                        if (itemObjective.Item == eventName)
+                        {
+                            // Complete the objective if the right NPC is talked to
+                            quest.CurrentObjective.Remove(objective);
+                            Debug.Log($"Found item {eventName} - objective complete");
+                            break;
+                        }
+                    }
                 } 
             }
 
@@ -223,8 +237,6 @@ public class QuestManager : MonoBehaviour
                     questConditions = true;
                 }
             }
-
-            // TODO: Check if the condition is an objective
         }
 
         Debug.Log("Meet all conditions: " + questConditions);

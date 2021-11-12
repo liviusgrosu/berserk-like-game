@@ -17,7 +17,7 @@ public class LootBehaviour : MonoBehaviour, IInteract
     public void Interact()
     {
         // Add the loot to the players inventory
-        Inventory.AddLoot(LootData, Amount);
+        Inventory.AddItem(LootData, Amount);
         Destroy(gameObject);
     }
 }

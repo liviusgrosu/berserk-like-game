@@ -10,12 +10,15 @@ public class Inventory : MonoBehaviour
 {
     // Contains the consumable and count
     public List<ConsuambleInventory> ConsumableInventory;
+    public List<QuestItem> QuestItems;
     public PickupPopup PickupPopup;
+    private QuestManager _questManager;
 
     void Awake()
     {
         // Initialize the consumables list
         ConsumableInventory = new List<ConsuambleInventory>();
+        _questManager = GetComponent<QuestManager>();
 
         Load();
     }
@@ -36,7 +39,15 @@ public class Inventory : MonoBehaviour
         ConsumableInventory.Add(new ConsuambleInventory(consumable.GetComponent<ConsumableItem>(), amount));
     }
 
-    public void AddLoot(GameObject loot, int amount)
+    private void AddQuestItem(QuestItem questItem)
+    {
+        // TODO: might need to add in count
+        QuestItems.Add(questItem);
+        // Trigger the quests
+        _questManager.TriggerEvent(QuestObjective.Type.Item, questItem.Name);
+    }
+
+    public void AddItem(GameObject loot, int amount)
     {
         ConsumableItem consumableItem = loot.GetComponent<ConsumableItem>();
         if (consumableItem != null)
@@ -44,6 +55,15 @@ public class Inventory : MonoBehaviour
             // Add the consumable
             AddConsumable(consumableItem, amount);
             PickupPopup.DisplayPickup(consumableItem.Icon, consumableItem.Name, amount);
+            return;
+        }
+
+        QuestItem questItem = loot.GetComponent<QuestItem>();
+        if (questItem != null)
+        {
+            AddQuestItem(questItem);
+            PickupPopup.DisplayPickup(questItem.Icon, questItem.Name, 1);
+            return;
         }
     }
 

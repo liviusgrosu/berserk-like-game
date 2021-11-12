@@ -14,7 +14,7 @@
 			"Title": "Find the Pendant",
 			"Conditions": ["Trouble in the Forest Pt1"],
 			"TriggerObjective": "Talk to Soul Artist",
-			"Objectives": ["Find Bronze Pendant", "Talk to Soul Artist"],
+			"Objectives": ["Find Bronze Pocket Watch", "Talk to Soul Artist"],
 			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
 			"SoulReward": "1000"
@@ -51,9 +51,9 @@
 			"NPC": "Mayor"
 		},
 		{
-			"Title": "Find Bronze Pendant",
+			"Title": "Find Bronze Pocket Watch",
 			"Type": "Item",
-			"Item": "Bronze Pendant",
+			"Item": "Bronze Pocket Watch",
 			"Amount": "1"
 		},
 		{
