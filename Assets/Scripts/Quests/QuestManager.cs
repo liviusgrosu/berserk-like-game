@@ -132,7 +132,8 @@ public class QuestManager : MonoBehaviour
 
     public void TriggerEvent(QuestObjective.Type eventType, string eventName)
     {
-        foreach(Quest quest in AllQuests.Except(ActiveQuests).Except(CompletedQuests))
+        // If an active quest has some objectives done then it'll still add
+        foreach(Quest quest in AllQuests)
         {
             string triggerObjective = quest.TriggerObjective.Title;
             if (eventType == quest.TriggerObjective.ObjectiveType)
@@ -141,7 +142,7 @@ public class QuestManager : MonoBehaviour
                 if (eventType == QuestObjective.Type.Talk)
                 {
                     TalkObjective talkObjective = (TalkObjective)quest.TriggerObjective;
-                    if (talkObjective.NPC == eventName && QuestMeetsConditions(quest))
+                    if (talkObjective.NPC == eventName && QuestMeetsConditions(quest) && !IsQuestActiveOrCompleted(quest))
                     {
                         // Check that the player meets the quest conditions
 
@@ -223,6 +224,34 @@ public class QuestManager : MonoBehaviour
             CompletedQuests.Add(questToRemove);
             ActiveQuests.Remove(questToRemove);
         }
+    }
+
+    private bool IsQuestActiveOrCompleted(Quest quest)
+    {
+        // Check if the quest is either completed or active 
+        
+        // Check the active quests
+        foreach(Quest activeQuest in ActiveQuests)
+        {
+            // Quest is in active quest list
+            if (activeQuest.Title == quest.Title)
+            {
+                return true;
+            }
+        }
+
+        // Check the completed quests
+        foreach(Quest completedQuest in CompletedQuests)
+        {
+            // Quest is in completed quest list
+            if (completedQuest.Title == quest.Title)
+            {
+                return true;
+            }
+        }
+
+        // No quest found
+        return false;
     }
 
     private bool QuestMeetsConditions(Quest quest)
