@@ -132,7 +132,7 @@ public class QuestManager : MonoBehaviour
 
     public void TriggerEvent(QuestObjective.Type eventType, string eventName)
     {
-        // If an active quest has some objectives done then it'll still add
+        // Check to see if a quest can be added
         foreach(Quest quest in AllQuests)
         {
             string triggerObjective = quest.TriggerObjective.Title;
@@ -147,7 +147,6 @@ public class QuestManager : MonoBehaviour
                         // Check that the player meets the quest conditions
 
                         ActiveQuests.Add(quest);
-                        Debug.Log($"Quest added - {quest.Title}");
                         quest.UpdateQuest();
                         return;
                     }
@@ -173,11 +172,10 @@ public class QuestManager : MonoBehaviour
                         {
                             // If the enemy killed is part of the objective then modify it
                             killObjective.CurrentAmount++;
-                            if (killObjective.CurrentAmount == killObjective.Amount)
+                            if (killObjective.CurrentAmount >= killObjective.Amount)
                             {
                                 // Kill objective is complete
                                 quest.CurrentObjective.Remove(objective);
-                                Debug.Log($"Kill {eventName} - objective complete");
                                 break;
                             }
                         }
@@ -190,7 +188,6 @@ public class QuestManager : MonoBehaviour
                         {
                             // Complete the objective if the right NPC is talked to
                             quest.CurrentObjective.Remove(objective);
-                            Debug.Log($"Talked to {eventName} - objective complete");
                             break;
                         }
                     }
@@ -200,9 +197,13 @@ public class QuestManager : MonoBehaviour
                         ItemObjective itemObjective = ((ItemObjective)objective);
                         if (itemObjective.Item == eventName)
                         {
-                            // Complete the objective if the right NPC is talked to
-                            quest.CurrentObjective.Remove(objective);
-                            Debug.Log($"Found item {eventName} - objective complete");
+                            itemObjective.CurrentAmount++;
+                            // If all the items are found then completed the objective
+                            if (itemObjective.CurrentAmount >= itemObjective.Amount)
+                            {
+                                // Complete the objective if the right NPC is talked to
+                                quest.CurrentObjective.Remove(objective);
+                            }
                             break;
                         }
                     }
@@ -229,7 +230,7 @@ public class QuestManager : MonoBehaviour
     private bool IsQuestActiveOrCompleted(Quest quest)
     {
         // Check if the quest is either completed or active 
-        
+
         // Check the active quests
         foreach(Quest activeQuest in ActiveQuests)
         {

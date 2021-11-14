@@ -18,7 +18,17 @@
 			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
 			"SoulReward": "1000"
+		},
+		{
+			"Title": "Find Scroll Fragments",
+			"Conditions": [],
+			"TriggerObjective": "Talk to Mayor",
+			"Objectives": ["Find Scroll Fragment", "Talk to Mayor"],
+			"ObjectivesOrder": ["1", "2"],
+			"ItemRewards": [],
+			"SoulReward": "2000"
 		}
+		
 	],
 	"Objectives": 
 	[		
@@ -55,6 +65,12 @@
 			"Type": "Item",
 			"Item": "Bronze Pocket Watch",
 			"Amount": "1"
+		},
+		{
+			"Title": "Find Scroll Fragment",
+			"Type": "Item",
+			"Item": "Scroll Fragment",
+			"Amount": "5"
 		},
 		{
 			"Title": "Talk to Blacksmith",

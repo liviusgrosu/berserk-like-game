@@ -8,6 +8,7 @@ public class ItemObjective : QuestObjective
 {
     public string Item;
     public int Amount;
+    public int CurrentAmount;
 
     public ItemObjective(string title, string item, string amount, string order)
     {
