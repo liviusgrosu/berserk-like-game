@@ -22,7 +22,10 @@ public class Quest
         Title = title;
         ItemRewards = itemRewards;
         // JSON stores it as a string so needs to be converted to an int
-        SoulReward = Int32.Parse(soulReward);
+        if (soulReward != "")
+        {
+            SoulReward = Int32.Parse(soulReward);
+        }
         Objectives = new List<QuestObjective>();
         CurrentObjective = new List<QuestObjective>();
         TriggerObjective = new QuestObjective();

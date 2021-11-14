@@ -14,7 +14,6 @@ public class QuestManager : MonoBehaviour
     public List<Quest> AllQuests;
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
-    private Inventory _inventory;
 
     void Awake()
     {
@@ -216,6 +215,19 @@ public class QuestManager : MonoBehaviour
             {
                 // If there are no more objectives for this active quest then it is considered completed
                 questToRemove = quest;
+
+                // Give player item rewards
+                foreach(string itemReward in quest.ItemRewards)
+                {
+                    string[] parsedItemReward = itemReward.Split(':');
+                    GetComponent<Inventory>().AddItem($"Prefabs/{parsedItemReward[0]}", Int32.Parse(parsedItemReward[1]));
+                }
+
+                // Give player soul reward
+                if(quest.SoulReward != 0)
+                {
+                    GetComponent<LootManager>().SoulCount += quest.SoulReward;
+                } 
             }
         }
 
@@ -275,9 +287,9 @@ public class QuestManager : MonoBehaviour
                     questConditions = true;
                 }
             }
-        }
 
-        Debug.Log("Meet all conditions: " + questConditions);
+            // TODO: Add item conditions 
+        }
 
         return questConditions;
     }

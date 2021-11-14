@@ -47,6 +47,12 @@ public class Inventory : MonoBehaviour
         _questManager.TriggerEvent(QuestObjective.Type.Item, questItem.Name);
     }
 
+    public void AddItem(string lootDirectory, int amount)
+    {
+        GameObject item = Resources.Load<GameObject>(lootDirectory);
+        AddItem(item, amount);
+    }
+
     public void AddItem(GameObject loot, int amount)
     {
         ConsumableItem consumableItem = loot.GetComponent<ConsumableItem>();

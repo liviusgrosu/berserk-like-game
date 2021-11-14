@@ -7,8 +7,8 @@
 			"Conditions": [],
 			"TriggerObjective": "Talk to Mayor",
 			"ObjectivesOrder": ["1", "1", "2"],
-			"ItemRewards": ["Health Consumable Item"],
-			"SoulReward": "200"
+			"ItemRewards": ["Consumables/Health Consumable Item:5"],
+			"SoulReward": "500"
 		},
 		{
 			"Title": "Find the Pendant",
@@ -21,7 +21,7 @@
 		},
 		{
 			"Title": "Find Scroll Fragments",
-			"Conditions": [],
+			"Conditions": ["Trouble in the Forest Pt1"],
 			"TriggerObjective": "Talk to Mayor",
 			"Objectives": ["Find Scroll Fragment", "Talk to Mayor"],
 			"ObjectivesOrder": ["1", "2"],
