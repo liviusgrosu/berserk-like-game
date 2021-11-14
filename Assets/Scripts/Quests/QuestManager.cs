@@ -14,7 +14,7 @@ public class QuestManager : MonoBehaviour
     public List<Quest> AllQuests;
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
-    private _inventory _inventory;
+    private Inventory _inventory;
 
     void Awake()
     {
@@ -70,17 +70,25 @@ public class QuestManager : MonoBehaviour
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create($"{Application.persistentDataPath}/quests.active");
+        // Save the active quests
         bf.Serialize(file, ActiveQuests);
+        file = File.Create($"{Application.persistentDataPath}/quests.completed");
+        // Save the completed quests
+        bf.Serialize(file, CompletedQuests);
         file.Close();
     }
 
     private void Load()
     {
-        if (File.Exists($"{Application.persistentDataPath}/quests.save"))
+        if (File.Exists($"{Application.persistentDataPath}/quests.active") && File.Exists($"{Application.persistentDataPath}/quests.completed"))
         {
             BinaryFormatter bf = new BinaryFormatter();
+            // Load the active quests
             FileStream file = File.Open($"{Application.persistentDataPath}/quests.active", FileMode.Open);
             ActiveQuests = (List<Quest>)bf.Deserialize(file);
+            // Load the completed quests
+            file = File.Open($"{Application.persistentDataPath}/quests.completed", FileMode.Open);
+            CompletedQuests = (List<Quest>)bf.Deserialize(file);
             file.Close();
         }
     }
@@ -242,5 +250,10 @@ public class QuestManager : MonoBehaviour
         Debug.Log("Meet all conditions: " + questConditions);
 
         return questConditions;
+    }
+
+    void OnApplicationQuit()
+    {
+        Save();
     }
 }
