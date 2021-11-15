@@ -23,7 +23,13 @@ public class DialogueManager
         DataTable regularDataTable = dataset.Tables["Reguluar"];
         DataTable specialDataTable = dataset.Tables["Special"];
 
-        foreach(DataRow dialogueRow in regularDataTable.Rows)
+        AddDialogue(regularDataTable, AllRegularDialogue);
+        AddDialogue(specialDataTable, AllSpecialDialogue);
+    }
+
+    private void AddDialogue(DataTable dataTable, List<Dialogue> dialogueCollection)
+    {
+        foreach(DataRow dialogueRow in dataTable.Rows)
         {
             Dialogue dialogue = new Dialogue((string[])dialogueRow["Lines"]);
 
@@ -44,7 +50,7 @@ public class DialogueManager
                 }
             }
 
-            AllRegularDialogue.Add(dialogue);
+            dialogueCollection.Add(dialogue);
         }
     }
 
