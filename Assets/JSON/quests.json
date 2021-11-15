@@ -22,8 +22,8 @@
 		{
 			"Title": "Find Scroll Fragments",
 			"Conditions": ["Trouble in the Forest Pt1"],
-			"TriggerObjective": "Talk to Mayor",
-			"Objectives": ["Find Scroll Fragment", "Talk to Mayor"],
+			"TriggerObjective": "Talk to Blacksmith",
+			"Objectives": ["Find Scroll Fragment", "Talk to Blacksmith"],
 			"ObjectivesOrder": ["1", "2"],
 			"ItemRewards": [],
 			"SoulReward": "2000"

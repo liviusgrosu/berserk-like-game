@@ -1,0 +1,43 @@
+{
+    "Reguluar":
+    [
+        {
+            "Conditions": [],
+            "Lines":
+            [
+                "Still alive, eh?",
+                "Let me know what I can do for you"
+            ]
+        },
+        {
+            "Conditions": ["Quest:Find the Pendant:"],
+            "Lines":
+            [
+                "Im glad the soul artist is happy again",
+                "It's been a while since she's cracked a smile...",
+                "Anyways, you need an upgrade"
+            ]
+        }
+    ],
+    "Special":
+    [
+        {
+            "Conditions": [],
+            "Lines":
+            [
+                "You must be the new guy in town",
+                "Im the local blacksmith around here. Plates. spears. nails. You name",
+                "Have a look at my wares. See what fancies you"
+            ]
+        },
+        {
+            "Conditions": ["Quest:Find Scroll Fragments:Talk to Blacksmith"],
+            "Lines":
+            [
+                "Found those scroll fragments? Excellent, give it here",
+                "Now I can enscribe onto your equipment. Come back and ill upgrade you gear",
+                "Oh before you go, here's something in return"
+            ]
+        }
+    ]
+}
