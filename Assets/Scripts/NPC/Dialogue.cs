@@ -37,4 +37,9 @@ public class Dialogue
         QuestConditions = new List<QuestCondtion>();
         ItemConditions = new List<ItemCondition>();
     }
+
+    public bool ConditionsExist()
+    {
+        return QuestConditions.Count != 0 || QuestConditions.Count != 0;
+    }
 }

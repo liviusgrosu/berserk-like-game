@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Data;
 using System.IO;
 using Newtonsoft.Json;
@@ -25,6 +26,8 @@ public class DialogueManager
 
         AddDialogue(regularDataTable, AllRegularDialogue);
         AddDialogue(specialDataTable, AllSpecialDialogue);
+
+        Load();
     }
 
     private void AddDialogue(DataTable dataTable, List<Dialogue> dialogueCollection)
@@ -54,9 +57,61 @@ public class DialogueManager
         }
     }
 
-    public void Load()
+    public void Talk()
+    {
+        if (CurrentSpecialDialogue != null)
+        {
+            foreach(string line in CurrentSpecialDialogue.Lines)
+            {
+                Debug.Log(line);
+            }
+            CurrentSpecialDialogue = null;
+        }
+        else
+        {
+            foreach(string line in CurrentRegularDialogue.Lines)
+            {
+                Debug.Log(line);
+            }
+        }
+    }
+
+    public void TriggerEvent()
     {
 
+    }
+
+    public void Load()
+    {
+        if (File.Exists($"{Application.persistentDataPath}/Dialogue/Blacksmith.currentRegular"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            // Load the current regular dialogue
+            FileStream file = File.Open($"{Application.persistentDataPath}/Dialogue/Blacksmith.currentRegular", FileMode.Open);
+            CurrentRegularDialogue = (Dialogue)bf.Deserialize(file);
+            file.Close();
+        }
+        else
+        {
+            // Use dialogue that has no conditions
+            foreach(Dialogue regularDialogue in AllRegularDialogue)
+            {
+                if (!regularDialogue.ConditionsExist())
+                {
+                    CurrentRegularDialogue = regularDialogue;
+                    break;
+                }
+            }
+
+            foreach(Dialogue specialDialogue in AllSpecialDialogue)
+            {
+                if (!specialDialogue.ConditionsExist())
+                {
+                    CurrentSpecialDialogue = specialDialogue;
+                    break;
+                }
+            }
+        }
     }
 
     public void Save()

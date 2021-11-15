@@ -16,6 +16,8 @@ public class Blacksmith : MonoBehaviour, IInteract
     public void Interact()
     {
         // Toggle the weapon upgrade tree with write mode turned on
-        _menuController.ChangeMenu(MenuController.Menu.WeaponUpgrade, true);
+        //_menuController.ChangeMenu(MenuController.Menu.WeaponUpgrade, true);
+
+        _dialogueManager.Talk();
     }
 }
