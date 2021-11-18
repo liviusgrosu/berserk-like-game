@@ -23,6 +23,9 @@ public class DialogueManager
         AllRegularDialogue = new List<Dialogue>();
         AllSpecialDialogue = new List<Dialogue>();
 
+        FinishedRegularDialogue = new List<Dialogue>();
+        FinishedSpecialDialogue = new List<Dialogue>();
+
         DataSet dataset = JsonConvert.DeserializeObject<DataSet>(File.ReadAllText($"./Assets/JSON/{file}.json"));
         DataTable regularDataTable = dataset.Tables["Reguluar"];
         DataTable specialDataTable = dataset.Tables["Special"];
@@ -101,10 +104,11 @@ public class DialogueManager
                 }
             }
 
-            if (dialogueMeetsConditions)
+            if (dialogueMeetsConditions && !FinishedRegularDialogue.Contains(regularDialogue))
             {
                 // Add new regular dialogue if all conditions are meet
                 CurrentRegularDialogue = regularDialogue;
+                FinishedRegularDialogue.Add(regularDialogue);
             }
         }
         
@@ -122,10 +126,11 @@ public class DialogueManager
                 }
             }
 
-            if (dialogueMeetsConditions)
+            if (dialogueMeetsConditions && !FinishedSpecialDialogue.Contains(specialDialogue))
             {
                 // Add new regular dialogue if all conditions are meet
                 CurrentSpecialDialogue = specialDialogue;
+                FinishedSpecialDialogue.Add(specialDialogue);
             }
         }
     }
@@ -146,7 +151,10 @@ public class DialogueManager
             {
                 if (regularDialogue.QuestConditions.Count == 0)
                 {
+                    // Assign new regular dialogue
                     CurrentRegularDialogue = regularDialogue;
+                    // Don't use this dialogue after its used
+                    FinishedRegularDialogue.Add(regularDialogue);
                     break;
                 }
             }
@@ -155,7 +163,10 @@ public class DialogueManager
             {
                 if (specialDialogue.QuestConditions.Count == 0)
                 {
+                    // Assign new special dialogue
                     CurrentSpecialDialogue = specialDialogue;
+                    // Don't use this dialogue after its used
+                    FinishedSpecialDialogue.Add(specialDialogue);
                     break;
                 }
             }
