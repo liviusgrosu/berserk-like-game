@@ -10,7 +10,8 @@
             ]
         },
         {
-            "Conditions": ["Quest:Find the Pendant:"],
+            "Comment": "Quest: = doesnt matter where the quest is currently in, Quest:Objective = objective must be compelted, Quest:COMPLETED = quest must be completed",
+            "Conditions": ["Find the Pendant:COMPLETED"],
             "Lines":
             [
                 "Im glad the soul artist is happy again",
@@ -31,7 +32,7 @@
             ]
         },
         {
-            "Conditions": ["Quest:Find Scroll Fragments:Talk to Blacksmith"],
+            "Conditions": ["Find Scroll Fragments:Talk to Blacksmith"],
             "Lines":
             [
                 "Found those scroll fragments? Excellent, give it here",

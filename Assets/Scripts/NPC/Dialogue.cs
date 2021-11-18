@@ -7,39 +7,22 @@ public class Dialogue
 {
     public string[] Lines;
 
-    public struct QuestCondtion
+    public struct QuestCondition
     {
-        public QuestCondtion(string title, string objective)
+        public QuestCondition(string title, string objective)
         {
             Title = title;
             Objective = objective;
         }
-        string Title;
-        string Objective;
-    }
-    public struct ItemCondition
-    {
-        public ItemCondition(string name, int amount)
-        {
-            Name = name;
-            Amount = amount;
-        }
-        string Name;
-        int Amount;
+        public string Title;
+        public string Objective;
     }
 
-    public List<QuestCondtion> QuestConditions;
-    public List<ItemCondition> ItemConditions;
+    public List<QuestCondition> QuestConditions;
 
     public Dialogue(string[] lines)
     {
         Lines = lines;
-        QuestConditions = new List<QuestCondtion>();
-        ItemConditions = new List<ItemCondition>();
-    }
-
-    public bool ConditionsExist()
-    {
-        return QuestConditions.Count != 0 || QuestConditions.Count != 0;
+        QuestConditions = new List<QuestCondition>();
     }
 }

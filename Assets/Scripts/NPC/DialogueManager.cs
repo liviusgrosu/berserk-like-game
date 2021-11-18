@@ -13,7 +13,7 @@ public class DialogueManager
     private List<Dialogue> AllRegularDialogue, AllSpecialDialogue;
     private List<Dialogue> FinishedRegularDialogue, FinishedSpecialDialogue;
 
-    private Dialogue CurrentRegularDialogue, CurrentSpecialDialogue; 
+    private Dialogue CurrentRegularDialogue, CurrentSpecialDialogue;
 
     public DialogueManager(string file)
     {
@@ -40,17 +40,7 @@ public class DialogueManager
             foreach(string condition in dialogueConditions)
             {
                 string[] conditionElements = condition.Split(':');
-                switch(conditionElements[0])
-                {
-                    case "Quest":
-                        dialogue.QuestConditions.Add(new Dialogue.QuestCondtion(conditionElements[1], conditionElements[2]));
-                        break;
-                    case "Item":
-                        dialogue.ItemConditions.Add(new Dialogue.ItemCondition(conditionElements[1], Int32.Parse(conditionElements[2])));
-                        break;
-                    default:
-                        break;
-                }
+                dialogue.QuestConditions.Add(new Dialogue.QuestCondition(conditionElements[0], conditionElements[1]));
             }
 
             dialogueCollection.Add(dialogue);
@@ -76,11 +66,27 @@ public class DialogueManager
         }
     }
 
-    public void TriggerEvent()
+    public void TriggerEvent(QuestManager questManager)
     {
+        foreach(Dialogue regularDialogue in AllRegularDialogue)
+        {
+            bool dialogueMeetsConditions = true;
+            // Go through all the objectives 
+            foreach(Dialogue.QuestCondition questCondition in regularDialogue.QuestConditions)
+            {
+                if (!questManager.CheckQuestAndObjectiveStatus(questCondition.Title, questCondition.Objective))
+                {
+                    dialogueMeetsConditions = false;
+                }
+            }
 
+            if (dialogueMeetsConditions)
+            {
+                // Add new regular dialogue if all conditions are meet
+                CurrentRegularDialogue = regularDialogue;
+            }
+        }
     }
-
     public void Load()
     {
         if (File.Exists($"{Application.persistentDataPath}/Dialogue/Blacksmith.currentRegular"))
@@ -96,7 +102,7 @@ public class DialogueManager
             // Use dialogue that has no conditions
             foreach(Dialogue regularDialogue in AllRegularDialogue)
             {
-                if (!regularDialogue.ConditionsExist())
+                if (regularDialogue.QuestConditions.Count == 0)
                 {
                     CurrentRegularDialogue = regularDialogue;
                     break;
@@ -105,7 +111,7 @@ public class DialogueManager
 
             foreach(Dialogue specialDialogue in AllSpecialDialogue)
             {
-                if (!specialDialogue.ConditionsExist())
+                if (specialDialogue.QuestConditions.Count == 0)
                 {
                     CurrentSpecialDialogue = specialDialogue;
                     break;

@@ -27,3 +27,8 @@ public interface IInteract
 {
     void Interact();
 }
+
+public interface INPC
+{
+    DialogueManager GetDialogueManager();
+}

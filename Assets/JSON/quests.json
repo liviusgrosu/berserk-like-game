@@ -12,7 +12,7 @@
 		},
 		{
 			"Title": "Find the Pendant",
-			"Conditions": ["Trouble in the Forest Pt1"],
+			"Conditions": [],
 			"TriggerObjective": "Talk to Soul Artist",
 			"Objectives": ["Find Bronze Pocket Watch", "Talk to Soul Artist"],
 			"ObjectivesOrder": ["1", "2"],

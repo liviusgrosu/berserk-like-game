@@ -13,6 +13,8 @@ public class QuestManager : MonoBehaviour
     public List<Quest> ActiveQuests;
     public List<Quest> CompletedQuests;
 
+    public List<GameObject> NPCEntites;
+
     void Awake()
     {
         AllQuests = new List<Quest>();
@@ -179,7 +181,7 @@ public class QuestManager : MonoBehaviour
                     }
                     else if (eventType ==  QuestObjective.Type.Talk)
                     {
-                        // Modify the kill objective
+                        // Modify the talk objective
                         TalkObjective talkObjective = ((TalkObjective)objective); 
                         if (talkObjective.NPC == eventName)
                         {
@@ -209,6 +211,7 @@ public class QuestManager : MonoBehaviour
 
             quest.UpdateQuest();
 
+            UpdateNPCEntitesDialogues();
             if (quest.CurrentObjective.Count == 0)
             {
                 // If there are no more objectives for this active quest then it is considered completed
@@ -234,6 +237,7 @@ public class QuestManager : MonoBehaviour
             // If theres a quest to remove, remove it from the active list and place it in the completed quest
             CompletedQuests.Add(questToRemove);
             ActiveQuests.Remove(questToRemove);
+            UpdateNPCEntitesDialogues();
         }
     }
 
@@ -290,6 +294,58 @@ public class QuestManager : MonoBehaviour
         }
 
         return questConditions;
+    }
+
+    public bool CheckQuestAndObjectiveStatus(string questTitle, string objectiveTitle)
+    {
+        switch(objectiveTitle)
+        {
+            case "":
+                // Quest is currently active and no objective is needed to trigger this check
+                foreach(Quest quest in ActiveQuests)
+                {
+                    if (quest.Title == questTitle)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case "COMPLETED":
+                // Quest must be completed
+                foreach(Quest quest in CompletedQuests)
+                {
+                    if (quest.Title == questTitle)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            default:
+                // quest must have an objective currently active to trigger this check
+                foreach(Quest quest in ActiveQuests)
+                {
+                    if (quest.Title == questTitle)
+                    {
+                        foreach(QuestObjective objective in quest.CurrentObjective)
+                        {
+                            if (objective.Title == objectiveTitle)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        return false;
+    }
+
+    private void UpdateNPCEntitesDialogues()
+    {
+        foreach(GameObject npc in NPCEntites)
+        {
+            npc.GetComponent<INPC>().GetDialogueManager().TriggerEvent(this);
+        }
     }
 
     void OnApplicationQuit()
