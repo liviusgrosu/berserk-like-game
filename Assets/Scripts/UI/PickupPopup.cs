@@ -16,7 +16,7 @@ public class PickupPopup : MonoBehaviour
     public Text ItemCount;
     [Header("Effect")]
     public float MovementMultiplier = 1.0f;
-    private float _step, _time;
+    private float _time;
     public float FadeInTime = 1.0f;
     public float IdleTime = 2.0f;
     public float FadeOutTime = 1.0f;

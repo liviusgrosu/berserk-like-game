@@ -15,6 +15,9 @@ public class DialogueManager
 
     private Dialogue CurrentRegularDialogue, CurrentSpecialDialogue;
 
+    public bool Talking;
+    private int _dialogueIdx;
+
     public DialogueManager(string file)
     {
         AllRegularDialogue = new List<Dialogue>();
@@ -47,23 +50,17 @@ public class DialogueManager
         }
     }
 
-    public void Talk()
+    public string GetNextLine()
     {
-        if (CurrentSpecialDialogue != null)
+        if (_dialogueIdx >= CurrentRegularDialogue.Lines.Length)
         {
-            foreach(string line in CurrentSpecialDialogue.Lines)
-            {
-                Debug.Log(line);
-            }
-            CurrentSpecialDialogue = null;
+            _dialogueIdx = 0;
+            return "";
         }
-        else
-        {
-            foreach(string line in CurrentRegularDialogue.Lines)
-            {
-                Debug.Log(line);
-            }
-        }
+
+        string lineToReturn = CurrentRegularDialogue.Lines[_dialogueIdx]; 
+        _dialogueIdx++;
+        return lineToReturn;
     }
 
     public void TriggerEvent(QuestManager questManager)
@@ -86,6 +83,8 @@ public class DialogueManager
                 CurrentRegularDialogue = regularDialogue;
             }
         }
+        
+        // TODO: implement special dialogue as well
     }
     public void Load()
     {
