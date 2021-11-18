@@ -68,6 +68,7 @@ public class DialoguePopup : MonoBehaviour
 
     public void InsertDialogue(string dialogueText)
     {
+        // Insert new the dialogue line
         DialogueText.text = dialogueText;
     }
 }

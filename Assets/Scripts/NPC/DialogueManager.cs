@@ -52,13 +52,36 @@ public class DialogueManager
 
     public string GetNextLine()
     {
-        if (_dialogueIdx >= CurrentRegularDialogue.Lines.Length)
+        if (CurrentSpecialDialogue != null)
         {
+            // If special dialogue exists then get those lines instead
+            string lineToReturn = GetNextCurrentLine(CurrentSpecialDialogue);
+            if (lineToReturn == "")
+            {
+                // Remove the special dialogue once they've gone through
+                CurrentSpecialDialogue = null;
+            } 
+            return lineToReturn;
+        }
+        else
+        {
+            // Return regular dialogue lines
+            string lineToReturn = GetNextCurrentLine(CurrentRegularDialogue);
+            return lineToReturn;
+        }
+    }
+
+    private string GetNextCurrentLine(Dialogue currentDialogue)
+    {
+        if (_dialogueIdx >= currentDialogue.Lines.Length)
+        {
+            // No more lines available
             _dialogueIdx = 0;
             return "";
         }
 
-        string lineToReturn = CurrentRegularDialogue.Lines[_dialogueIdx]; 
+        // Return the next line
+        string lineToReturn = currentDialogue.Lines[_dialogueIdx]; 
         _dialogueIdx++;
         return lineToReturn;
     }
