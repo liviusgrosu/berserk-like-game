@@ -88,6 +88,7 @@ public class DialogueManager
 
     public void TriggerEvent(QuestManager questManager)
     {
+        // Check all regular dialogue
         foreach(Dialogue regularDialogue in AllRegularDialogue)
         {
             bool dialogueMeetsConditions = true;
@@ -107,7 +108,26 @@ public class DialogueManager
             }
         }
         
-        // TODO: implement special dialogue as well
+        // Check all special dialogue
+
+        foreach(Dialogue specialDialogue in AllSpecialDialogue)
+        {
+            bool dialogueMeetsConditions = true;
+            // Go through all the objectives 
+            foreach(Dialogue.QuestCondition questCondition in specialDialogue.QuestConditions)
+            {
+                if (!questManager.CheckQuestAndObjectiveStatus(questCondition.Title, questCondition.Objective))
+                {
+                    dialogueMeetsConditions = false;
+                }
+            }
+
+            if (dialogueMeetsConditions)
+            {
+                // Add new regular dialogue if all conditions are meet
+                CurrentSpecialDialogue = specialDialogue;
+            }
+        }
     }
     public void Load()
     {

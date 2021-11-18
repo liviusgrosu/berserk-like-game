@@ -10,7 +10,6 @@
             ]
         },
         {
-            "Comment": "Quest: = doesnt matter where the quest is currently in, Quest:Objective = objective must be compelted, Quest:COMPLETED = quest must be completed",
             "Conditions": ["Find the Pendant:COMPLETED"],
             "Lines":
             [
