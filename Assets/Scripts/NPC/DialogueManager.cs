@@ -136,15 +136,13 @@ public class DialogueManager
     }
     public void Load()
     {
-        if (File.Exists($"{Application.persistentDataPath}/Dialogue/Blacksmith.currentRegular"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            // Load the current regular dialogue
-            FileStream file = File.Open($"{Application.persistentDataPath}/Dialogue/Blacksmith.currentRegular", FileMode.Open);
-            CurrentRegularDialogue = (Dialogue)bf.Deserialize(file);
-            file.Close();
-        }
-        else
+        LoadDialogue(ref CurrentRegularDialogue, "Dialogue/Blacksmith.currentRegular");
+        LoadDialogue(ref CurrentSpecialDialogue, "Dialogue/Blacksmith.currentSpecial");
+
+        LoadDialogue(ref FinishedRegularDialogue, "Dialogue/Blacksmith.finishedRegular");
+        LoadDialogue(ref FinishedSpecialDialogue, "Dialogue/Blacksmith.finishedSpecial");
+
+        if (CurrentRegularDialogue == null && CurrentSpecialDialogue == null)
         {
             // Use dialogue that has no conditions
             foreach(Dialogue regularDialogue in AllRegularDialogue)
@@ -173,8 +171,62 @@ public class DialogueManager
         }
     }
 
+    public void LoadDialogue(ref Dialogue dialogueObject, string filePath)
+    {
+        if (File.Exists($"{Application.persistentDataPath}/{filePath}"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/{filePath}", FileMode.Open);
+            dialogueObject = (Dialogue)bf.Deserialize(file);
+            file.Close();
+        }
+    }
+
+    public void LoadDialogue(ref List<Dialogue> dialogueObject, string filePath)
+    {
+        if (File.Exists($"{Application.persistentDataPath}/{filePath}"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open($"{Application.persistentDataPath}/{filePath}", FileMode.Open);
+            dialogueObject = (List<Dialogue>)bf.Deserialize(file);
+            file.Close();
+        }
+    }
+
+
     public void Save()
     {
+        // Save the current regular and special dialogue
+        SaveDialogue(CurrentRegularDialogue, "Dialogue/Blacksmith.currentRegular");
+        SaveDialogue(CurrentSpecialDialogue, "Dialogue/Blacksmith.currentSpecial");
 
+        SaveDialogue(FinishedRegularDialogue, "Dialogue/Blacksmith.finishedRegular");
+        SaveDialogue(FinishedSpecialDialogue, "Dialogue/Blacksmith.finishedSpecial");
+    }
+
+    public void SaveDialogue(Dialogue dialogueObject, string filePath)
+    {
+        // Save a dialogue object
+        if (dialogueObject != null)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file;
+            file = File.Create($"{Application.persistentDataPath}/{filePath}");
+            bf.Serialize(file, dialogueObject);
+            file.Close();
+        }
+    }
+
+    public void SaveDialogue(List<Dialogue> dialogueObject, string filePath)
+    {
+        // Save a list of dialogue objects
+        if (dialogueObject.Count != 0)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file;
+            file = File.Create($"{Application.persistentDataPath}/{filePath}");
+            bf.Serialize(file, dialogueObject);
+            file.Close();
+        }
     }
 }

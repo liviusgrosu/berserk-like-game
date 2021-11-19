@@ -50,4 +50,9 @@ public class Blacksmith : MonoBehaviour, IInteract, INPC
     {
         return DialogueManager;
     }
+
+    void OnApplicationQuit()
+    {
+        DialogueManager.Save();
+    }
 }

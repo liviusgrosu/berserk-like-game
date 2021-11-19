@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2294,6 +2294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952c761e6cf04034894a20a616c0e580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DialogueManager:
+    Talking: 0
 --- !u!114 &271777396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4256,7 +4258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5782,7 +5784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8231,7 +8233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+  m_Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12712,20 +12714,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879623056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 221d6a671feaeb545ae0a1ee7f902ef5, type: 3}
+  m_Script: {fileID: 11500000, guid: a5438ae72e2c1cd43b307e1d78fe0abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   StartingPoint: {fileID: 1553761458}
   EndPoint: {fileID: 215025835}
   PopupParent: {fileID: 562899320}
   PopupBackground: {fileID: 1277303834}
-  ItemIcon: {fileID: 0}
-  ItemName: {fileID: 584271063}
-  ItemCount: {fileID: 0}
+  NextLineIndicator: {fileID: 180887701}
+  NPCName: {fileID: 584271063}
+  DialogueText: {fileID: 852976454}
   MovementMultiplier: 6
   FadeInTime: 0.5
-  IdleTime: 4
-  FadeOutTime: 0.1
 --- !u!1001 &1898600435
 PrefabInstance:
   m_ObjectHideFlags: 0

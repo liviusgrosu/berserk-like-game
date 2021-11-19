@@ -7,6 +7,7 @@ public class Dialogue
 {
     public string[] Lines;
 
+    [System.Serializable]
     public struct QuestCondition
     {
         public QuestCondition(string title, string objective)
